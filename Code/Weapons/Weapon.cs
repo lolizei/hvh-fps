@@ -226,6 +226,23 @@ public sealed class Weapon : Component
 	/// Host-side shot resolution. The client supplies a direction; everything
 	/// that matters - ammo, the trace, the damage - is decided here.
 	/// </summary>
+	// ---- diagnostics -------------------------------------------------------
+	// Counts along one shot's path, so "two markers" can be answered with
+	// numbers instead of a theory. Read and reset by hvh_hitdebug.
+	public static int FireRequests;
+	public static int DamageApplications;
+	public static int ConfirmHitInvocations;
+	public static int ConfirmHitDeliveries;
+
+	public static void ResetCounters()
+	{
+		FireRequests = 0;
+		DamageApplications = 0;
+		ConfirmHitInvocations = 0;
+		ConfirmHitDeliveries = 0;
+		HitMarker.ShowCount = 0;
+	}
+
 	[Rpc.Host]
 	private void RequestFire( Vector3 direction )
 	{
@@ -234,6 +251,8 @@ public sealed class Weapon : Component
 		if ( Ammo <= 0 || IsReloading ) return;
 		if ( !Owner.IsValid() || !Owner.IsAlive ) return;
 		if ( !( RoundManager.Current?.AllowShooting ?? true ) ) return;
+
+		FireRequests++;
 
 		Ammo--;
 
@@ -261,6 +280,8 @@ public sealed class Weapon : Component
 		var zone = ClassifyHit( trace, health );
 		var damage = stats.Damage * stats.MultiplierFor( zone );
 
+		DamageApplications++;
+
 		health.ApplyDamage( new DamageInfo
 		{
 			Damage = damage,
@@ -274,6 +295,7 @@ public sealed class Weapon : Component
 		// broadcast on purpose: that is something everyone sees, this is one
 		// person's feedback. Anything with health marks, dummies included - an
 		// empty server is mostly dummy-shooting and silence there reads as broken.
+		ConfirmHitInvocations++;
 		ConfirmHit( !health.IsAlive, zone == HitZone.Head );
 	}
 
@@ -300,6 +322,8 @@ public sealed class Weapon : Component
 	[Rpc.Owner]
 	private void ConfirmHit( bool killed, bool headshot )
 	{
+		ConfirmHitDeliveries++;
+
 		if ( !Owner.IsValid() || !Owner.IsLocallyControlled ) return;
 
 		HitMarker.Show( killed ? HitKind.Kill : headshot ? HitKind.Headshot : HitKind.Body );
@@ -322,9 +346,24 @@ public sealed class Weapon : Component
 				return HitZone.Body;
 		}
 
-		var feet = target.WorldPosition.z;
-		var height = target.GetComponentInParent<PlayerMovement>()?.StandHeight ?? 72f;
-		var fraction = ( trace.EndPosition.z - feet ) / MathF.Max( 1f, height );
+		// Measure against the target's real bounds, not its origin. Deriving the
+		// feet from the origin assumed every target is anchored at its feet -
+		// true for a Player, false for a TargetDummy, which is anchored at its
+		// middle. That put the head zone above the dummy's own head, so a dummy
+		// could not be headshot at all and everything below its waist read as a
+		// limb. Bounds make one rule correct for both.
+		var bounds = target.GameObject.GetBounds();
+		var floor = bounds.Mins.z;
+		var height = bounds.Size.z;
+
+		// No renderer or collider yet - fall back rather than divide by nothing.
+		if ( height < 1f )
+		{
+			floor = target.WorldPosition.z;
+			height = target.GetComponentInParent<PlayerMovement>()?.StandHeight ?? 72f;
+		}
+
+		var fraction = ( trace.EndPosition.z - floor ) / MathF.Max( 1f, height );
 
 		if ( fraction >= 0.88f ) return HitZone.Head;
 		if ( fraction <= 0.35f ) return HitZone.Limb;

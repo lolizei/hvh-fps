@@ -55,10 +55,13 @@ $panel-bg: rgba(12, 14, 18, 0.72);
 		height: 9px;
 	}
 
-	.tl { transform: rotate(45deg)  translate(-9px, -9px); }
-	.tr { transform: rotate(-45deg) translate(9px, -9px); }
-	.bl { transform: rotate(-45deg) translate(-9px, 9px); }
-	.br { transform: rotate(45deg)  translate(9px, 9px); }
+	// Translate FIRST, then rotate. The other order translates along the tick's
+	// own rotated axes, which collapsed all four ticks onto two points - one
+	// above the centre and one below - and read on screen as two hit markers.
+	.tl { transform: translate(-9px, -9px) rotate(45deg); }
+	.tr { transform: translate(9px, -9px)  rotate(-45deg); }
+	.bl { transform: translate(-9px, 9px)  rotate(-45deg); }
+	.br { transform: translate(9px, 9px)   rotate(45deg); }
 
 	&.headshot .hm { height: 12px; width: 3px; }
 	&.kill .hm { height: 15px; width: 3px; }

@@ -87,6 +87,56 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
 
+## Task 6 - double hit marker (2026-09-01)
+
+**Reported from play: two hit markers on screen at once.** Measured before
+touching anything, because a second damage application would have mattered far
+more than the visual.
+
+Counts for one landed shot, repeated over 4 isolated trials:
+
+| Counter | Per landed shot |
+|---|---|
+| fireRequests | 1 |
+| damageApplications | **1** |
+| confirmHitInvocations | 1 |
+| confirmHitDeliveries | 1 |
+| markerShows | 1 |
+| live marker elements | 1 |
+| live Hud / ScreenPanel / Crosshair | 1 / 1 / 1 |
+
+Held under sustained fire and under three simultaneous shooters: across 30s of a
+two-bot duel, `damageApplications == confirmInvoked == confirmDelivered == 66`
+at every sample, never 2:1. **Damage was never applying twice.**
+
+So every engine-side count said one while the screen said two. The cause was in
+the stylesheet: the marker's four ticks used `transform: rotate(...) translate(...)`,
+which translates along the tick's *own rotated axes*. All four resolved to
+`(0, +/-12.7)` - `.tl` and `.tr` both directly above the centre, `.bl` and `.br`
+both directly below. One marker rendered as two marks. Fixed by translating
+first, then rotating. Confirmed by screen capture before and after: two stacked
+clumps became a single four-tick X.
+
+Lesson recorded in `NOTES.md`: when every count says one and the screen says two,
+capture the screen.
+
+### Hit zones now measured from bounds
+`ClassifyHit` derived the target's feet from its origin. Measured: a player is
+`originZ=0` with bounds `0..72`; a dummy is `originZ=36` with bounds `0..72`. It
+now uses `GameObject.GetBounds()`, so one rule fits both. `hvh_aim` had the same
+assumption - and ignored its height argument entirely for dummies - and was
+fixed with it, so a given height means the same body part on any target.
+
+Damage by zone after the change:
+
+| Target | Head (66u) | Chest (40u) | Legs (15u) |
+|---|---|---|---|
+| Dummy | 100 | 26 | 20.8 |
+| Bot | 52 | 13 | 10.4 |
+
+Same ratios on both (head 4x chest, limb 0.8x chest); the bot's lower absolute
+numbers are its armour. Before the change a dummy could not be headshot at all.
+
 ## Task 5 - consolidation sweep (2026-09-01)
 
 All four feature tasks re-verified in one session on current main. **Current
@@ -104,8 +154,9 @@ state, not as-shipped.**
 | 3 | Headshot marker | PASS - 9/14 vs a bot |
 | 3 | Kill marker | PASS |
 | 3 | Miss shows nothing | PASS |
-| 3 | Someone else's hit never shows on my crosshair | PASS - 22/22 invisible during bot combat |
-| 3 | Headshot on a **target dummy** | **FAIL** - impossible by geometry, see below |
+| 3 | Someone else's hit never shows on my crosshair | PASS - 58 hits by other pawns, 0 markers |
+| 3 | **One landed hit produces exactly one marker** | PASS - (1 show, 1 element) on every landed hit |
+| 3 | Headshot on a **target dummy** | PASS - fixed, was impossible by geometry |
 | 4 | Cadence differs walk/run/crouch | PASS - 1.37 / 2.12 / 0.50 steps/s |
 | 4 | Airborne silence | PASS - 9.83s airborne, 0 steps, 13 landings |
 | 4 | Bot-produced footsteps, human idle | PASS - bot 5->18 while human held at 198 |
@@ -142,7 +193,7 @@ numbers are reported, not acted on, as agreed.
   `EnsureRoomForBots` helper so the rule lives in one place. This had silently
   emptied the arena under three measurements.
 
-### Found, not fixed
+### Found, not fixed at the time (fixed in Task 6)
 - **Head zones cannot be hit on target dummies.** `ClassifyHit` measures the hit
   height upward from the target's origin. A player's origin is at its feet;
   a `TargetDummy` sits at z=36, its middle. So on a dummy the head zone begins
@@ -151,7 +202,11 @@ numbers are reported, not acted on, as agreed.
   rather than fixed: the fix is either re-placing the dummies or changing
   `ClassifyHit`, and the damage path is a working system. Verify zones on a bot.
 
-## Known issues (task 4)
+## Known issues
+- **`hvh_traceaim` does not model spread.** It traces the un-spread centre ray,
+  while a real shot scatters up to ~9.5 degrees when moving or airborne. It
+  answers "what am I pointed at", not "where will this shot land". To be renamed
+  or made self-explanatory in Task 7.
 - **The default surface uses the same sound for left and right feet.** The
   alternation in `PlayerFootsteps` is real, but `default` points `FootLeft` and
   `FootRight` at the same `footstep-concrete` event, so on the current grey-box

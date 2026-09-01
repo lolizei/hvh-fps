@@ -102,6 +102,69 @@ public static class DevCommands
 		Log.Info( $"  (raised DesiredPlayers to {needed} so the new bots are not trimmed)" );
 	}
 
+	/// <summary>
+	/// Counts along the whole hit path, so a double marker can be diagnosed with
+	/// numbers. `hvh_hitdebug` reports, `hvh_hitdebug 1` resets first.
+	/// </summary>
+	[ConCmd( "hvh_hitdebug" )]
+	public static void HitDebug( int reset = 0 )
+	{
+		if ( reset != 0 )
+		{
+			Weapon.ResetCounters();
+			Log.Info( "hvh_hitdebug: counters reset" );
+			return;
+		}
+
+		var scene = Game.ActiveScene;
+		var huds = scene?.GetAllComponents<HvH.UI.Hud>().Count() ?? 0;
+		var screens = scene?.GetAllComponents<ScreenPanel>().Count() ?? 0;
+
+		Log.Info(
+			$"fireRequests={Weapon.FireRequests}" +
+			$" damageApplications={Weapon.DamageApplications}" +
+			$" confirmInvoked={Weapon.ConfirmHitInvocations}" +
+			$" confirmDelivered={Weapon.ConfirmHitDeliveries}" +
+			$" markerShows={HitMarker.ShowCount}" );
+		Log.Info(
+			$"  live UI: Hud={huds} ScreenPanel={screens}" +
+			$" Crosshair={HvH.UI.Crosshair.LiveCount}" +
+			$" | markerElements={HvH.UI.Crosshair.LiveMarkerElements}" +
+			$" (incl. deleting {HvH.UI.Crosshair.MarkerElementsIncludingDeleting})" );
+	}
+
+	/// <summary>
+	/// Hold the hit marker on screen so it can actually be looked at.
+	/// `hvh_marker_hold 8` then shoot; `hvh_marker_hold` restores the default.
+	/// </summary>
+	[ConCmd( "hvh_marker_hold" )]
+	public static void MarkerHold( float seconds = 0.4f )
+	{
+		HitMarker.Duration = MathF.Max( 0.05f, seconds );
+		Log.Info( $"hvh_marker_hold -> marker duration {HitMarker.Duration:0.##}s" );
+	}
+
+	/// <summary>
+	/// Report each target's origin against its actual world bounds. `hvh_bounds`
+	/// Exists because hit zones were being measured from the origin, which is at
+	/// the feet for a player and at the middle for a dummy.
+	/// </summary>
+	[ConCmd( "hvh_bounds" )]
+	public static void Bounds()
+	{
+		foreach ( var health in Game.ActiveScene.GetAllComponents<HealthComponent>() )
+		{
+			var go = health.GameObject;
+			var b = go.GetBounds();
+			var originZ = go.WorldPosition.z;
+			var stand = health.GetComponentInParent<PlayerMovement>()?.StandHeight ?? 72f;
+
+			Log.Info( $"{go.Name}: originZ={originZ:0.#} boundsZ={b.Mins.z:0.#}..{b.Maxs.z:0.#}" +
+				$" height={b.Size.z:0.#} standHeight={stand:0.#}" +
+				$" | originIsFeet={( MathF.Abs( originZ - b.Mins.z ) < 4f )}" );
+		}
+	}
+
 	/// <summary>Damage yourself. `hvh_hurt 25`</summary>
 	[ConCmd( "hvh_hurt" )]
 	public static void Hurt( float amount = 25f )
@@ -170,8 +233,10 @@ public static class DevCommands
 
 		if ( bestPlayer.IsValid() )
 		{
-			// Height above the target's feet. 48 is chest, 66+ is the head zone.
-			var aimAt = bestPlayer.WorldPosition + Vector3.Up * height;
+			// Height above the bottom of the target, not above its origin - a
+			// dummy is anchored at its middle, so origin-relative heights meant
+			// different things for different targets. 48 is chest, 66+ is head.
+			var aimAt = AimPoint( bestPlayer.GameObject, height );
 			player.EyeAngles = Rotation.LookAt( ( aimAt - eye ).Normal ).Angles();
 
 			Log.Info( $"hvh_aim -> {bestPlayer.State?.DisplayName} (player) at " +
@@ -185,8 +250,23 @@ public static class DevCommands
 			return;
 		}
 
-		player.EyeAngles = Rotation.LookAt( ( best.WorldPosition - eye ).Normal ).Angles();
+		// Dummies used to ignore the height argument entirely and take a shot at
+		// the origin, so a "head" aim was never actually aimed at a head.
+		var dummyAim = AimPoint( best.GameObject, height );
+		player.EyeAngles = Rotation.LookAt( ( dummyAim - eye ).Normal ).Angles();
 		Log.Info( $"hvh_aim -> {best.DisplayName} at {bestDistance:0}u, hp {best.Health?.Health}" );
+	}
+
+	/// <summary>
+	/// A point <paramref name="height"/> units above the bottom of the target,
+	/// so the same number means the same body part on any target.
+	/// </summary>
+	private static Vector3 AimPoint( GameObject target, float height )
+	{
+		var bounds = target.GetBounds();
+		var floor = bounds.Size.z < 1f ? target.WorldPosition.z : bounds.Mins.z;
+
+		return target.WorldPosition.WithZ( floor + height );
 	}
 
 	/// <summary>Fire the active weapon N times through its real code path. `hvh_fire 5`</summary>

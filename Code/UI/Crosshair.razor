@@ -1,5 +1,7 @@
 @namespace HvH.UI
 @using System
+@using System.Collections.Generic
+@using System.Linq
 @using Sandbox
 @using Sandbox.UI
 @using HvH
@@ -37,6 +39,43 @@
 </root>
 
 @code {
+	// ---- diagnostics -------------------------------------------------------
+	// Every live crosshair draws its own hit marker, so if two markers appear at
+	// once the question "how many of these exist?" has to be answerable.
+	private static readonly List<Crosshair> Instances = new();
+
+	public static int LiveCount => Instances.Count( x => x.IsValid && !x.IsDeleting );
+
+	/// <summary>
+	/// How many hit-marker elements are actually alive in the panel tree right
+	/// now. This is the number that matters: one marker state can still render
+	/// as several elements if old ones outlive a rebuild.
+	/// </summary>
+	public static int LiveMarkerElements => Instances
+		.Where( x => x.IsValid && !x.IsDeleting )
+		.SelectMany( x => x.Descendants )
+		.Count( d => d.IsValid && ( d.Classes?.Contains( "hitmarker" ) ?? false ) );
+
+	/// <summary>Marker elements including ones already on their way out.</summary>
+	public static int MarkerElementsIncludingDeleting => Instances
+		.Where( x => x.IsValid )
+		.SelectMany( x => x.Descendants )
+		.Count( d => d.Classes?.Contains( "hitmarker" ) ?? false );
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		base.OnAfterTreeRender( firstTime );
+
+		if ( firstTime && !Instances.Contains( this ) )
+			Instances.Add( this );
+	}
+
+	public override void OnDeleted()
+	{
+		base.OnDeleted();
+		Instances.Remove( this );
+	}
+
 	private static GameSettings Settings => GameSettings.Current;
 
 	private bool Visible => Player.Local.IsValid() && Player.Local.IsAlive;

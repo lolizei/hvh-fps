@@ -156,14 +156,19 @@ before it was spotted.
 
 ## Practice dummies are placed at their centre, players at their feet
 
-`Weapon.ClassifyHit` measures the hit height as a fraction of stand height
-*upward from the target's origin*. A `Player` origin is at the feet, so that is
-correct. `TargetDummy` objects sit at z=36 - their middle - so the fraction is
-measured from the dummy's waist.
+**Fixed 2026-09-01** - `ClassifyHit` and `hvh_aim` now measure from
+`GameObject.GetBounds().Mins.z` instead of the origin, so one rule is correct for
+both. Kept here because the origin convention is still not uniform and anything
+new that assumes "origin == feet" will be wrong for dummies.
 
-Consequence: on a dummy, the head zone (fraction >= 0.88) starts above the
-dummy's own head and **cannot be hit at all**; everything below the waist reads
-as a limb. Verify hit zones against a bot, never against a dummy.
+Measured: dummy `originZ=36`, bounds `0..72`; player `originZ=0`, bounds `0..72`.
+
+
+`Weapon.ClassifyHit` used to measure the hit height as a fraction of stand height
+*upward from the target's origin*. A `Player` origin is at the feet, so that was
+correct. `TargetDummy` objects sit at z=36 - their middle - so the fraction was
+measured from the dummy's waist: the head zone started above the dummy's own head
+and could not be hit at all, and everything below its waist read as a limb.
 
 ---
 
@@ -204,6 +209,32 @@ Use `OcclusionEnabled`. `Occlusion` still compiles, with a warning.
 s&box has its own, stricter Razor generator. It has rejected eight lambda
 type-inference errors that the .NET SDK accepted without complaint. Always
 confirm in the editor — `compile_status` over MCP, or just watch the console.
+
+---
+
+## CSS transform order: `rotate` before `translate` moves along rotated axes
+
+This drew the hit marker as **two** markers for weeks and read as a gameplay bug.
+
+```scss
+// WRONG - rotate first, so the translate runs in the tick's own rotated frame
+.tl { transform: rotate(45deg)  translate(-9px, -9px); }
+.tr { transform: rotate(-45deg) translate(9px, -9px); }
+
+// RIGHT - place it, then spin it
+.tl { transform: translate(-9px, -9px) rotate(45deg); }
+.tr { transform: translate(9px, -9px)  rotate(-45deg); }
+```
+
+With the wrong order every one of the marker's four ticks resolved to
+`(0, +/-12.7)`: `.tl` and `.tr` both landed straight above the centre and
+`.bl`/`.br` both straight below. Four ticks collapsed onto two points, and one
+hit marker looked like two.
+
+Nothing about this is visible from the counts - one damage application, one
+`ConfirmHit`, one `HitMarker.Show`, one marker element. **The engine-side
+measurements were all correct and all beside the point.** When every count says
+one and the screen says two, capture the screen.
 
 ---
 

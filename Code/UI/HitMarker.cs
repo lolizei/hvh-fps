@@ -40,6 +40,9 @@ public static class HitMarker
 	/// </summary>
 	public static HitKind Kind => Visible ? _kind : HitKind.Body;
 
+	/// <summary>How many times Show has run. Diagnostics only.</summary>
+	public static int ShowCount { get; set; }
+
 	private static HitKind _kind;
 	private static float _shownAt = float.MinValue;
 
@@ -59,6 +62,7 @@ public static class HitMarker
 	/// <summary>Show the marker and play its tick. Local to this machine only.</summary>
 	public static void Show( HitKind kind )
 	{
+		ShowCount++;
 		_kind = kind;
 		_shownAt = Time.Now;
 
