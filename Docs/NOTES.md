@@ -145,10 +145,12 @@ knowingly left alone - the HVH features are all default-off and untested.
 `Converge()` trims the bot count to `DesiredPlayers - humans`. Anything that
 spawns bots directly - `hvh_botduel` did - has its bots removed within a frame or
 two, *after* the command has already logged that it succeeded. From
-`hvh_target 1`, `hvh_botduel` reported two duellists and delivered zero.
+`hvh_target 1`, `hvh_botduel` reported two duellists and delivered zero, and
+`hvh_bot` reported a spawn and delivered zero.
 
-Raise `DesiredPlayers` first, or the arena empties under you. This silently
-invalidated three separate measurements before it was spotted.
+Raise `DesiredPlayers` first - `DevCommands.EnsureRoomForBots` does this - or the
+arena empties under you. This silently invalidated three separate measurements
+before it was spotted.
 
 ---
 

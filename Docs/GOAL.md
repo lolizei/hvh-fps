@@ -135,9 +135,12 @@ numbers are reported, not acted on, as agreed.
   so it stopped ignoring the bot, hit the bot standing there and placed it at
   z=128, falling. Scripted aim then missed 13/13. Now traces `WithTag("solid")`.
   Same test after the fix: 9 headshots in 14.
-- **`hvh_botduel` reported success and delivered nothing.** `BotManager.Converge()`
-  trimmed both duellists within a frame or two. It now raises `DesiredPlayers`
-  first. This had silently emptied the arena under three measurements.
+- **`hvh_botduel` and `hvh_bot` reported success and delivered nothing.**
+  `BotManager.Converge()` trimmed the new bots within a frame or two. From
+  `hvh_target 1`, `hvh_botduel` logged two duellists and produced zero, and
+  `hvh_bot` logged a spawn and produced zero. Both now go through a shared
+  `EnsureRoomForBots` helper so the rule lives in one place. This had silently
+  emptied the arena under three measurements.
 
 ### Found, not fixed
 - **Head zones cannot be hit on target dummies.** `ClassifyHit` measures the hit

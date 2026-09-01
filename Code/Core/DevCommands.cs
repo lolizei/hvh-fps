@@ -84,6 +84,24 @@ public static class DevCommands
 		driver.Enabled = true;
 	}
 
+	/// <summary>
+	/// Make room for <paramref name="extra"/> hand-spawned bots.
+	///
+	/// <see cref="BotManager.Converge"/> trims the bot count back to
+	/// DesiredPlayers within a frame or two, so a command that spawns bots
+	/// directly has them deleted immediately after it reports success. Every
+	/// such command must call this first.
+	/// </summary>
+	private static void EnsureRoomForBots( BotManager manager, int extra )
+	{
+		var humans = Player.All.Count( x => !x.IsBot );
+		var needed = humans + extra;
+		if ( manager.DesiredPlayers >= needed ) return;
+
+		manager.DesiredPlayers = needed;
+		Log.Info( $"  (raised DesiredPlayers to {needed} so the new bots are not trimmed)" );
+	}
+
 	/// <summary>Damage yourself. `hvh_hurt 25`</summary>
 	[ConCmd( "hvh_hurt" )]
 	public static void Hurt( float amount = 25f )
@@ -367,6 +385,8 @@ public static class DevCommands
 			return;
 		}
 
+		EnsureRoomForBots( manager, 1 );
+
 		var bot = manager.SpawnBot();
 		Log.Info( bot.IsValid()
 			? $"hvh_bot -> spawned, bots now {BotManager.BotCount}"
@@ -471,15 +491,7 @@ public static class DevCommands
 		var left = new Vector3( -gap * 0.5f, -450f, 16f );
 		var right = new Vector3( gap * 0.5f, -450f, 16f );
 
-		// Converge() trims down to DesiredPlayers, so without this it deletes both
-		// duellists within a frame or two while this command still reports success.
-		// That silently emptied the arena under three separate measurements.
-		var humans = Player.All.Count( x => !x.IsBot );
-		if ( manager.DesiredPlayers < humans + 2 )
-		{
-			manager.DesiredPlayers = humans + 2;
-			Log.Info( $"hvh_botduel: raised DesiredPlayers to {manager.DesiredPlayers} so the duellists survive" );
-		}
+		EnsureRoomForBots( manager, 2 );
 
 		var a = manager.SpawnBot( Team.Vanguard, left );
 		var b = manager.SpawnBot( Team.Syndicate, right );
