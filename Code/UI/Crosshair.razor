@@ -1,0 +1,62 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+@* Four ticks and an optional dot. Gap grows with inaccuracy so the crosshair
+   tells you what your spread is actually doing. *@
+
+<root class="crosshair">
+	@if ( Visible )
+	{
+		<div class="tick top" style="height: @(Length)px; bottom: @(Gap)px; background-color: @Color;" />
+		<div class="tick bottom" style="height: @(Length)px; top: @(Gap)px; background-color: @Color;" />
+		<div class="tick left" style="width: @(Length)px; right: @(Gap)px; background-color: @Color;" />
+		<div class="tick right" style="width: @(Length)px; left: @(Gap)px; background-color: @Color;" />
+
+		@if ( Settings.CrosshairDot )
+		{
+			<div class="dot" style="background-color: @Color;" />
+		}
+	}
+</root>
+
+@code {
+	private static GameSettings Settings => GameSettings.Current;
+
+	private bool Visible => Player.Local.IsValid() && Player.Local.IsAlive;
+
+	private float Length => Settings.CrosshairLength;
+	private string Color => Settings.CrosshairColor.Hex;
+
+	/// <summary>
+	/// Static gap plus a dynamic component driven by the weapon's current
+	/// inaccuracy, so movement visibly opens the crosshair up.
+	/// </summary>
+	private float Gap
+	{
+		get
+		{
+			var gap = Settings.CrosshairGap;
+			if ( !Settings.CrosshairDynamic ) return gap;
+
+			var player = Player.Local;
+			var weapon = player?.Inventory?.ActiveWeapon;
+			if ( !weapon.IsValid() || !player.Movement.IsValid() ) return gap;
+
+			var stats = weapon.BuildStats();
+			if ( stats is null ) return gap;
+
+			var speed = player.Movement.Velocity.WithZ( 0f ).Length;
+			var fraction = MathF.Min( 1f, speed / MathF.Max( 1f, player.Movement.RunSpeed ) );
+			var spread = stats.Spread + stats.MovementInaccuracy * fraction;
+
+			return gap + spread * 4f;
+		}
+	}
+
+	protected override int BuildHash()
+		=> HashCode.Combine( Visible, (int)Gap, Length, Color, Settings.CrosshairDot );
+}

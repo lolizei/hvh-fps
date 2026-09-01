@@ -1,0 +1,60 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits PanelComponent
+
+@*
+	Startup menu. Lives in its own scene and loads the gameplay scene on Play,
+	which is the architecture s&box documents for a menu -> game handoff.
+
+	LOADOUT and MODS are shown but disabled: they belong to later phases and a
+	dead-but-visible entry is clearer than pretending they don't exist.
+*@
+
+<root class="main-menu">
+	<div class="brand">
+		<div class="title">HVH</div>
+		<div class="subtitle">hack versus hack</div>
+	</div>
+
+	@if ( Page == MenuPage.Root )
+	{
+		<div class="buttons">
+			<div class="button primary" onclick=@Play>PLAY</div>
+			<div class="button disabled">LOADOUT</div>
+			<div class="button disabled">MODS</div>
+			<div class="button" onclick=@( () => { Page = MenuPage.Settings; } )>SETTINGS</div>
+			<div class="button quit" onclick=@Quit>QUIT</div>
+		</div>
+	}
+	else
+	{
+		<SettingsMenu OnClose=@( () => { Page = MenuPage.Root; } ) />
+	}
+</root>
+
+@code {
+	private enum MenuPage { Root, Settings }
+
+	/// <summary>The gameplay scene to load when Play is pressed.</summary>
+	[Property] public SceneFile GameScene { get; set; }
+
+	private MenuPage Page { get; set; } = MenuPage.Root;
+
+	private void Play()
+	{
+		if ( GameScene is null )
+		{
+			Log.Warning( "MainMenu has no GameScene assigned - nothing to load." );
+			return;
+		}
+
+		Scene.Load( GameScene );
+	}
+
+	private void Quit() => Game.Close();
+
+	protected override int BuildHash() => HashCode.Combine( Page );
+}

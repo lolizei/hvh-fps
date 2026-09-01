@@ -1,0 +1,55 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+@* Round clock and team scores, centred at the top like a tactical shooter. *@
+
+<root class="round-bar">
+	<div class="score vanguard" style="color: @(HvH.Team.Vanguard.Color().Hex)">@VanguardScore</div>
+
+	<div class="middle">
+		<div class="clock">@Clock</div>
+		<div class="state">@StateLabel</div>
+	</div>
+
+	<div class="score syndicate" style="color: @(HvH.Team.Syndicate.Color().Hex)">@SyndicateScore</div>
+</root>
+
+@code {
+	private RoundManager Round => RoundManager.Current;
+	private TeamManager Teams => TeamManager.Current;
+
+	private int VanguardScore => Teams.IsValid() ? Teams.VanguardScore : 0;
+	private int SyndicateScore => Teams.IsValid() ? Teams.SyndicateScore : 0;
+
+	private string Clock
+	{
+		get
+		{
+			if ( !Round.IsValid() ) return "--:--";
+
+			var seconds = (int)MathF.Ceiling( Round.TimeRemaining );
+			return $"{seconds / 60:0}:{seconds % 60:00}";
+		}
+	}
+
+	private string StateLabel => Round.IsValid()
+		? Round.State switch
+		{
+			RoundState.Warmup => "WARMUP",
+			RoundState.RoundStart => "GET READY",
+			RoundState.Playing => $"ROUND {Round.RoundNumber}",
+			RoundState.RoundEnd => Round.LastWinner.IsPlaying()
+				? $"{Round.LastWinner.DisplayName().ToUpper()} WINS"
+				: "DRAW",
+			RoundState.Restarting => "RESETTING",
+			_ => "",
+		}
+		: "";
+
+	protected override int BuildHash()
+		=> HashCode.Combine( Clock, StateLabel, VanguardScore, SyndicateScore );
+}

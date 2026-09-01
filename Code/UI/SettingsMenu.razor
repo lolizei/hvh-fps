@@ -1,0 +1,109 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+@* Ordinary game settings only. Mod settings deliberately live elsewhere. *@
+
+<root class="settings-menu">
+	<div class="header">SETTINGS</div>
+
+	<div class="section">INPUT &amp; VIEW</div>
+
+	<div class="row">
+		<span class="name">Mouse Sensitivity</span>
+		<SliderControl Min="@(0.1f)" Max="@(5f)" Step="@(0.05f)"
+			Value=@Settings.MouseSensitivity
+			OnValueChanged=@( ( float v ) => Apply( () => { Settings.MouseSensitivity = v; } ) ) />
+		<span class="value">@Settings.MouseSensitivity.ToString( "0.00" )</span>
+	</div>
+
+	<div class="row">
+		<span class="name">Field of View</span>
+		<SliderControl Min="@(70f)" Max="@(120f)" Step="@(1f)"
+			Value=@Settings.FieldOfView
+			OnValueChanged=@( ( float v ) => Apply( () => { Settings.FieldOfView = v; } ) ) />
+		<span class="value">@Settings.FieldOfView.ToString( "0" )</span>
+	</div>
+
+	<div class="section">CROSSHAIR</div>
+
+	<div class="row">
+		<span class="name">Length</span>
+		<SliderControl Min="@(0f)" Max="@(20f)" Step="@(1f)"
+			Value=@Settings.CrosshairLength
+			OnValueChanged=@( ( float v ) => Apply( () => { Settings.CrosshairLength = v; } ) ) />
+		<span class="value">@Settings.CrosshairLength.ToString( "0" )</span>
+	</div>
+
+	<div class="row">
+		<span class="name">Gap</span>
+		<SliderControl Min="@(0f)" Max="@(20f)" Step="@(1f)"
+			Value=@Settings.CrosshairGap
+			OnValueChanged=@( ( float v ) => Apply( () => { Settings.CrosshairGap = v; } ) ) />
+		<span class="value">@Settings.CrosshairGap.ToString( "0" )</span>
+	</div>
+
+	<div class="row">
+		<span class="name">Centre Dot</span>
+		<div class="toggle @(Settings.CrosshairDot ? "on" : "")"
+			onclick=@( () => Apply( () => Settings.CrosshairDot = !Settings.CrosshairDot ) )>
+			@(Settings.CrosshairDot ? "ON" : "OFF")
+		</div>
+	</div>
+
+	<div class="row">
+		<span class="name">Dynamic Spread</span>
+		<div class="toggle @(Settings.CrosshairDynamic ? "on" : "")"
+			onclick=@( () => Apply( () => Settings.CrosshairDynamic = !Settings.CrosshairDynamic ) )>
+			@(Settings.CrosshairDynamic ? "ON" : "OFF")
+		</div>
+	</div>
+
+	<div class="section">AUDIO</div>
+
+	<div class="row">
+		<span class="name">Master Volume</span>
+		<SliderControl Min="@(0f)" Max="@(1f)" Step="@(0.05f)"
+			Value=@Settings.MasterVolume
+			OnValueChanged=@( ( float v ) => Apply( () => { Settings.MasterVolume = v; } ) ) />
+		<span class="value">@((Settings.MasterVolume * 100f).ToString( "0" ))%</span>
+	</div>
+
+	<div class="footer">
+		<div class="button" onclick=@Reset>RESET DEFAULTS</div>
+		<div class="button primary" onclick=@Close>BACK</div>
+	</div>
+</root>
+
+@code {
+	/// <summary>Invoked when the player backs out. The owner decides what that means.</summary>
+	public Action OnClose { get; set; }
+
+	private static GameSettings Settings => GameSettings.Current;
+
+	/// <summary>Mutate, persist, redraw. Every control goes through this.</summary>
+	private void Apply( Action change )
+	{
+		change();
+		Settings.Save();
+		StateHasChanged();
+	}
+
+	private void Reset()
+	{
+		GameSettings.ResetToDefaults();
+		StateHasChanged();
+	}
+
+	private void Close() => OnClose?.Invoke();
+
+	protected override int BuildHash() => HashCode.Combine(
+		Settings.MouseSensitivity, Settings.FieldOfView,
+		Settings.CrosshairLength, Settings.CrosshairGap,
+		Settings.CrosshairDot, Settings.CrosshairDynamic,
+		Settings.MasterVolume );
+}
+

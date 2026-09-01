@@ -1,0 +1,275 @@
+{
+  "RootObject": {
+    "__guid": "a54cf0c3-f1e9-4d33-ac3f-767300019c23",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "player",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "Sandbox.CharacterController",
+        "__guid": "07696153-7d93-46fa-880d-1e098a6b591a",
+        "__enabled": true,
+        "Height": 72,
+        "Radius": 16,
+        "StepHeight": 18,
+        "GroundAngle": 46,
+        "Acceleration": 10,
+        "Bounciness": 0.3,
+        "IgnoreLayers": "",
+        "UseCollisionRules": false
+      },
+      {
+        "__type": "HvH.HealthComponent",
+        "__guid": "219f9c67-8668-4c70-84fa-67fe09aabbd6",
+        "__enabled": true,
+        "MaxHealth": 100
+      },
+      {
+        "__type": "HvH.Player",
+        "__guid": "e629108a-55c2-4aa5-bb66-95ef226c7377",
+        "__enabled": true,
+        "RespawnDelay": 3
+      },
+      {
+        "__type": "HvH.PlayerMovement",
+        "__guid": "0df7d79f-6881-4ed6-adc4-5f7e1fa43d97",
+        "__enabled": true
+      },
+      {
+        "__type": "HvH.PlayerCamera",
+        "__guid": "31f1e347-675d-4374-8ea5-ed49d0237009",
+        "__enabled": true
+      },
+      {
+        "__type": "HvH.PlayerState",
+        "__guid": "60c98a89-555f-4fa5-8e1d-97f02b0c3dac",
+        "__enabled": true
+      },
+      {
+        "__type": "HvH.WeaponInventory",
+        "__guid": "ab3f91d4-12a1-405c-b115-bb657c2e1453",
+        "__enabled": true,
+        "ActiveIndex": 0
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "1643df95-3461-41a6-ab42-44f46a051275",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Body",
+        "Position": "0,0,36",
+        "Rotation": "0,0,0,1",
+        "Scale": "0.64,0.64,1.44",
+        "Tags": "player",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 0,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "66eee718-cda6-41c1-8247-33d0a56f0707",
+            "__enabled": true,
+            "Model": "models/dev/box.vmdl",
+            "MaterialOverride": "materials/default.vmat",
+            "RenderType": "On",
+            "Tint": "0.85,0.25,0.2,1",
+            "BodyGroups": 18446744073709551615
+          },
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "2332e5ce-af5c-4d19-b8d5-2a1761586180",
+            "__enabled": true,
+            "Center": "0,0,0",
+            "Scale": "50,50,50",
+            "IsTrigger": false,
+            "Static": false
+          }
+        ]
+      },
+      {
+        "__guid": "64235b77-5d5d-43e1-bed9-7b41812908b5",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Eye",
+        "Position": "0,0,64",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 0,
+        "Components": [
+          {
+            "__type": "Sandbox.CameraComponent",
+            "__guid": "9fb8a48c-3594-4405-a52d-0fae9d2c43a3",
+            "__enabled": true,
+            "BackgroundColor": "0.12,0.14,0.17,1",
+            "ClearFlags": "All",
+            "FieldOfView": 90,
+            "IsMainCamera": true,
+            "Priority": 100,
+            "Orthographic": false,
+            "OrthographicHeight": 1204,
+            "RenderExcludeTags": "",
+            "RenderTags": "",
+            "TargetEye": "None",
+            "Viewport": "0,0,1,1",
+            "ZFar": 20000,
+            "ZNear": 3
+          }
+        ]
+      },
+      {
+        "__guid": "5591965d-7b6f-4f6e-9b9d-2b37769b23bb",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Weapons",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 0,
+        "Components": [],
+        "Children": [
+          {
+            "__guid": "d0e9b415-8bf4-4841-940c-98c851ff842c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Rifle",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 1,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 0,
+            "Components": [
+              {
+                "__type": "HvH.Weapon",
+                "__guid": "a22086fd-6b79-42bf-83f2-27723031e7c9",
+                "__enabled": true,
+                "BuiltInId": "rifle",
+                "Ammo": -1,
+                "Reserve": -1,
+                "IsReloading": false
+              }
+            ]
+          },
+          {
+            "__guid": "055dca87-4ad4-4f18-bb8a-35692c7ccb2c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Pistol",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 1,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 0,
+            "Components": [
+              {
+                "__type": "HvH.Weapon",
+                "__guid": "2a3b7791-3d18-477f-86f7-fe9d73a78032",
+                "__enabled": true,
+                "BuiltInId": "pistol",
+                "Ammo": -1,
+                "Reserve": -1,
+                "IsReloading": false
+              }
+            ]
+          },
+          {
+            "__guid": "75915216-6602-4b02-9373-35c544a7c161",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Sniper",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 1,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 0,
+            "Components": [
+              {
+                "__type": "HvH.Weapon",
+                "__guid": "619d44ef-914f-4972-92e3-8213e68c44dd",
+                "__enabled": true,
+                "BuiltInId": "sniper",
+                "Ammo": -1,
+                "Reserve": -1,
+                "IsReloading": false
+              }
+            ]
+          },
+          {
+            "__guid": "b1bed441-486a-4eb0-b83f-f51cfd7dda47",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "SMG",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 1,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 0,
+            "Components": [
+              {
+                "__type": "HvH.Weapon",
+                "__guid": "facac917-6705-4964-a611-f2bd1cb0d917",
+                "__enabled": true,
+                "BuiltInId": "smg",
+                "Ammo": -1,
+                "Reserve": -1,
+                "IsReloading": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

@@ -1,0 +1,172 @@
+// Default HVH menu. Dark windowed panel with category columns and a cyan
+// accent - a nod to old-school cheat menus, drawn from scratch.
+
+$accent: #35e0d8;
+$panel: rgba(14, 16, 20, 0.96);
+
+.mod-menu {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	min-width: 760px;
+	background-color: $panel;
+	border: 1px solid rgba(53, 224, 216, 0.35);
+	border-radius: 4px;
+	font-family: Poppins;
+	color: white;
+	pointer-events: all;
+
+	.titlebar {
+		flex-direction: row;
+		align-items: center;
+		background-color: rgba(53, 224, 216, 0.12);
+		padding: 9px 14px;
+		border-bottom: 1px solid rgba(53, 224, 216, 0.3);
+
+		.name {
+			font-size: 17px;
+			font-weight: bold;
+			letter-spacing: 3px;
+			color: $accent;
+		}
+
+		.meta {
+			flex-grow: 1;
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.4);
+			margin-left: 12px;
+		}
+
+		.close {
+			font-size: 13px;
+			padding: 2px 8px;
+			cursor: pointer;
+			color: rgba(255, 255, 255, 0.5);
+
+			&:hover { color: #ff6b6b; }
+		}
+	}
+
+	.profiles {
+		flex-direction: row;
+		align-items: center;
+		padding: 7px 14px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+		.label {
+			font-size: 10px;
+			letter-spacing: 2px;
+			color: rgba(255, 255, 255, 0.35);
+			margin-right: 8px;
+		}
+
+		.current {
+			flex-grow: 1;
+			font-size: 13px;
+			color: $accent;
+		}
+
+		.chip {
+			font-size: 10px;
+			letter-spacing: 1px;
+			padding: 3px 10px;
+			margin-left: 6px;
+			border-radius: 2px;
+			background-color: rgba(255, 255, 255, 0.07);
+			cursor: pointer;
+
+			&:hover { background-color: rgba(53, 224, 216, 0.25); }
+		}
+	}
+
+	.columns {
+		flex-direction: row;
+		padding: 12px;
+
+		.column {
+			flex-direction: column;
+			width: 240px;
+			margin-right: 12px;
+
+			.category {
+				font-size: 11px;
+				letter-spacing: 3px;
+				color: $accent;
+				border-bottom: 1px solid rgba(53, 224, 216, 0.25);
+				padding-bottom: 5px;
+				margin-bottom: 7px;
+			}
+		}
+	}
+
+	.feature {
+		flex-direction: column;
+		margin-bottom: 7px;
+
+		.head {
+			flex-direction: row;
+			align-items: center;
+			cursor: pointer;
+			padding: 2px 0;
+
+			&:hover .fname { color: $accent; }
+		}
+
+		.box {
+			width: 13px;
+			height: 13px;
+			margin-right: 8px;
+			border: 1px solid rgba(255, 255, 255, 0.35);
+			font-size: 10px;
+			text-align: center;
+			color: $accent;
+
+			&.on { border-color: $accent; }
+		}
+
+		.fname { font-size: 13px; }
+	}
+
+	.setting {
+		flex-direction: row;
+		align-items: center;
+		padding: 2px 0 2px 21px;
+
+		.slabel {
+			width: 96px;
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.5);
+		}
+
+		.slider { flex-grow: 1; margin: 0 6px; }
+
+		.svalue {
+			width: 42px;
+			text-align: right;
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.75);
+		}
+
+		.mini {
+			min-width: 66px;
+			text-align: center;
+			font-size: 10px;
+			padding: 2px 0;
+			border-radius: 2px;
+			background-color: rgba(255, 255, 255, 0.07);
+			cursor: pointer;
+
+			&.on { background-color: rgba(53, 224, 216, 0.25); color: $accent; }
+		}
+	}
+
+	.footer {
+		padding: 7px 14px;
+		font-size: 10px;
+		letter-spacing: 2px;
+		color: rgba(255, 255, 255, 0.25);
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+	}
+}

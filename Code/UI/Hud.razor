@@ -1,0 +1,31 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits PanelComponent
+
+@*
+	Root of the in-game HUD. Composition only - every readout is its own panel
+	that pulls what it needs from the game state. Gameplay code never reaches
+	into these panels.
+*@
+
+<root class="hud">
+	<Crosshair />
+	<RoundBar />
+	<KillFeed />
+	<Vitals />
+	<AmmoCounter />
+
+	@if ( ShowScoreboard )
+	{
+		<Scoreboard />
+	}
+</root>
+
+@code {
+	private bool ShowScoreboard => Input.Down( "Score" );
+
+	protected override int BuildHash() => HashCode.Combine( ShowScoreboard );
+}

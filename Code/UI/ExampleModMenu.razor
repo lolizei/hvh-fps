@@ -1,0 +1,132 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@using HvH.Mods
+@inherits PanelComponent
+
+@*
+	The example mod's own menu.
+
+	Deliberately nothing like the default one: a compact strip docked to the
+	bottom of the screen instead of a windowed panel. It shares no code and no
+	styling with DefaultModMenu - the only thing they have in common is that
+	both talk to IGameMod / IModFeature / ModSetting.
+*@
+
+<root class="example-menu">
+	<div class="strip">
+		<div class="badge">@(Mod?.Name ?? "Mod")</div>
+
+		@foreach ( var feature in Features )
+		{
+			<div class="pill @(feature.Enabled ? "on" : "")"
+				onclick=@( () => Toggle( feature ) )>
+				<span class="pname">@feature.Name</span>
+
+				@if ( feature.Enabled && feature.Settings.Count > 0 )
+				{
+					<span class="pvalue">@Summarise( feature )</span>
+				}
+			</div>
+		}
+
+		<div class="pill expand" onclick=@ToggleDetail>@(ShowDetail ? "HIDE" : "TUNE")</div>
+	</div>
+
+	@if ( ShowDetail )
+	{
+		<div class="detail">
+			@foreach ( var feature in Features.Where( f => f.Enabled && f.Settings.Count > 0 ) )
+			{
+				<div class="group">
+					<div class="gname">@feature.Name</div>
+
+					@foreach ( var setting in feature.Settings )
+					{
+						<div class="line">
+							<span class="lname">@setting.Label</span>
+
+							@if ( setting.Kind == ModSettingKind.Slider )
+							{
+								<SliderControl class="slider"
+									Min=@setting.Min Max=@setting.Max Step=@setting.Step
+									Value=@setting.GetFloat()
+									OnValueChanged=@( ( float v ) => Apply( () => setting.SetFloat( v ) ) ) />
+							}
+							else if ( setting.Kind == ModSettingKind.Toggle )
+							{
+								<div class="switch @(setting.GetBool() ? "on" : "")"
+									onclick=@( () => Apply( () => setting.SetBool( !setting.GetBool() ) ) )>
+									@setting.DisplayValue
+								</div>
+							}
+							else
+							{
+								<div class="switch" onclick=@( () => Cycle( setting ) )>@setting.DisplayValue</div>
+							}
+
+							<span class="lvalue">@setting.DisplayValue</span>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code {
+	public IGameMod Mod { get; set; }
+
+	private bool ShowDetail { get; set; }
+
+	private IReadOnlyList<IModFeature> Features
+		=> Mod?.Features ?? Array.Empty<IModFeature>();
+
+	private void Toggle( IModFeature feature )
+	{
+		feature.Enabled = !feature.Enabled;
+		Mod?.Config?.Save();
+		StateHasChanged();
+	}
+
+	private void ToggleDetail()
+	{
+		ShowDetail = !ShowDetail;
+		StateHasChanged();
+	}
+
+	private void Apply( Action change )
+	{
+		change();
+		StateHasChanged();
+	}
+
+	private void Cycle( ModSetting setting )
+	{
+		if ( setting.Choices.Length == 0 ) return;
+
+		Apply( () => setting.SetInt( ( setting.GetInt() + 1 ) % setting.Choices.Length ) );
+	}
+
+	/// <summary>First setting's value, as a one-glance summary on the pill.</summary>
+	private static string Summarise( IModFeature feature )
+		=> feature.Settings.Count == 0 ? "" : feature.Settings[0].DisplayValue;
+
+	protected override int BuildHash()
+	{
+		var hash = new HashCode();
+		hash.Add( ShowDetail );
+
+		foreach ( var feature in Features )
+		{
+			hash.Add( feature.Enabled );
+
+			foreach ( var setting in feature.Settings )
+				hash.Add( setting.DisplayValue );
+		}
+
+		return hash.ToHashCode();
+	}
+}

@@ -1,0 +1,30 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+<root class="vitals">
+	<div class="stat health">
+		<div class="label">HP</div>
+		<div class="value">@Health</div>
+	</div>
+
+	@if ( Armor > 0 )
+	{
+		<div class="stat armor">
+			<div class="label">AR</div>
+			<div class="value">@Armor</div>
+		</div>
+	}
+</root>
+
+@code {
+	private HealthComponent Target => Player.Local?.Health;
+
+	private int Health => Target.IsValid() ? (int)MathF.Ceiling( Target.Health ) : 0;
+	private int Armor => Target.IsValid() ? (int)MathF.Ceiling( Target.Armor ) : 0;
+
+	protected override int BuildHash() => HashCode.Combine( Health, Armor );
+}

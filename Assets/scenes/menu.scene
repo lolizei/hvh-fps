@@ -1,0 +1,100 @@
+{
+  "__guid": "97c3b05f-48a2-4eea-ac97-0a22435db867",
+  "GameObjects": [
+    {
+      "__guid": "b7e2414f-f482-46ce-95f0-02e771f00385",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Menu Camera",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.CameraComponent",
+          "__guid": "8405fb06-2da0-4eb3-bf7a-18870a059136",
+          "__enabled": true,
+          "BackgroundColor": "0.043,0.051,0.067,1",
+          "ClearFlags": "All",
+          "FieldOfView": 60,
+          "IsMainCamera": true,
+          "Priority": 1,
+          "Orthographic": false,
+          "OrthographicHeight": 1204,
+          "RenderExcludeTags": "",
+          "RenderTags": "",
+          "TargetEye": "None",
+          "Viewport": "0,0,1,1",
+          "ZFar": 10000,
+          "ZNear": 10
+        }
+      ]
+    },
+    {
+      "__guid": "47aa8819-a576-4190-8b90-97f6561a1cff",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Menu UI",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.ScreenPanel",
+          "__guid": "4130e5ed-25e9-4572-b875-8a25ecf365fa",
+          "__enabled": true,
+          "AutoScreenScale": true,
+          "Opacity": 1,
+          "Scale": 1,
+          "ZIndex": 100
+        },
+        {
+          "__type": "HvH.UI.MainMenu",
+          "__guid": "e43cd314-464c-4dec-8fc6-81b654ba84d7",
+          "__enabled": true,
+          "GameScene": "scenes/game.scene"
+        }
+      ]
+    }
+  ],
+  "SceneProperties": {
+    "FixedUpdateFrequency": 50,
+    "MaxFixedUpdates": 5,
+    "NetworkFrequency": 60,
+    "NetworkInterpolation": true,
+    "ThreadedAnimation": true,
+    "TimeScale": 1,
+    "UseFixedUpdate": true,
+    "NavMesh": {
+      "Enabled": false,
+      "IncludeStaticBodies": true,
+      "IncludeKeyframedBodies": true,
+      "EditorAutoUpdate": true,
+      "AgentHeight": 64,
+      "AgentRadius": 16,
+      "AgentStepSize": 18,
+      "AgentMaxSlope": 40,
+      "ExcludedBodies": "",
+      "IncludedBodies": ""
+    }
+  },
+  "Title": "menu",
+  "Description": "Main menu",
+  "ResourceVersion": 1,
+  "__references": [],
+  "__version": 1
+}

@@ -1,0 +1,146 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@using HvH.Mods
+@inherits PanelComponent
+
+@*
+	The default HVH menu.
+
+	Note what it does NOT do: it never mentions a specific feature by name. It
+	walks IGameMod.Features and renders whatever ModSetting descriptors it
+	finds. That is the proof the API is real - this menu would draw a
+	third-party mod's features just as happily, and a third-party menu can draw
+	these.
+
+	Visual style nods at old-school cheat menus (dark panel, category columns,
+	cyan accents) with an original design.
+*@
+
+<root class="mod-menu">
+	<div class="titlebar">
+		<span class="name">@(Mod?.Name ?? "Mods")</span>
+		<span class="meta">v@(Mod?.Version) by @(Mod?.Author)</span>
+		<span class="close" onclick=@CloseMenu>X</span>
+	</div>
+
+	<div class="profiles">
+		<span class="label">CONFIG</span>
+		<span class="current">@(Mod?.Config?.Profile ?? "default")</span>
+		<div class="chip" onclick=@SaveProfile>SAVE</div>
+		<div class="chip" onclick=@ReloadProfile>RELOAD</div>
+	</div>
+
+	<div class="columns">
+		@foreach ( var category in Categories )
+		{
+			<div class="column">
+				<div class="category">@category.Key</div>
+
+				@foreach ( var feature in category )
+				{
+					<div class="feature">
+						<div class="head" onclick=@( () => ToggleFeature( feature ) )>
+							<span class="box @(feature.Enabled ? "on" : "")">@(feature.Enabled ? "x" : "")</span>
+							<span class="fname">@feature.Name</span>
+						</div>
+
+						@if ( feature.Enabled )
+						{
+							@foreach ( var setting in feature.Settings )
+							{
+								<div class="setting">
+									<span class="slabel">@setting.Label</span>
+
+									@switch ( setting.Kind )
+									{
+										case ModSettingKind.Toggle:
+											<div class="mini @(setting.GetBool() ? "on" : "")"
+												onclick=@( () => Apply( () => setting.SetBool( !setting.GetBool() ) ) )>
+												@setting.DisplayValue
+											</div>
+											break;
+
+										case ModSettingKind.Slider:
+											<SliderControl class="slider"
+												Min=@setting.Min Max=@setting.Max Step=@setting.Step
+												Value=@setting.GetFloat()
+												OnValueChanged=@( ( float v ) => Apply( () => setting.SetFloat( v ) ) ) />
+											<span class="svalue">@setting.DisplayValue</span>
+											break;
+
+										case ModSettingKind.Choice:
+											<div class="mini" onclick=@( () => CycleChoice( setting ) )>
+												@setting.DisplayValue
+											</div>
+											break;
+									}
+								</div>
+							}
+						}
+					</div>
+				}
+			</div>
+		}
+	</div>
+
+	<div class="footer">Press INSERT to close</div>
+</root>
+
+@code {
+	/// <summary>The mod being drawn. Injected by DefaultHvhMenu.Configure.</summary>
+	public IGameMod Mod { get; set; }
+
+	private IEnumerable<IGrouping<string, IModFeature>> Categories
+		=> Mod?.Features?.GroupBy( f => f.Category )
+		   ?? Enumerable.Empty<IGrouping<string, IModFeature>>();
+
+	private void ToggleFeature( IModFeature feature )
+	{
+		feature.Enabled = !feature.Enabled;
+		Mod?.Config?.Save();
+		StateHasChanged();
+	}
+
+	private void Apply( Action change )
+	{
+		change();
+		StateHasChanged();
+	}
+
+	private void CycleChoice( ModSetting setting )
+	{
+		if ( setting.Choices.Length == 0 ) return;
+
+		var next = ( setting.GetInt() + 1 ) % setting.Choices.Length;
+		Apply( () => setting.SetInt( next ) );
+	}
+
+	private void SaveProfile() => Mod?.Config?.Save();
+
+	private void ReloadProfile()
+	{
+		Mod?.Config?.Load( Mod.Config.Profile );
+		StateHasChanged();
+	}
+
+	private void CloseMenu() => Mod?.Menu?.Close();
+
+	protected override int BuildHash()
+	{
+		var hash = new HashCode();
+		hash.Add( Mod?.Id );
+
+		foreach ( var feature in Mod?.Features ?? (IReadOnlyList<IModFeature>)Array.Empty<IModFeature>() )
+		{
+			hash.Add( feature.Enabled );
+
+			foreach ( var setting in feature.Settings )
+				hash.Add( setting.DisplayValue );
+		}
+
+		return hash.ToHashCode();
+	}
+}

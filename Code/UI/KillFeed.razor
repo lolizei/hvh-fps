@@ -1,0 +1,43 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+@* Reads the pruned log off GameEvents rather than subscribing, so rebuilding
+   the panel never drops entries. *@
+
+<root class="kill-feed">
+	@foreach ( var kill in Kills )
+	{
+		<div class="entry">
+			<span class="killer" style="color: @(kill.KillerTeam.Color().Hex)">
+				@(string.IsNullOrEmpty( kill.KillerName ) ? "world" : kill.KillerName)
+			</span>
+
+			<span class="weapon">@kill.WeaponName</span>
+
+			@if ( kill.Headshot )
+			{
+				<span class="headshot">HS</span>
+			}
+
+			<span class="victim" style="color: @(kill.VictimTeam.Color().Hex)">@kill.VictimName</span>
+		</div>
+	}
+</root>
+
+@code {
+	private IEnumerable<KillEvent> Kills
+		=> GameEvents.Current?.RecentKills ?? Enumerable.Empty<KillEvent>();
+
+	protected override int BuildHash()
+	{
+		var hash = new HashCode();
+		foreach ( var kill in Kills )
+			hash.Add( HashCode.Combine( kill.KillerName, kill.VictimName, kill.WeaponName ) );
+
+		return hash.ToHashCode();
+	}
+}

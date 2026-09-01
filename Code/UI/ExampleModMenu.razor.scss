@@ -1,0 +1,119 @@
+// The example mod's menu. Intentionally shares nothing with the default menu -
+// different shape, different palette, different interaction. Docked strip
+// rather than a floating window.
+
+$accent: #ffb347;
+
+.example-menu {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	font-family: Poppins;
+	color: white;
+	pointer-events: all;
+
+	.strip {
+		flex-direction: row;
+		align-items: center;
+		background-color: rgba(18, 15, 10, 0.94);
+		border-top: 2px solid $accent;
+		padding: 9px 16px;
+		width: 100%;
+
+		.badge {
+			font-size: 12px;
+			letter-spacing: 2px;
+			color: $accent;
+			margin-right: 18px;
+		}
+
+		.pill {
+			flex-direction: row;
+			align-items: center;
+			background-color: rgba(255, 255, 255, 0.06);
+			border-radius: 14px;
+			padding: 5px 14px;
+			margin-right: 9px;
+			cursor: pointer;
+
+			&:hover { background-color: rgba(255, 179, 71, 0.2); }
+
+			&.on {
+				background-color: rgba(255, 179, 71, 0.28);
+				color: $accent;
+			}
+
+			.pname { font-size: 12px; }
+
+			.pvalue {
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.6);
+				margin-left: 8px;
+			}
+		}
+
+		.expand {
+			margin-left: auto;
+			margin-right: 0px;
+			letter-spacing: 2px;
+			font-size: 11px;
+		}
+	}
+
+	.detail {
+		flex-direction: row;
+		flex-wrap: wrap;
+		background-color: rgba(18, 15, 10, 0.94);
+		width: 100%;
+		padding: 12px 16px;
+
+		.group {
+			flex-direction: column;
+			min-width: 300px;
+			margin-right: 26px;
+
+			.gname {
+				font-size: 11px;
+				letter-spacing: 2px;
+				color: $accent;
+				margin-bottom: 5px;
+			}
+		}
+
+		.line {
+			flex-direction: row;
+			align-items: center;
+			padding: 2px 0;
+
+			.lname {
+				width: 118px;
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.55);
+			}
+
+			.slider { flex-grow: 1; margin: 0 8px; }
+
+			.switch {
+				min-width: 60px;
+				text-align: center;
+				font-size: 10px;
+				padding: 2px 0;
+				border-radius: 2px;
+				background-color: rgba(255, 255, 255, 0.07);
+				cursor: pointer;
+
+				&.on { background-color: rgba(255, 179, 71, 0.3); color: $accent; }
+			}
+
+			.lvalue {
+				width: 46px;
+				text-align: right;
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.7);
+			}
+		}
+	}
+}

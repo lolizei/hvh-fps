@@ -1,0 +1,34 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+<root class="ammo">
+	@if ( Weapon.IsValid() )
+	{
+		<div class="weapon-name">@Weapon.DisplayName</div>
+		<div class="counts @(Reloading ? "reloading" : "")">
+			<span class="mag">@Mag</span>
+			<span class="divider">/</span>
+			<span class="reserve">@Reserve</span>
+		</div>
+
+		@if ( Reloading )
+		{
+			<div class="reload-hint">RELOADING</div>
+		}
+	}
+</root>
+
+@code {
+	private Weapon Weapon => Player.Local?.Inventory?.ActiveWeapon;
+
+	private int Mag => Weapon.IsValid() ? Math.Max( 0, Weapon.Ammo ) : 0;
+	private int Reserve => Weapon.IsValid() ? Math.Max( 0, Weapon.Reserve ) : 0;
+	private bool Reloading => Weapon.IsValid() && Weapon.IsReloading;
+
+	protected override int BuildHash()
+		=> HashCode.Combine( Weapon?.DisplayName, Mag, Reserve, Reloading );
+}

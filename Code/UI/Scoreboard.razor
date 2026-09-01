@@ -1,0 +1,52 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+<root class="scoreboard">
+	@foreach ( var team in Teams )
+	{
+		<div class="team-block">
+			<div class="team-header" style="color: @(team.Color().Hex)">
+				<span class="name">@team.DisplayName()</span>
+				<span class="score">@(TeamManager.Current?.ScoreOf( team ) ?? 0)</span>
+			</div>
+
+			<div class="columns">
+				<span class="col-name">PLAYER</span>
+				<span class="col-num">K</span>
+				<span class="col-num">D</span>
+			</div>
+
+			@foreach ( var player in PlayerState.OnTeam( team ).OrderByDescending( x => x.Kills ) )
+			{
+				<div class="row @(IsLocal( player ) ? "local" : "")">
+					<span class="col-name">@player.DisplayName</span>
+					<span class="col-num">@player.Kills</span>
+					<span class="col-num">@player.Deaths</span>
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code {
+	private static readonly Team[] Teams = { HvH.Team.Vanguard, HvH.Team.Syndicate };
+
+	private static bool IsLocal( PlayerState state )
+		=> state.IsValid() && Player.Local.IsValid() && Player.Local.State == state;
+
+	protected override int BuildHash()
+	{
+		var hash = new HashCode();
+		foreach ( var player in PlayerState.All )
+			hash.Add( HashCode.Combine( player.DisplayName, player.Kills, player.Deaths, player.Team ) );
+
+		hash.Add( TeamManager.Current?.VanguardScore ?? 0 );
+		hash.Add( TeamManager.Current?.SyndicateScore ?? 0 );
+
+		return hash.ToHashCode();
+	}
+}
