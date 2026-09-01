@@ -401,10 +401,14 @@ public static class DevCommands
 		// Drop it onto the floor. Placing it at the shooter's Z leaves it in the
 		// air whenever the shooter is stood on something, and a falling target
 		// invalidates the aim taken a moment earlier.
+		//
+		// Hit world geometry only. The two chained IgnoreGameObjectHierarchy calls
+		// this used to have did not stack - the second replaced the first - so the
+		// bot stopped being ignored and the trace landed on the bot already stood
+		// there, teleporting it onto its own head at z=128 and leaving it falling.
 		var ground = player.Scene.Trace
 			.Ray( target + Vector3.Up * 256f, target + Vector3.Down * 1024f )
-			.IgnoreGameObjectHierarchy( bot.GameObject )
-			.IgnoreGameObjectHierarchy( player.GameObject )
+			.WithTag( "solid" )
 			.Run();
 
 		if ( ground.Hit )
@@ -466,6 +470,16 @@ public static class DevCommands
 		// 240,000 units away.
 		var left = new Vector3( -gap * 0.5f, -450f, 16f );
 		var right = new Vector3( gap * 0.5f, -450f, 16f );
+
+		// Converge() trims down to DesiredPlayers, so without this it deletes both
+		// duellists within a frame or two while this command still reports success.
+		// That silently emptied the arena under three separate measurements.
+		var humans = Player.All.Count( x => !x.IsBot );
+		if ( manager.DesiredPlayers < humans + 2 )
+		{
+			manager.DesiredPlayers = humans + 2;
+			Log.Info( $"hvh_botduel: raised DesiredPlayers to {manager.DesiredPlayers} so the duellists survive" );
+		}
 
 		var a = manager.SpawnBot( Team.Vanguard, left );
 		var b = manager.SpawnBot( Team.Syndicate, right );

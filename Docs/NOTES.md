@@ -58,8 +58,8 @@ Concretely: there is **no gunshot sound in s&box**. Useful things that *are*
 guaranteed present:
 
 ```
-sounds/Impacts/Bullets/impact-bullet-flesh
-sounds/Impacts/Bullets/impact-bullet-concrete
+sounds/impacts/bullets/impact-bullet-flesh
+sounds/impacts/bullets/impact-bullet-concrete
 sounds/footsteps/footstep-concrete
 prefabs/effects/default_muzzleflash.prefab
 prefabs/effects/default_tracer.prefab
@@ -117,8 +117,55 @@ var tr = Scene.Trace.Ray( a, b ).IgnoreGameObjectHierarchy( self ).Run();
 var visible = !tr.Hit || tr.GameObject.GetComponentInParent<Player>() == target;
 ```
 
-`BotBrain.CanSee` has the fixed version. `TargetSelector.IsVisible` in the mod
-layer still has the bug and is knowingly left alone.
+`BotBrain.CanSee` has the fixed version.
+
+**This has now bitten twice.** The second was `hvh_botnear`, whose "drop the bot
+onto the floor" trace chained the same two calls, so it stopped ignoring the bot
+and landed on the bot already standing there - teleporting it to z=128, on top of
+its own head, where it fell while the aim taken a moment earlier went stale. It
+reported success every time. Symptom: a scripted aim that misses 13 shots out of
+13 for no visible reason.
+
+When you want world geometry, do not ignore pawns one at a time - filter for the
+thing you actually want:
+
+```csharp
+Scene.Trace.Ray( a, b ).WithTag( "solid" ).Run();   // world only, no pawn can interfere
+```
+
+World geometry is tagged `solid`; pawns and their children are tagged `player`.
+
+`TargetSelector.IsVisible` in the mod layer still has the original bug and is
+knowingly left alone - the HVH features are all default-off and untested.
+
+---
+
+## `BotManager.Converge()` deletes bots you spawned by hand
+
+`Converge()` trims the bot count to `DesiredPlayers - humans`. Anything that
+spawns bots directly - `hvh_botduel` did - has its bots removed within a frame or
+two, *after* the command has already logged that it succeeded. From
+`hvh_target 1`, `hvh_botduel` reported two duellists and delivered zero.
+
+Raise `DesiredPlayers` first, or the arena empties under you. This silently
+invalidated three separate measurements before it was spotted.
+
+---
+
+## Practice dummies are placed at their centre, players at their feet
+
+`Weapon.ClassifyHit` measures the hit height as a fraction of stand height
+*upward from the target's origin*. A `Player` origin is at the feet, so that is
+correct. `TargetDummy` objects sit at z=36 - their middle - so the fraction is
+measured from the dummy's waist.
+
+Consequence: on a dummy, the head zone (fraction >= 0.88) starts above the
+dummy's own head and **cannot be hit at all**; everything below the waist reads
+as a limb. Verify hit zones against a bot, never against a dummy.
+
+---
+
+## A clean `dotnet build` does not mean it compiles
 
 ---
 

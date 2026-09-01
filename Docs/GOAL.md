@@ -87,6 +87,67 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
 
+## Task 5 - consolidation sweep (2026-09-01)
+
+All four feature tasks re-verified in one session on current main. **Current
+state, not as-shipped.**
+
+| Task | Check | Result |
+|---|---|---|
+| 1 | Muzzle flash spawns per shot, host-broadcast | PASS - exactly 1 per shot |
+| 1 | Fire sound | **BLOCKED** - no gunshot asset exists |
+| 2 | Tracer spawns per shot | PASS |
+| 2 | Impact spawns where the shot lands | PASS |
+| 2 | Impact sits on the hit geometry | PASS - 3 consecutive impacts at exactly x=-300.0, one plane |
+| 2 | Effects self-destruct | PASS - 36 -> 42 -> 36 objects |
+| 3 | Body marker | PASS - 12/14 |
+| 3 | Headshot marker | PASS - 9/14 vs a bot |
+| 3 | Kill marker | PASS |
+| 3 | Miss shows nothing | PASS |
+| 3 | Someone else's hit never shows on my crosshair | PASS - 22/22 invisible during bot combat |
+| 3 | Headshot on a **target dummy** | **FAIL** - impossible by geometry, see below |
+| 4 | Cadence differs walk/run/crouch | PASS - 1.37 / 2.12 / 0.50 steps/s |
+| 4 | Airborne silence | PASS - 9.83s airborne, 0 steps, 13 landings |
+| 4 | Bot-produced footsteps, human idle | PASS - bot 5->18 while human held at 198 |
+| 4 | Ground surface resolves (not silently falling back) | PASS - `default` -> `footstep-concrete` |
+
+Cadence is lower than the Task 4 figures because average speed was lower this
+run (more wall contact). The speed-independent measure, stride, matches:
+90.8 / 86.5 / 171.7 u against 85 / 85 / 153 configured.
+
+### Sustained load - 8 bots plus a human, ~4.5 minutes continuous combat
+
+Object counts sampled every 7s throughout, not just before and after:
+
+- Quiescent floor with 9 pawns: **exactly 100**, returned to on 14 separate
+  samples spread across the whole run. Never crept.
+- Peak: **413 objects** (124 effect objects in flight) during a heavy exchange.
+- After clearing bots and settling: **36** - the identical baseline the session
+  started at.
+
+No leak. This is the first time all four effect systems ran together for a long
+stretch. 9 pawns is at the ~10-simultaneous-shooter pooling threshold and the
+numbers are reported, not acted on, as agreed.
+
+### Bugs found and fixed by the sweep
+- **`hvh_botnear` teleported the bot onto its own head.** Its ground trace chained
+  two `IgnoreGameObjectHierarchy` calls - the documented trap, second occurrence -
+  so it stopped ignoring the bot, hit the bot standing there and placed it at
+  z=128, falling. Scripted aim then missed 13/13. Now traces `WithTag("solid")`.
+  Same test after the fix: 9 headshots in 14.
+- **`hvh_botduel` reported success and delivered nothing.** `BotManager.Converge()`
+  trimmed both duellists within a frame or two. It now raises `DesiredPlayers`
+  first. This had silently emptied the arena under three measurements.
+
+### Found, not fixed
+- **Head zones cannot be hit on target dummies.** `ClassifyHit` measures the hit
+  height upward from the target's origin. A player's origin is at its feet;
+  a `TargetDummy` sits at z=36, its middle. So on a dummy the head zone begins
+  above the dummy's own head, and everything below its waist reads as a limb.
+  Player-versus-player hit zones are unaffected, which is why this is reported
+  rather than fixed: the fix is either re-placing the dummies or changing
+  `ClassifyHit`, and the damage path is a working system. Verify zones on a bot.
+
 ## Known issues (task 4)
 - **The default surface uses the same sound for left and right feet.** The
   alternation in `PlayerFootsteps` is real, but `default` points `FootLeft` and

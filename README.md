@@ -35,7 +35,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | Viewmodel | Not implemented — the gun is invisible |
 | Real map | Not started. Current arena is a grey box |
 
-Roughly 6k lines of C# and Razor. Every "Working" row above was verified by actually
+Roughly 7k lines of C# and Razor. Every "Working" row above was verified by actually
 playing it, not by the code compiling.
 
 ---
@@ -134,6 +134,9 @@ Open the console in-game. These made everything above testable.
 | `hvh_shoot <n>` | aim at nearest enemy and fire, in one frame |
 | `hvh_traceaim` | run the weapon's exact trace and report what it would hit |
 | `hvh_refill` / `hvh_slot <n>` | refill ammo / switch weapon |
+| `hvh_aim <h>` / `hvh_fire` | point at the nearest target at height h / fire |
+| `hvh_botnear` / `hvh_botduel` | bring a bot to you / stage a two-bot duel |
+| `hvh_dummies` / `hvh_hitmarker` | dummy health / current hit marker state |
 | `hvh_steps` | per-pawn footstep state, cadence and ground surface |
 | `hvh_steptest <mode>` | drive the pawn under scripted input and measure step cadence |
 
@@ -183,6 +186,11 @@ fixes, is in [`Docs/NOTES.md`](Docs/NOTES.md).
   you find an asset only there, it is not available to this project.
 - **A dead pawn still moves.** Respawn teleports count as distance travelled and
   will make a corpse look like a sprinter in any movement measurement.
+- **Bots quietly invalidate measurements.** They kill your test subject, and
+  `BotManager.Converge()` deletes bots you spawned by hand. Assume any run can be
+  disturbed and measure whether it was.
+- **Hit zones only make sense on players, not target dummies** — dummies are
+  placed at their centre, so their head zone is unreachable.
 
 - **`[Sync]` writes before `NetworkSpawn()` are silently discarded.** Set networked values
   *after* spawning. This produced bots that reported `IsBot == false` and inherited the
