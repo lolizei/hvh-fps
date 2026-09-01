@@ -9,6 +9,81 @@ namespace HvH;
 /// </summary>
 public static class DevCommands
 {
+	/// <summary>
+	/// Report footstep state for every pawn. `hvh_steps`
+	/// </summary>
+	[ConCmd( "hvh_steps" )]
+	public static void Steps()
+	{
+		var players = Player.All.ToArray();
+		if ( players.Length == 0 )
+		{
+			Log.Info( "hvh_steps: no pawns" );
+			return;
+		}
+
+		foreach ( var player in players )
+		{
+			var steps = player.GetComponent<PlayerFootsteps>();
+			var movement = player.Movement;
+
+			if ( !steps.IsValid() || !movement.IsValid() )
+			{
+				Log.Warning( $"hvh_steps: {player.State?.DisplayName} has no footstep component" );
+				continue;
+			}
+
+			var speed = movement.Velocity.WithZ( 0f ).Length;
+			var stride = steps.StepDistance * ( movement.IsCrouching ? steps.CrouchStrideMultiplier : 1f );
+
+			Log.Info(
+				$"{player.State?.DisplayName}{( player.IsBot ? " [bot]" : "" )}: steps {steps.StepCount}" +
+				$" | speed {speed:0} u/s | ground {movement.IsOnGround} | crouch {movement.IsCrouching}" +
+				$" | stride {stride:0} u | implied {( stride > 0f ? speed / stride : 0f ):0.00} steps/s" +
+				$" | accum {steps.Accumulator:0.0} | lands {steps.LandCount}" );
+
+			var surface = steps.ProbeGround();
+			Log.Info( surface is null
+				? "    ground surface: none - every step uses the fallback sound"
+				: $"    ground surface: {surface.ResourceName}" +
+				  $" | left {( surface.SoundCollection.FootLeft?.ResourceName ?? "MISSING" )}" +
+				  $" | right {( surface.SoundCollection.FootRight?.ResourceName ?? "MISSING" )}" +
+				  $" | land {( surface.SoundCollection.FootLand?.ResourceName ?? "MISSING" )}" );
+		}
+	}
+
+	/// <summary>
+	/// Walk the local pawn under scripted input and measure its step cadence.
+	/// `hvh_steptest run 5` - modes: walk, run, crouch, jump.
+	/// </summary>
+	[ConCmd( "hvh_steptest" )]
+	public static void StepTest( string mode = "walk", float seconds = 4f )
+	{
+		var player = Player.Local;
+		if ( !player.IsValid() )
+		{
+			Log.Warning( "hvh_steptest: no local player" );
+			return;
+		}
+
+		if ( player.GetComponent<StepTestDriver>().IsValid() )
+		{
+			Log.Warning( "hvh_steptest: a test is already running" );
+			return;
+		}
+
+		if ( !Enum.TryParse<StepTestDriver.TestMode>( mode, true, out var parsed ) )
+		{
+			Log.Warning( $"hvh_steptest: unknown mode '{mode}' - use walk, run, crouch or jump" );
+			return;
+		}
+
+		var driver = player.AddComponent<StepTestDriver>( false );
+		driver.Mode = parsed;
+		driver.Duration = Math.Clamp( seconds, 0.5f, 30f );
+		driver.Enabled = true;
+	}
+
 	/// <summary>Damage yourself. `hvh_hurt 25`</summary>
 	[ConCmd( "hvh_hurt" )]
 	public static void Hurt( float amount = 25f )

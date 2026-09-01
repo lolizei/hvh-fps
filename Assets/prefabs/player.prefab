@@ -46,6 +46,11 @@
         "__enabled": true
       },
       {
+        "__type": "HvH.PlayerFootsteps",
+        "__guid": "b5ce2fc2-9625-4792-ba40-81609d37d7bd",
+        "__enabled": true
+      },
+      {
         "__type": "HvH.PlayerCamera",
         "__guid": "31f1e347-675d-4374-8ea5-ed49d0237009",
         "__enabled": true

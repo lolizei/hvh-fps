@@ -33,8 +33,14 @@ public static class HitMarker
 	/// <summary>How long the marker stays on screen.</summary>
 	public static float Duration { get; set; } = 0.4f;
 
-	public static HitKind Kind { get; private set; }
+	/// <summary>
+	/// The kind of the marker currently on screen. Reads Body once the marker
+	/// has expired rather than holding the last value - stale state here is
+	/// read straight off the console and wastes the reader's time.
+	/// </summary>
+	public static HitKind Kind => Visible ? _kind : HitKind.Body;
 
+	private static HitKind _kind;
 	private static float _shownAt = float.MinValue;
 
 	public static bool Visible => Time.Now - _shownAt < Duration;
@@ -53,7 +59,7 @@ public static class HitMarker
 	/// <summary>Show the marker and play its tick. Local to this machine only.</summary>
 	public static void Show( HitKind kind )
 	{
-		Kind = kind;
+		_kind = kind;
 		_shownAt = Time.Now;
 
 		var sound = kind switch

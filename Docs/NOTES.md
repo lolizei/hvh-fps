@@ -122,6 +122,34 @@ layer still has the bug and is knowingly left alone.
 
 ---
 
+## A dead pawn still moves - respawns look like distance travelled
+
+Measuring anything from `WorldPosition` deltas silently counts respawn
+teleports. A footstep cadence test read **746 units travelled and zero steps**,
+which looked like a broken accumulator. It was not: the bot was killing the test
+subject, and every "distance" was a corpse being teleported to a spawn point.
+The give-away was `speed 0` on a pawn that had supposedly just run 746 units.
+
+Any harness that measures movement should reject implausible frame deltas and
+report whether the subject stayed alive, rather than quietly averaging a corpse
+into the result:
+
+```csharp
+var reachable = MathF.Max( 40f, velocity.Length * Time.Delta * 2f );
+if ( moved > reachable ) _teleports++; else _distance += moved;
+```
+
+More generally: when a runtime number looks wrong, check what else was acting on
+the subject before changing the code under test.
+
+---
+
+## `SoundHandle.Occlusion` is obsolete
+
+Use `OcclusionEnabled`. `Occlusion` still compiles, with a warning.
+
+---
+
 ## A clean `dotnet build` does not mean it compiles
 
 s&box has its own, stricter Razor generator. It has rejected eight lambda

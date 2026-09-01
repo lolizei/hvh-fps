@@ -31,7 +31,8 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | Mod framework + example mod | Loads at runtime, API documented |
 | HVH features (aim assist, ESP, etc.) | Written, **all default off, never tuned or tested** |
 | Multiplayer with 2+ real clients | **Never tested.** Biggest unknown in the project |
-| Muzzle flash / tracers / sounds / viewmodel | Not implemented — this is the current goal |
+| Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
+| Viewmodel | Not implemented — the gun is invisible |
 | Real map | Not started. Current arena is a grey box |
 
 Roughly 6k lines of C# and Razor. Every "Working" row above was verified by actually
@@ -133,6 +134,8 @@ Open the console in-game. These made everything above testable.
 | `hvh_shoot <n>` | aim at nearest enemy and fire, in one frame |
 | `hvh_traceaim` | run the weapon's exact trace and report what it would hit |
 | `hvh_refill` / `hvh_slot <n>` | refill ammo / switch weapon |
+| `hvh_steps` | per-pawn footstep state, cadence and ground surface |
+| `hvh_steptest <mode>` | drive the pawn under scripted input and measure step cadence |
 
 `hvh_traceaim` and `hvh_botinfo` are the two that solve most "why isn't this working"
 questions.
@@ -178,6 +181,8 @@ fixes, is in [`Docs/NOTES.md`](Docs/NOTES.md).
   nothing. Confirm the real path in the asset browser before using it.
 - **`download/assets/…` is other people's cloud cache, not base content.** If
   you find an asset only there, it is not available to this project.
+- **A dead pawn still moves.** Respawn teleports count as distance travelled and
+  will make a corpse look like a sprinter in any movement measurement.
 
 - **`[Sync]` writes before `NetworkSpawn()` are silently discarded.** Set networked values
   *after* spawning. This produced bots that reported `IsBot == false` and inherited the

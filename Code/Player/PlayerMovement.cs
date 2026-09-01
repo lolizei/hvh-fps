@@ -30,11 +30,6 @@ public sealed class PlayerMovement : Component
 	[Property] public float StandHeight { get; set; } = 72f;
 	[Property] public float CrouchHeight { get; set; } = 44f;
 
-	/// <summary>Optional - leave unset and the player is silent.</summary>
-	[Property] public SoundEvent FootstepSound { get; set; }
-
-	[Property] public float FootstepDistance { get; set; } = 90f;
-
 	public CharacterController Controller { get; private set; }
 	public Player Player { get; private set; }
 
@@ -44,8 +39,6 @@ public sealed class PlayerMovement : Component
 	public bool IsCrouching { get; private set; }
 	public bool IsOnGround => Controller.IsValid() && Controller.IsOnGround;
 	public Vector3 Velocity => Controller.IsValid() ? Controller.Velocity : Vector3.Zero;
-
-	private float _footstepAccumulator;
 
 	protected override void OnAwake()
 	{
@@ -94,8 +87,6 @@ public sealed class PlayerMovement : Component
 		UpdateCrouch();
 		BuildWishVelocity();
 
-		var wasOnGround = Controller.IsOnGround;
-
 		if ( Controller.IsOnGround && Player.InputState.JumpPressed )
 			DoJump();
 
@@ -122,10 +113,7 @@ public sealed class PlayerMovement : Component
 		else
 			Controller.Velocity += Vector3.Down * Gravity * Time.Delta * 0.5f;
 
-		if ( !wasOnGround && Controller.IsOnGround )
-			_footstepAccumulator = FootstepDistance;
-
-		TickFootsteps();
+		// Footsteps live in PlayerFootsteps, which reads this component's state.
 	}
 
 	private void BuildWishVelocity()
@@ -196,15 +184,4 @@ public sealed class PlayerMovement : Component
 		return !trace.Hit;
 	}
 
-	private void TickFootsteps()
-	{
-		if ( FootstepSound is null ) return;
-		if ( !Controller.IsOnGround ) return;
-
-		_footstepAccumulator += Controller.Velocity.WithZ( 0f ).Length * Time.Delta;
-		if ( _footstepAccumulator < FootstepDistance ) return;
-
-		_footstepAccumulator = 0f;
-		Sound.Play( FootstepSound, WorldPosition );
-	}
 }

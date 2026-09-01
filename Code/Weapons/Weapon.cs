@@ -272,9 +272,9 @@ public sealed class Weapon : Component
 
 		// Confirm the hit to the shooter alone. Separate from the world-effect
 		// broadcast on purpose: that is something everyone sees, this is one
-		// person's feedback. Only players count - practice dummies do not mark.
-		if ( trace.GameObject.GetComponentInParent<PlayerState>().IsValid() )
-			ConfirmHit( !health.IsAlive, zone == HitZone.Head );
+		// person's feedback. Anything with health marks, dummies included - an
+		// empty server is mostly dummy-shooting and silence there reads as broken.
+		ConfirmHit( !health.IsAlive, zone == HitZone.Head );
 	}
 
 	/// <summary>
