@@ -41,6 +41,8 @@ public sealed class StepTestDriver : Component, IPlayerInputSource
 	private float _deadTime;
 
 	// Walking into a wall would measure nothing, so turn around when we stall.
+	private float _maxSpeed;
+	private float _timeAtSpeed;
 	private float _stuckTime;
 	private bool _turnAround;
 
@@ -127,6 +129,11 @@ public sealed class StepTestDriver : Component, IPlayerInputSource
 
 		// Nose against a wall: turn and keep measuring rather than report a zero.
 		var speed = movement.IsValid() ? movement.Velocity.WithZ( 0f ).Length : 0f;
+		_maxSpeed = MathF.Max( _maxSpeed, speed );
+
+		if ( speed >= TargetSpeed() * 0.9f )
+			_timeAtSpeed += Time.Delta;
+
 		if ( speed < 20f && onGround )
 		{
 			_stuckTime += Time.Delta;
@@ -145,6 +152,20 @@ public sealed class StepTestDriver : Component, IPlayerInputSource
 			Finish();
 	}
 
+	/// <summary>Speed this mode should reach with clear ground ahead.</summary>
+	private float TargetSpeed()
+	{
+		var movement = _player.IsValid() ? _player.Movement : null;
+		if ( !movement.IsValid() ) return 1f;
+
+		return Mode switch
+		{
+			TestMode.Run => movement.RunSpeed,
+			TestMode.Crouch => movement.CrouchSpeed,
+			_ => movement.WalkSpeed,
+		};
+	}
+
 	private void Finish()
 	{
 		var elapsed = MathF.Max( 0.01f, Time.Now - _startTime );
@@ -158,7 +179,16 @@ public sealed class StepTestDriver : Component, IPlayerInputSource
 			$" | airborne {_airTime:0.00}s, steps while airborne {_airborneSteps}" +
 			$" | landings {( _footsteps.IsValid() ? _footsteps.LandCount - _startLands : 0 )}" +
 			$" | dead {_deadTime:0.00}s, teleports {_teleports}" +
-			( _deadTime > 0.05f || _teleports > 0 ? "  <-- DISTURBED, numbers not trustworthy" : "" ) );
+			$" | peak {_maxSpeed:0} of {TargetSpeed():0} u/s, {_timeAtSpeed / elapsed * 100f:0}% of the time at pace" +
+			( _deadTime > 0.05f || _teleports > 0 ? "  <-- DISTURBED, numbers not trustworthy" : "" ) +
+			// Cadence is speed divided by stride. A pawn that spent the test
+			// bouncing off cover never reached its pace, so its steps/s says
+			// nothing about the mode - stride is the number that still holds.
+			// Jump mode is not a cadence test - zero steps is the pass condition,
+			// so "never reached pace" is expected there rather than a warning.
+			( Mode != TestMode.Jump && _timeAtSpeed / elapsed < 0.4f
+				? "  <-- NEVER REACHED PACE, cadence not comparable (stride still valid)"
+				: "" ) );
 
 		Restore();
 		Destroy();

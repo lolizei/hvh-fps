@@ -126,14 +126,31 @@ its own head, where it fell while the aim taken a moment earlier went stale. It
 reported success every time. Symptom: a scripted aim that misses 13 shots out of
 13 for no visible reason.
 
-When you want world geometry, do not ignore pawns one at a time - filter for the
-thing you actually want:
+When you want world geometry, filter for the thing you actually want:
 
 ```csharp
-Scene.Trace.Ray( a, b ).WithTag( "solid" ).Run();   // world only, no pawn can interfere
+Scene.Trace.Ray( a, b ).WithTag( "solid" ).Run();   // world only
 ```
 
 World geometry is tagged `solid`; pawns and their children are tagged `player`.
+
+**But a tag filter does not save you from starting inside a collider.** Measured:
+a `WithTag( "solid" )` trace from a pawn's eye reported `hit 'Body' at 0u` in all
+ten directions tried, because the eye sits inside that pawn's own body collider
+and a trace that begins solid reports a hit at distance zero whatever the filter
+says. The same filter works fine for a trace that starts in open air - which is
+why the vertical ground trace in `hvh_bots near` was genuinely fixed by it while
+the line-of-sight trace right next to it was not.
+
+So: **filter by tag for what you want to hit, and still ignore your own
+hierarchy if the trace starts inside you.** Both, not either.
+
+```csharp
+Scene.Trace.Ray( eye, target )
+    .IgnoreGameObjectHierarchy( self.GameObject )   // we start inside ourselves
+    .WithTag( "solid" )                             // and only care about world
+    .Run();
+```
 
 `TargetSelector.IsVisible` in the mod layer still has the original bug and is
 knowingly left alone - the HVH features are all default-off and untested.

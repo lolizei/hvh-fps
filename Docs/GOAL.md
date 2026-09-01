@@ -87,6 +87,69 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
 
+## Task 7 - console command consolidation (2026-09-01)
+
+**29 commands -> 16.** Nothing deleted; every capability kept.
+
+| Was | Now |
+|---|---|
+| `hvh_state` `hvh_players` `hvh_botinfo` `hvh_steps` `hvh_dummies` `hvh_hitmarker` `hvh_hitdebug` `hvh_bounds` | `hvh_report <state\|players\|bots\|steps\|dummies\|marker\|hits\|bounds\|all>` |
+| `hvh_target` `hvh_bot` `hvh_botduel` `hvh_botnear` `hvh_killbots` `hvh_clearbots` | `hvh_bots <n\|add\|duel\|near\|kill\|clear>` |
+| `hvh_killdummies` | `hvh_dummies kill` (plus a new `revive`) |
+| `hvh_hitmarker_clear` | `hvh_reset marker` (plus `counters`, `all`) |
+| `hvh_menu` | `hvh_loadscene menu` |
+| `hvh_traceaim` | `hvh_centerray` |
+| `hvh_aim` `hvh_fire` `hvh_shoot` `hvh_hurt` `hvh_kill` `hvh_refill` `hvh_slot` `hvh_sandbox` `hvh_steptest` `hvh_marker_hold` `hvh_loadscene` | unchanged |
+
+16, not the proposed 13: the proposal forgot dummy control, diagnostic reset and
+the marker hold. Those are real capabilities, so they got commands rather than
+being dropped.
+
+### The spread caveat is structural now
+`hvh_centerray` computes the live spread cone by the same rule `Weapon` uses and
+leads with it:
+
+```
+hvh_centerray: CENTRE RAY ONLY - no spread modelled. A real shot right now
+scatters up to 0.7 deg from this line.
+  hit 'Crate C' at 170u | health=none | owner=none | canDamage=True
+```
+
+### Bugs found by running every command once
+- **`hvh_bots near` placed the bot outside the arena.** It used
+  `player + forward * distance` with no validity check; from a corner spawn
+  facing out that lands past a wall. Every scripted shot then hit the wall, which
+  looks exactly like broken hit detection. Task 6 passed only because the shooter
+  happened to face inward. It now tries a fan of ten directions, requires solid
+  ground *and* line of sight, refuses to move the bot if none qualifies, and
+  prints why each direction was rejected.
+- **A `WithTag("solid")` trace still hit the shooter.** The line-of-sight check
+  reported `hit 'Body' at 0u` in all ten directions: the eye starts inside its own
+  body collider, and a trace that begins solid reports a hit at distance zero
+  whatever the tag filter says. This contradicts what I wrote in NOTES during
+  Task 5 - corrected there.
+- **`hvh_bots duel` could trim its own duellist.** It made room for two bots but
+  ignored bots already present, so it spawned into an over-target population and
+  one got deleted. It now clears first, so a duel is exactly two.
+- **The step harness reported cadence for runs that never reached pace.** A pawn
+  bouncing off cover averages walking speed while "running", which silently made
+  run and walk look identical. It now reports peak speed, the fraction of the test
+  spent at pace, and flags a run that never got there - stride stays valid.
+
+### Re-verified through the new commands
+| Check | Result |
+|---|---|
+| Body marker | PASS - 10/10 |
+| Headshot marker | PASS - 10/12 |
+| Kill marker | PASS |
+| Limb hit (15u) | PASS - 8/8 body-kind marker, limb damage |
+| Miss shows nothing | PASS - 56 fire requests vs 50 damage, 0 markers |
+| Others' hits never show | PASS - 50 hits by two bots, 0 markers |
+| One landed hit = one marker | PASS - (1 show, 1 element) x 10/10 |
+| Cadence walk/run/crouch | PASS - stride 81.8 / 87.8 / 171.2 u vs 85 / 85 / 153 |
+| Airborne silence | PASS - 7.88s airborne, 0 steps, 10 landings |
+| Every command invoked once | PASS - all 16, including bad-argument paths |
+
 ## Task 6 - double hit marker (2026-09-01)
 
 **Reported from play: two hit markers on screen at once.** Measured before

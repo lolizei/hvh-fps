@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace HvH;
 
@@ -9,16 +10,190 @@ namespace HvH;
 /// </summary>
 public static class DevCommands
 {
+	// ======================================================================
+	//  Consolidated command surface.
+	//
+	//  These dispatchers are the whole public surface; everything below them is
+	//  an implementation. Grouped by verb so there is one obvious place to look
+	//  rather than one command per thing that was ever tested.
+	// ======================================================================
+
 	/// <summary>
-	/// Report footstep state for every pawn. `hvh_steps`
+	/// Everything read-only, in one place. `hvh_report players`
+	/// state | players | bots | steps | dummies | marker | hits | bounds | all
 	/// </summary>
-	[ConCmd( "hvh_steps" )]
+	[ConCmd( "hvh_report" )]
+	public static void Report( string what = "state" )
+	{
+		switch ( what.ToLowerInvariant() )
+		{
+			case "state": State(); return;
+			case "players": Players(); return;
+			case "bots": BotInfo(); return;
+			case "steps": Steps(); return;
+			case "dummies": Dummies(); return;
+			case "marker": HitMarkerState(); return;
+			case "hits": HitDebug(); return;
+			case "bounds": Bounds(); return;
+			case "all":
+				State(); Players(); BotInfo(); Steps();
+				Dummies(); HitMarkerState(); HitDebug(); Bounds();
+				return;
+			default:
+				Log.Warning( $"hvh_report: unknown '{what}' - use state, players, bots, " +
+					"steps, dummies, marker, hits, bounds or all" );
+				return;
+		}
+	}
+
+	/// <summary>
+	/// Bot population and placement. `hvh_bots 4`, `hvh_bots duel`
+	/// &lt;n&gt; | add | duel | near [dist] | kill | clear
+	/// </summary>
+	[ConCmd( "hvh_bots" )]
+	public static void Bots( string what = "", float value = 0f )
+	{
+		if ( string.IsNullOrWhiteSpace( what ) )
+		{
+			PopulationReport( "hvh_bots" );
+			Log.Info( "  usage: hvh_bots <n> | add | duel | near [dist] | kill | clear" );
+			return;
+		}
+
+		if ( int.TryParse( what, out var total ) )
+		{
+			Target( total );
+			PopulationReport( "hvh_bots" );
+			return;
+		}
+
+		var removed = false;
+
+		switch ( what.ToLowerInvariant() )
+		{
+			case "add": SpawnBot(); break;
+			case "duel": BotDuel( value > 0f ? value : 400f ); removed = true; break;
+			case "near": BotNear( value > 0f ? value : 250f ); break;
+			case "kill": KillBots(); removed = true; break;
+			case "clear": ClearBots(); removed = true; break;
+			default:
+				Log.Warning( $"hvh_bots: unknown '{what}' - use <n>, add, duel, near, kill or clear" );
+				return;
+		}
+
+		PopulationReport( "hvh_bots", removed );
+	}
+
+	/// <summary>Practice dummies. `hvh_dummies kill` | `hvh_dummies revive`</summary>
+	[ConCmd( "hvh_dummies" )]
+	public static void DummiesControl( string what = "" )
+	{
+		switch ( what.ToLowerInvariant() )
+		{
+			case "kill": KillDummies(); return;
+			case "revive":
+				TargetDummy.ReviveAll();
+				Log.Info( $"hvh_dummies revive -> alive {TargetDummy.AliveCount}/{TargetDummy.TotalCount}" );
+				return;
+			default:
+				Log.Warning( "hvh_dummies: use kill or revive (hvh_report dummies to look)" );
+				return;
+		}
+	}
+
+	/// <summary>
+	/// Put diagnostic state back to a known baseline before a measurement.
+	/// `hvh_reset` | `hvh_reset marker` | `hvh_reset counters`
+	/// </summary>
+	[ConCmd( "hvh_reset" )]
+	public static void Reset( string what = "all" )
+	{
+		var key = what.ToLowerInvariant();
+
+		if ( key is "all" or "marker" ) HitMarkerClear();
+		if ( key is "all" or "counters" ) Weapon.ResetCounters();
+
+		if ( key is not ( "all" or "marker" or "counters" ) )
+		{
+			Log.Warning( $"hvh_reset: unknown '{what}' - use all, marker or counters" );
+			return;
+		}
+
+		Log.Info( $"hvh_reset {key} -> done" );
+	}
+
+	/// <summary>
+	/// Population, printed after anything that changes it.
+	///
+	/// Task 5 found three commands that logged success while Converge() deleted
+	/// their bots a frame later, so a pending trim is called out explicitly
+	/// rather than left for the next measurement to discover.
+	/// </summary>
+	private static void PopulationReport( string label, bool afterDeliberateRemoval = false )
+	{
+		var manager = BotManager.Current;
+		var humans = Player.All.Count( x => !x.IsBot );
+		var bots = BotManager.BotCount;
+
+		if ( !manager.IsValid() )
+		{
+			Log.Warning( $"{label}: no BotManager - nothing here can work" );
+			return;
+		}
+
+		Log.Info( $"  humans={humans} bots={bots} desired={manager.DesiredPlayers} wanted={manager.WantedBots}" );
+
+		// Destruction is deferred to the end of the frame, so straight after a
+		// deliberate kill or clear this count is still counting the dead. Warning
+		// there would be crying wolf, and a warning nobody trusts is no warning.
+		if ( afterDeliberateRemoval )
+		{
+			Log.Info( $"  {label}: count settles at the end of the frame after a removal" );
+			return;
+		}
+
+		if ( manager.WantedBots < bots )
+			Log.Warning( $"  {label}: TRIM PENDING - {bots - manager.WantedBots} bot(s) will be " +
+				$"deleted within a frame or two. Raise the target first." );
+	}
+
+	/// <summary>
+	/// The spread cone the active weapon would actually use this instant, by the
+	/// same rule <see cref="Weapon"/> applies. Exists so `hvh_centerray` can say
+	/// how wrong it is rather than leaving that in a doc nobody reads at 2am.
+	/// </summary>
+	private static float CurrentSpreadDegrees()
+	{
+		var weapon = Player.Local?.Inventory?.ActiveWeapon;
+		if ( !weapon.IsValid() ) return 0f;
+
+		var stats = weapon.BuildStats();
+		if ( stats is null ) return 0f;
+
+		var spread = stats.Spread;
+		var movement = Player.Local?.Movement;
+
+		if ( movement.IsValid() )
+		{
+			var speed = movement.Velocity.WithZ( 0f ).Length;
+			spread += stats.MovementInaccuracy * MathF.Min( 1f, speed / MathF.Max( 1f, movement.RunSpeed ) );
+
+			if ( !movement.IsOnGround )
+				spread += stats.MovementInaccuracy;
+		}
+
+		return spread;
+	}
+
+	/// <summary>
+	/// Report footstep state for every pawn. `hvh_report steps`
+	/// </summary>
 	public static void Steps()
 	{
 		var players = Player.All.ToArray();
 		if ( players.Length == 0 )
 		{
-			Log.Info( "hvh_steps: no pawns" );
+			Log.Info( "hvh_report steps: no pawns" );
 			return;
 		}
 
@@ -29,7 +204,7 @@ public static class DevCommands
 
 			if ( !steps.IsValid() || !movement.IsValid() )
 			{
-				Log.Warning( $"hvh_steps: {player.State?.DisplayName} has no footstep component" );
+				Log.Warning( $"hvh_report steps: {player.State?.DisplayName} has no footstep component" );
 				continue;
 			}
 
@@ -104,15 +279,14 @@ public static class DevCommands
 
 	/// <summary>
 	/// Counts along the whole hit path, so a double marker can be diagnosed with
-	/// numbers. `hvh_hitdebug` reports, `hvh_hitdebug 1` resets first.
+	/// numbers. `hvh_report hits` reports; `hvh_reset counters` zeroes them.
 	/// </summary>
-	[ConCmd( "hvh_hitdebug" )]
 	public static void HitDebug( int reset = 0 )
 	{
 		if ( reset != 0 )
 		{
 			Weapon.ResetCounters();
-			Log.Info( "hvh_hitdebug: counters reset" );
+			Log.Info( "hvh_reset counters -> counters zeroed" );
 			return;
 		}
 
@@ -145,11 +319,10 @@ public static class DevCommands
 	}
 
 	/// <summary>
-	/// Report each target's origin against its actual world bounds. `hvh_bounds`
+	/// Report each target's origin against its actual world bounds. `hvh_report bounds`
 	/// Exists because hit zones were being measured from the origin, which is at
 	/// the feet for a player and at the middle for a dummy.
 	/// </summary>
-	[ConCmd( "hvh_bounds" )]
 	public static void Bounds()
 	{
 		foreach ( var health in Game.ActiveScene.GetAllComponents<HealthComponent>() )
@@ -292,8 +465,7 @@ public static class DevCommands
 		Log.Info( $"hvh_fire {fired}/{shots} -> ammo {weapon.Ammo}/{weapon.Reserve}" );
 	}
 
-	/// <summary>Kill every dummy, to exercise the round-end path. `hvh_killdummies`</summary>
-	[ConCmd( "hvh_killdummies" )]
+	/// <summary>Kill every dummy, to exercise the round-end path. `hvh_dummies kill`</summary>
 	public static void KillDummies()
 	{
 		var player = Player.Local;
@@ -314,7 +486,7 @@ public static class DevCommands
 			killed++;
 		}
 
-		Log.Info( $"hvh_killdummies -> killed {killed}, alive {TargetDummy.AliveCount}/{TargetDummy.TotalCount}" );
+		Log.Info( $"hvh_dummies kill -> killed {killed}, alive {TargetDummy.AliveCount}/{TargetDummy.TotalCount}" );
 	}
 
 	/// <summary>Switch the local player's weapon slot. `hvh_slot 0`</summary>
@@ -351,15 +523,15 @@ public static class DevCommands
 
 	/// <summary>
 	/// Run the weapon's exact trace from your eye and report what it hits.
-	/// Answers "did the shot miss, or did the hit not register?". `hvh_traceaim`
+	/// Answers "did the shot miss, or did the hit not register?". `hvh_centerray`
 	/// </summary>
-	[ConCmd( "hvh_traceaim" )]
-	public static void TraceAim()
+	[ConCmd( "hvh_centerray" )]
+	public static void CenterRay()
 	{
 		var player = Player.Local;
 		if ( !player.IsValid() )
 		{
-			Log.Warning( "hvh_traceaim: no local player" );
+			Log.Warning( "hvh_centerray: no local player" );
 			return;
 		}
 
@@ -372,15 +544,17 @@ public static class DevCommands
 
 		if ( !trace.Hit || !trace.GameObject.IsValid() )
 		{
-			Log.Info( "hvh_traceaim: hit nothing" );
+			Log.Info( $"hvh_centerray: CENTRE RAY ONLY (no spread; a real shot scatters up to {CurrentSpreadDegrees():0.##} deg) -> hit nothing" );
 			return;
 		}
 
 		var health = trace.GameObject.GetComponentInParent<HealthComponent>();
 		var state = trace.GameObject.GetComponentInParent<PlayerState>();
 
+		Log.Info( $"hvh_centerray: CENTRE RAY ONLY - no spread modelled. A real shot " +
+			$"right now scatters up to {CurrentSpreadDegrees():0.##} deg from this line." );
 		Log.Info(
-			$"hvh_traceaim: hit '{trace.GameObject.Name}' at {trace.Distance:0}u " +
+			$"  hit '{trace.GameObject.Name}' at {trace.Distance:0}u " +
 			$"| health={( health.IsValid() ? health.Health.ToString( "0" ) : "none" )} " +
 			$"| owner={( state.IsValid() ? state.DisplayName : "none" )} " +
 			$"| canDamage={DamageRules.CanDamage( player.GameObject, trace.GameObject )}" );
@@ -403,8 +577,7 @@ public static class DevCommands
 		}
 	}
 
-	/// <summary>Report every dummy's health. `hvh_dummies`</summary>
-	[ConCmd( "hvh_dummies" )]
+	/// <summary>Report every dummy's health. `hvh_report dummies`</summary>
 	public static void Dummies()
 	{
 		Log.Info( $"dummies alive {TargetDummy.AliveCount}/{TargetDummy.TotalCount}" );
@@ -413,18 +586,17 @@ public static class DevCommands
 			Log.Info( $"  {dummy.DisplayName}: hp={dummy.Health?.Health} alive={dummy.IsAlive}" );
 	}
 
-	/// <summary>Leave the match and go back to the menu. `hvh_menu`</summary>
-	[ConCmd( "hvh_menu" )]
+	/// <summary>Leave the match and go back to the menu. `hvh_loadscene menu`</summary>
 	public static void ToMenu()
 	{
 		var exit = Game.ActiveScene?.GetAllComponents<GameExitHandler>().FirstOrDefault();
 		if ( !exit.IsValid() )
 		{
-			Log.Warning( "hvh_menu: no GameExitHandler in this scene" );
+			Log.Warning( "hvh_loadscene menu: no GameExitHandler in this scene" );
 			return;
 		}
 
-		Log.Info( "hvh_menu -> returning to menu" );
+		Log.Info( "hvh_loadscene menu -> returning to menu" );
 		exit.ReturnToMenu();
 	}
 
@@ -432,6 +604,14 @@ public static class DevCommands
 	[ConCmd( "hvh_loadscene" )]
 	public static void LoadScene( string path = "scenes/game.scene" )
 	{
+		// "menu" is not just the menu scene - leaving a match has to go through
+		// GameExitHandler so the lobby is torn down properly.
+		if ( path.Equals( "menu", StringComparison.OrdinalIgnoreCase ) )
+		{
+			ToMenu();
+			return;
+		}
+
 		var scene = ResourceLibrary.Get<SceneFile>( path );
 		if ( scene is null )
 		{
@@ -454,14 +634,13 @@ public static class DevCommands
 		return state.IsValid() ? state.DisplayName : attacker.Name;
 	}
 
-	/// <summary>Spawn one bot on the opposing team. `hvh_bot`</summary>
-	[ConCmd( "hvh_bot" )]
+	/// <summary>Spawn one bot on the opposing team. `hvh_bots add`</summary>
 	public static void SpawnBot()
 	{
 		var manager = BotManager.Current;
 		if ( !manager.IsValid() )
 		{
-			Log.Warning( "hvh_bot: no BotManager in this scene" );
+			Log.Warning( "hvh_bots add: no BotManager in this scene" );
 			return;
 		}
 
@@ -469,60 +648,120 @@ public static class DevCommands
 
 		var bot = manager.SpawnBot();
 		Log.Info( bot.IsValid()
-			? $"hvh_bot -> spawned, bots now {BotManager.BotCount}"
-			: "hvh_bot: spawn failed" );
+			? $"hvh_bots add -> spawned, bots now {BotManager.BotCount}"
+			: "hvh_bots add: spawn failed" );
 	}
 
 	/// <summary>
 	/// Teleport the nearest bot to just in front of you, for close-range
 	/// testing. The arena's centre cover blocks most spawn-to-spawn diagonals.
-	/// `hvh_botnear 250`
+	/// `hvh_bots near 250`
 	/// </summary>
-	[ConCmd( "hvh_botnear" )]
 	public static void BotNear( float distance = 250f )
 	{
 		var player = Player.Local;
 		if ( !player.IsValid() )
 		{
-			Log.Warning( "hvh_botnear: no local player" );
+			Log.Warning( "hvh_bots near: no local player" );
 			return;
 		}
 
 		var bot = BotManager.Bots.FirstOrDefault();
 		if ( !bot.IsValid() )
 		{
-			Log.Warning( "hvh_botnear: no bot" );
+			Log.Warning( "hvh_bots near: no bot" );
 			return;
 		}
 
-		var forward = player.EyeAngles.Forward.WithZ( 0f ).Normal;
-		var target = player.WorldPosition + forward * distance;
+		// Straight ahead is often outside the arena - the shooter spawns in a
+		// corner facing out, and player + forward * distance lands past a wall.
+		// That placed the bot out of the world and every scripted shot hit the
+		// wall instead, which looked like a hit-detection failure. So try a fan
+		// of directions and take the first that is both standable and visible.
+		var eye = player.AimRay.Position;
+		var placed = Vector3.Zero;
+		var found = false;
+		var tried = 0;
+		var reasons = new List<string>();
 
-		// Drop it onto the floor. Placing it at the shooter's Z leaves it in the
-		// air whenever the shooter is stood on something, and a falling target
-		// invalidates the aim taken a moment earlier.
-		//
-		// Hit world geometry only. The two chained IgnoreGameObjectHierarchy calls
-		// this used to have did not stack - the second replaced the first - so the
-		// bot stopped being ignored and the trace landed on the bot already stood
-		// there, teleporting it onto its own head at z=128 and leaving it falling.
-		var ground = player.Scene.Trace
-			.Ray( target + Vector3.Up * 256f, target + Vector3.Down * 1024f )
+		foreach ( var offset in new[] { 0f, 30f, -30f, 60f, -60f, 90f, -90f, 130f, -130f, 180f } )
+		{
+			tried++;
+
+			var angles = player.EyeAngles with { pitch = 0f };
+			angles.yaw += offset;
+
+			var candidate = player.WorldPosition + angles.Forward.Normal * distance;
+
+			// Drop it onto the floor. World geometry only - a trace that can hit
+			// the bot already standing there put it on its own head at z=128.
+			var ground = player.Scene.Trace
+				.Ray( candidate + Vector3.Up * 256f, candidate + Vector3.Down * 1024f )
+				.WithTag( "solid" )
+				.Run();
+
+			if ( !ground.Hit )
+			{
+				reasons.Add( $"{offset:+0;-0;0}deg: nothing to stand on" );
+				continue;
+			}
+
+			candidate = ground.EndPosition;
+
+			// Useless if the shooter cannot see it - check against the chest.
+			// Ignore ourselves. The eye sits inside our own body collider, and a
+			// tag filter does NOT get you out of it - pawn colliders are hit by
+			// a "solid" trace too, so this blocked every direction at 0u.
+			var los = player.Scene.Trace
+				.Ray( eye, candidate + Vector3.Up * 40f )
+				.IgnoreGameObjectHierarchy( player.GameObject )
+				.WithTag( "solid" )
+				.Run();
+
+			if ( los.Hit )
+			{
+				reasons.Add( $"{offset:+0;-0;0}deg: sight blocked by '{los.GameObject?.Name}' at {los.Distance:0}u" );
+				continue;
+			}
+
+			placed = candidate;
+			found = true;
+			break;
+		}
+
+		if ( !found )
+		{
+			Log.Warning( $"hvh_bots near: no standable spot with line of sight within " +
+				$"{distance:0}u after {tried} directions - bot NOT moved. Move and retry." );
+
+			// Say why, or the next person just runs it again and gets the same
+			// silence. Every rejection reason, in order.
+			foreach ( var reason in reasons )
+				Log.Warning( $"    {reason}" );
+
+			return;
+		}
+
+		// The host owns the bot, so writing its transform here is authoritative.
+		bot.WorldPosition = placed;
+		bot.Movement?.ClearVelocity();
+
+		// Verify the effect rather than assume it: confirm where it ended up and
+		// that the shooter can actually see it from here.
+		var check = player.Scene.Trace
+			.Ray( eye, bot.WorldPosition + Vector3.Up * 40f )
+			.IgnoreGameObjectHierarchy( player.GameObject )
 			.WithTag( "solid" )
 			.Run();
 
-		if ( ground.Hit )
-			target = ground.EndPosition;
+		Log.Info( $"hvh_bots near -> {bot.State?.DisplayName} at {placed} " +
+			$"({eye.Distance( placed ):0}u away, {tried} direction(s) tried)" );
 
-		// The host owns the bot, so writing its transform here is authoritative.
-		bot.WorldPosition = target;
-		bot.Movement?.ClearVelocity();
-
-		Log.Info( $"hvh_botnear -> {bot.State?.DisplayName} moved to {target}" );
+		if ( check.Hit )
+			Log.Warning( "hvh_bots near: placed, but line of sight is blocked - shots will not land." );
 	}
 
-	/// <summary>Why is the bot not shooting? `hvh_botinfo`</summary>
-	[ConCmd( "hvh_botinfo" )]
+	/// <summary>Why is the bot not shooting? `hvh_report bots`</summary>
 	public static void BotInfo()
 	{
 		var any = false;
@@ -546,21 +785,20 @@ public static class DevCommands
 				$"| alive={bot.IsAlive} source={( bot.InputSource is null ? "null" : bot.InputSource.GetType().Name )}" );
 		}
 
-		if ( !any ) Log.Info( "hvh_botinfo: no bots" );
+		if ( !any ) Log.Info( "hvh_report bots: no bots" );
 	}
 
 	/// <summary>
 	/// Spawn two bots on opposing teams facing each other, to watch bot combat
-	/// without a human in the loop. `hvh_botduel`
+	/// without a human in the loop. `hvh_bots duel`
 	/// </summary>
-	[ConCmd( "hvh_botduel" )]
 	public static void BotDuel( float gap = 400f )
 	{
 		var manager = BotManager.Current;
 		var player = Player.Local;
 		if ( !manager.IsValid() || !player.IsValid() )
 		{
-			Log.Warning( "hvh_botduel: need a BotManager and a local player" );
+			Log.Warning( "hvh_bots duel: need a BotManager and a local player" );
 			return;
 		}
 
@@ -571,41 +809,49 @@ public static class DevCommands
 		var left = new Vector3( -gap * 0.5f, -450f, 16f );
 		var right = new Vector3( gap * 0.5f, -450f, 16f );
 
+		// A duel means exactly two bots. Any bot already in the arena would push
+		// the count past the target and get one of the duellists trimmed instead,
+		// so clear first and then make room for precisely two.
+		var existing = BotManager.BotCount;
+		if ( existing > 0 )
+		{
+			ClearBots();
+			Log.Info( $"hvh_bots duel: cleared {existing} existing bot(s) so the duel is a duel" );
+		}
+
 		EnsureRoomForBots( manager, 2 );
 
 		var a = manager.SpawnBot( Team.Vanguard, left );
 		var b = manager.SpawnBot( Team.Syndicate, right );
 
-		Log.Info( $"hvh_botduel -> {( a.IsValid() ? a.State?.DisplayName : "fail" )} vs " +
+		Log.Info( $"hvh_bots duel -> {( a.IsValid() ? a.State?.DisplayName : "fail" )} vs " +
 			$"{( b.IsValid() ? b.State?.DisplayName : "fail" )}, gap {gap}u" );
 	}
 
 	/// <summary>
 	/// Set the total player target (humans + bots) and report convergence.
-	/// `hvh_target 4`
+	/// `hvh_bots 4`
 	/// </summary>
-	[ConCmd( "hvh_target" )]
 	public static void Target( int total = 2 )
 	{
 		var manager = BotManager.Current;
 		if ( !manager.IsValid() )
 		{
-			Log.Warning( "hvh_target: no BotManager" );
+			Log.Warning( "hvh_bots: no BotManager" );
 			return;
 		}
 
 		manager.DesiredPlayers = total;
 
-		Log.Info( $"hvh_target {total} -> humans={Player.All.Count( x => !x.IsBot )} " +
+		Log.Info( $"hvh_bots {total} -> humans={Player.All.Count( x => !x.IsBot )} " +
 			$"bots={BotManager.BotCount} wantedBots={manager.WantedBots}" );
 	}
 
 	/// <summary>
 	/// Kill every bot through the normal damage path, credited to you.
 	/// Exercises death, scoring, kill feed, round elimination and respawn
-	/// without depending on scripted aim landing. `hvh_killbots`
+	/// without depending on scripted aim landing. `hvh_bots kill`
 	/// </summary>
-	[ConCmd( "hvh_killbots" )]
 	public static void KillBots()
 	{
 		var player = Player.Local;
@@ -627,16 +873,14 @@ public static class DevCommands
 			killed++;
 		}
 
-		Log.Info( $"hvh_killbots -> killed {killed}" );
+		Log.Info( $"hvh_bots kill -> killed {killed}" );
 	}
 
-	/// <summary>Remove every bot. `hvh_clearbots`</summary>
-	[ConCmd( "hvh_clearbots" )]
+	/// <summary>Remove every bot. `hvh_bots clear`</summary>
 	public static void ClearBots()
-		=> Log.Info( $"hvh_clearbots -> removed {BotManager.RemoveAllBots()}" );
+		=> Log.Info( $"hvh_bots clear -> removed {BotManager.RemoveAllBots()}" );
 
-	/// <summary>List every player pawn and who drives it. `hvh_players`</summary>
-	[ConCmd( "hvh_players" )]
+	/// <summary>List every player pawn and who drives it. `hvh_report players`</summary>
 	public static void Players()
 	{
 		var local = Player.Local;
@@ -682,27 +926,24 @@ public static class DevCommands
 			$"{TargetDummy.AliveCount} dummies and {Player.All.Count()} players revived" );
 	}
 
-	/// <summary>Current hit-marker state on THIS machine. `hvh_hitmarker`</summary>
-	[ConCmd( "hvh_hitmarker" )]
+	/// <summary>Current hit-marker state on THIS machine. `hvh_report marker`</summary>
 	public static void HitMarkerState()
 		=> Log.Info( $"hitmarker visible={HitMarker.Visible} kind={HitMarker.Kind} fade={HitMarker.Fade:0.00}" );
 
-	/// <summary>Clear the hit marker, so a test starts from a known state. `hvh_hitmarker_clear`</summary>
-	[ConCmd( "hvh_hitmarker_clear" )]
+	/// <summary>Clear the hit marker, so a test starts from a known state. `hvh_reset marker`</summary>
 	public static void HitMarkerClear()
 	{
 		HitMarker.Clear();
 		Log.Info( "hitmarker cleared" );
 	}
 
-	/// <summary>Print the local player's live state. `hvh_state`</summary>
-	[ConCmd( "hvh_state" )]
+	/// <summary>Print the local player's live state. `hvh_report state`</summary>
 	public static void State()
 	{
 		var player = Player.Local;
 		if ( !player.IsValid() )
 		{
-			Log.Info( "hvh_state: no local player" );
+			Log.Info( "hvh_report state: no local player" );
 			return;
 		}
 

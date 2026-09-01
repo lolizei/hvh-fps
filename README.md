@@ -123,25 +123,24 @@ Open the console in-game. These made everything above testable.
 
 | Command | Does |
 |---|---|
-| `hvh_state` | position, angles, health, team, weapon, ammo, round |
-| `hvh_players` | every pawn: bot?, team, K/D, input, who last hit them |
-| `hvh_botinfo` | bot brain: target, why it is or isn't shooting, distance, speed |
-| `hvh_bot` / `hvh_clearbots` | spawn / remove bots |
-| `hvh_target <n>` | set the total player target (bots fill the rest) |
-| `hvh_sandbox` | hold the round in Playing and revive everything — for testing |
+| `hvh_report <what>` | everything read-only: `state`, `players`, `bots`, `steps`, `dummies`, `marker`, `hits`, `bounds`, `all` |
+| `hvh_bots <n>` | set the total player target — bots fill the rest |
+| `hvh_bots add\|duel\|near\|kill\|clear` | spawn one, stage a two-bot duel, bring one to you, kill them, remove them |
+| `hvh_dummies kill\|revive` | practice dummies |
+| `hvh_shoot <n> [height]` | aim at the nearest enemy and fire, in one frame |
+| `hvh_aim [height]` / `hvh_fire [n]` | the two halves separately |
+| `hvh_centerray` | what the centre of your view is on — **states that it does not model spread** |
 | `hvh_hurt <n>` / `hvh_kill` | damage or kill yourself |
-| `hvh_killbots` / `hvh_killdummies` | clear the opposition |
-| `hvh_shoot <n>` | aim at nearest enemy and fire, in one frame |
-| `hvh_traceaim` | run the weapon's exact trace and report what it would hit |
 | `hvh_refill` / `hvh_slot <n>` | refill ammo / switch weapon |
-| `hvh_aim <h>` / `hvh_fire` | point at the nearest target at height h / fire |
-| `hvh_botnear` / `hvh_botduel` | bring a bot to you / stage a two-bot duel |
-| `hvh_dummies` / `hvh_hitmarker` | dummy health / current hit marker state |
-| `hvh_steps` | per-pawn footstep state, cadence and ground surface |
-| `hvh_steptest <mode>` | drive the pawn under scripted input and measure step cadence |
+| `hvh_sandbox` | hold the round in Playing and revive everything |
+| `hvh_steptest <mode> [s]` | drive the pawn under scripted input and measure step cadence |
+| `hvh_reset [all\|marker\|counters]` | put diagnostic state back to a known baseline |
+| `hvh_marker_hold [s]` | hold the hit marker on screen long enough to look at it |
+| `hvh_loadscene <path\|menu>` | load a scene, or leave the match properly |
 
-`hvh_traceaim` and `hvh_botinfo` are the two that solve most "why isn't this working"
-questions.
+Heights are measured from the **bottom** of the target, so `66` is the head on
+anything. `hvh_centerray` and `hvh_report bots` answer most "why isn't this
+working" questions.
 
 ---
 
@@ -189,8 +188,11 @@ fixes, is in [`Docs/NOTES.md`](Docs/NOTES.md).
 - **Bots quietly invalidate measurements.** They kill your test subject, and
   `BotManager.Converge()` deletes bots you spawned by hand. Assume any run can be
   disturbed and measure whether it was.
-- **Hit zones only make sense on players, not target dummies** — dummies are
-  placed at their centre, so their head zone is unreachable.
+- **A tag filter does not stop a trace hitting you** if it starts inside your own
+  collider — it reports a hit at distance 0 regardless. Ignore your own hierarchy
+  too.
+- **Origins are not uniform.** Players sit at their feet, dummies at their middle.
+  Measure against `GetBounds()`, never the origin.
 
 - **`[Sync]` writes before `NetworkSpawn()` are silently discarded.** Set networked values
   *after* spawning. This produced bots that reported `IsBot == false` and inherited the
