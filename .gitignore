@@ -16,6 +16,7 @@ code/Properties/*
 .sbox/*
 *.generated.*
 *.*_c
+*.*_d
 !*.shader_c
 *.los
 *.vpk
