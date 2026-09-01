@@ -13,14 +13,14 @@ When you fire, you see and hear it; when you hit someone, you know instantly wit
 The game is mechanically complete — movement, weapons, rounds, and an opponent that hunts and kills you — but firing produces nothing at all. No flash, no sound, no tracer, no impact, no hit confirmation. Right now you learn that you hit something by watching a number change in the corner of the screen. This is the largest remaining gap between "the systems work" and "it feels like a shooter", it carries no netcode risk, and it needs no new gameplay rules.
 
 ## Definition of Done
-- [ ] Firing produces a muzzle flash at the weapon and a fire sound
-- [ ] Each shot leaves a visible tracer along its path
-- [ ] Shots that hit the world leave an impact effect at the hit point
-- [ ] Hitting a player shows a hit marker on your crosshair and plays a distinct hit sound
-- [ ] Killing a player gives a clearly different confirmation from a body hit
+- [~] Firing produces a muzzle flash **(done)** and a fire sound **(blocked, see Blockers)**
+- [x] Each shot leaves a visible tracer along its path
+- [x] Shots that hit the world leave an impact effect at the hit point (surface-appropriate, with sound)
+- [x] Hitting a player shows a hit marker on your crosshair and plays a distinct hit sound
+- [x] Killing a player gives a clearly different confirmation from a body hit (plus a separate headshot marker)
 - [ ] Reloading is audible
 - [ ] Footsteps are audible (the hook already exists and is unassigned)
-- [ ] The bot's shots produce the same flash/sound/tracer, so you can tell where you are being shot from
+- [x] The bot's shots produce the same flash, tracer and impact **(observed via a bot duel)** — sound still blocked, so you can tell where you are being shot from
 
 ## Non-Goals
 - **Viewmodel / first-person arms.** The gun being invisible is a real gap, but it needs models and animation and is its own goal.
@@ -50,9 +50,9 @@ The game is mechanically complete — movement, weapons, rounds, and an opponent
 | Assets | `Assets/sounds/*` | Sound events for fire, reload, hit, kill, footstep |
 
 ## Tasks
-1. [ ] **Fire is visible and audible.** Muzzle flash at the muzzle and a fire sound, broadcast from the host so every player sees and hears every shot — the bot's included.
-2. [ ] **Tracer and impact.** A tracer along the shot path and an impact effect where it lands.
-3. [ ] **Hit confirmation.** The shooter gets a crosshair hit marker and a hit sound when damage lands; a kill reads differently from a body hit.
+1. [~] **Fire is visible (done) and audible (blocked).** Muzzle flash at the muzzle and a fire sound, broadcast from the host so every player sees and hears every shot — the bot's included.
+2. [x] **Tracer and impact.** A tracer along the shot path and an impact effect where it lands.
+3. [x] **Hit confirmation.** The shooter gets a crosshair hit marker and a hit sound when damage lands; a kill reads differently from a body hit.
 4. [ ] **Reload and footsteps.** Assign the existing footstep hook and add a reload sound.
 
 ## Verification
@@ -64,9 +64,20 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 4. **Task 4** — Walk: footsteps. Reload: audible. The bot's footsteps are audible as it approaches.
 
 ## Risks
-- ~~s&box may not ship a usable gunshot sound.~~ **Checked before starting and cleared:** base content has 157 gunshot-type sound assets (e.g. `1911_shoot`), 69 footstep sounds, and ready-made `default_muzzleflash`, `default_tracer` and `default_brasseject` prefabs under `addons/base/Assets/prefabs/effects/`. Task 1 and 2 should reuse those prefabs rather than build effects from scratch.
+- **s&box ships no gunshot sound. CONFIRMED, and my earlier "cleared" note was wrong.** That count of 157 included `download/assets/...`, which is the cloud cache of *other people's packages*, not base content. `addons/base` contains zero sound files. Engine `core/` has 763 sounds — 294 footsteps, 123 impacts (including `impact-bullet-flesh` and `impact-bullet-concrete`), UI clicks — but nothing resembling a gun.
+- The effect prefabs DO exist and work: `prefabs/effects/default_muzzleflash.prefab` and `prefabs/effects/default_tracer.prefab`. Note the `prefabs/` prefix - the on-disk folder layout is misleading and the path without it silently resolves to nothing.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
 
 ## Blockers
-- None.
+- **No gunshot sound exists to point `FireSound` at.** Everything else in task 1
+  is done: the muzzle flash spawns per shot, is broadcast from the host so bots'
+  shots show too, and self-destroys. `Weapon.FireSound` is wired and left
+  deliberately empty. Three ways forward, needs a decision:
+    1. Add a `PackageReference` to a sound package from sbox.game (the normal
+       s&box route, adds a cloud dependency to the project).
+    2. Drop a gunshot .wav into `Assets/sounds/` and author a .sound resource.
+    3. Ship visual-only for now. Impacts, flesh hits and footsteps all have
+       usable engine sounds, so tasks 2-4 are NOT blocked by this.
+  A stopgap exists — `sounds/effects/explosion/explosion_small` — but it will
+  sound wrong, so I have not wired it.

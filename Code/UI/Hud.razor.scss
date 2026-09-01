@@ -37,6 +37,33 @@ $panel-bg: rgba(12, 14, 18, 0.72);
 	}
 }
 
+// ---- Hit marker --------------------------------------------------------
+// Shooter-local confirmation. Sits on the crosshair; kill and headshot differ
+// by colour and by size, so the difference survives colour-blindness.
+.hitmarker {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 0px;
+	height: 0px;
+	align-items: center;
+	justify-content: center;
+
+	.hm {
+		position: absolute;
+		width: 2px;
+		height: 9px;
+	}
+
+	.tl { transform: rotate(45deg)  translate(-9px, -9px); }
+	.tr { transform: rotate(-45deg) translate(9px, -9px); }
+	.bl { transform: rotate(-45deg) translate(-9px, 9px); }
+	.br { transform: rotate(45deg)  translate(9px, 9px); }
+
+	&.headshot .hm { height: 12px; width: 3px; }
+	&.kill .hm { height: 15px; width: 3px; }
+}
+
 // ---- Round bar ---------------------------------------------------------
 .round-bar {
 	position: absolute;

@@ -21,6 +21,19 @@
 			<div class="dot" style="background-color: @Color;" />
 		}
 	}
+
+	@* Hit marker - four diagonal ticks, shooter-local. Kill and headshot are
+	   distinguished by colour AND by the marker growing, so it reads even for
+	   someone who cannot separate the colours. *@
+	@if ( HitMarker.Visible )
+	{
+		<div class="hitmarker @MarkerClass" style="opacity: @HitMarker.Fade;">
+			<div class="hm tl" style="background-color: @MarkerColor;" />
+			<div class="hm tr" style="background-color: @MarkerColor;" />
+			<div class="hm bl" style="background-color: @MarkerColor;" />
+			<div class="hm br" style="background-color: @MarkerColor;" />
+		</div>
+	}
 </root>
 
 @code {
@@ -57,6 +70,16 @@
 		}
 	}
 
+	private string MarkerColor => HitMarker.ColorFor( HitMarker.Kind ).Hex;
+
+	private string MarkerClass => HitMarker.Kind switch
+	{
+		HitKind.Kill => "kill",
+		HitKind.Headshot => "headshot",
+		_ => "body",
+	};
+
 	protected override int BuildHash()
-		=> HashCode.Combine( Visible, (int)Gap, Length, Color, Settings.CrosshairDot );
+		=> HashCode.Combine( Visible, (int)Gap, Length, Color, Settings.CrosshairDot,
+			HitMarker.Visible, HitMarker.Kind, (int)( HitMarker.Fade * 10f ) );
 }

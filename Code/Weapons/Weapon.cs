@@ -32,6 +32,14 @@ public sealed class Weapon : Component
 	/// <summary>Raised locally when this weapon actually fires. Drives effects and the HUD.</summary>
 	public event Action Fired;
 
+	/// <summary>
+	/// Gunshot sound. Left unassigned by default: s&amp;box ships impact and
+	/// footstep sounds but NO gunshot, so there is nothing correct to point this
+	/// at without adding an asset or a package reference. Assign one and every
+	/// shot - yours and the bots' - becomes audible.
+	/// </summary>
+	[Property] public SoundEvent FireSound { get; set; }
+
 	public WeaponData Resolved => Data ?? WeaponDefinitions.Get( BuiltInId );
 
 	public string DisplayName => Resolved?.DisplayName ?? "Unknown";
@@ -238,6 +246,13 @@ public sealed class Weapon : Component
 			.UseHitboxes()
 			.Run();
 
+		// Cosmetic only, and broadcast for every shot including misses - a client
+		// never decides on its own that a shot happened.
+		// The surface travels as its resource path so every machine can resolve
+		// the engine's own impact prefab and sound for it.
+		BroadcastShot( origin, trace.EndPosition, trace.Normal, trace.Hit,
+			trace.Surface?.ResourcePath ?? "" );
+
 		if ( !trace.Hit || !trace.GameObject.IsValid() ) return;
 
 		var health = trace.GameObject.GetComponentInParent<HealthComponent>();
@@ -254,6 +269,40 @@ public sealed class Weapon : Component
 			Position = trace.EndPosition,
 			Origin = origin,
 		}, zone );
+
+		// Confirm the hit to the shooter alone. Separate from the world-effect
+		// broadcast on purpose: that is something everyone sees, this is one
+		// person's feedback. Only players count - practice dummies do not mark.
+		if ( trace.GameObject.GetComponentInParent<PlayerState>().IsValid() )
+			ConfirmHit( !health.IsAlive, zone == HitZone.Head );
+	}
+
+	/// <summary>
+	/// Play one shot's cosmetic effects on every machine. Carries only what the
+	/// effects need - two points and a flag - so the per-shot traffic stays tiny
+	/// even at 600 rounds per minute.
+	/// </summary>
+	[Rpc.Broadcast]
+	private void BroadcastShot( Vector3 origin, Vector3 end, Vector3 normal, bool hit, string surfacePath )
+	{
+		WeaponEffects.Shot( origin, end, normal, hit, surfacePath );
+		WeaponEffects.PlayAt( FireSound, origin );
+	}
+
+	/// <summary>
+	/// Tell the shooter, and only the shooter, that they landed a hit.
+	///
+	/// [Rpc.Owner] goes to the connection that owns this weapon. A bot's weapon
+	/// is host-owned, so for a bot this executes on the host - which would flash
+	/// a marker on the host's screen for the bot's hits. The IsLocallyControlled
+	/// check is what stops that.
+	/// </summary>
+	[Rpc.Owner]
+	private void ConfirmHit( bool killed, bool headshot )
+	{
+		if ( !Owner.IsValid() || !Owner.IsLocallyControlled ) return;
+
+		HitMarker.Show( killed ? HitKind.Kill : headshot ? HitKind.Headshot : HitKind.Body );
 	}
 
 	/// <summary>

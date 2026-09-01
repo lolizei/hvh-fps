@@ -37,7 +37,7 @@ public static class DevCommands
 
 	/// <summary>Point the view at the nearest living dummy. `hvh_aim`</summary>
 	[ConCmd( "hvh_aim" )]
-	public static void AimAtDummy()
+	public static void AimAtDummy( float height = 48f )
 	{
 		var player = Player.Local;
 		if ( !player.IsValid() ) return;
@@ -77,8 +77,8 @@ public static class DevCommands
 
 		if ( bestPlayer.IsValid() )
 		{
-			// Aim at chest height rather than the feet.
-			var aimAt = bestPlayer.WorldPosition + Vector3.Up * 48f;
+			// Height above the target's feet. 48 is chest, 66+ is the head zone.
+			var aimAt = bestPlayer.WorldPosition + Vector3.Up * height;
 			player.EyeAngles = Rotation.LookAt( ( aimAt - eye ).Normal ).Angles();
 
 			Log.Info( $"hvh_aim -> {bestPlayer.State?.DisplayName} (player) at " +
@@ -221,11 +221,11 @@ public static class DevCommands
 	/// so the scripted aim is gone before the shot leaves.
 	/// </summary>
 	[ConCmd( "hvh_shoot" )]
-	public static void Shoot( int shots = 1 )
+	public static void Shoot( int shots = 1, float height = 48f )
 	{
 		for ( var i = 0; i < shots; i++ )
 		{
-			AimAtDummy();
+			AimAtDummy( height );
 			Fire( 1 );
 		}
 	}
@@ -499,6 +499,19 @@ public static class DevCommands
 
 		Log.Info( $"hvh_sandbox -> round held in Playing, " +
 			$"{TargetDummy.AliveCount} dummies and {Player.All.Count()} players revived" );
+	}
+
+	/// <summary>Current hit-marker state on THIS machine. `hvh_hitmarker`</summary>
+	[ConCmd( "hvh_hitmarker" )]
+	public static void HitMarkerState()
+		=> Log.Info( $"hitmarker visible={HitMarker.Visible} kind={HitMarker.Kind} fade={HitMarker.Fade:0.00}" );
+
+	/// <summary>Clear the hit marker, so a test starts from a known state. `hvh_hitmarker_clear`</summary>
+	[ConCmd( "hvh_hitmarker_clear" )]
+	public static void HitMarkerClear()
+	{
+		HitMarker.Clear();
+		Log.Info( "hitmarker cleared" );
 	}
 
 	/// <summary>Print the local player's live state. `hvh_state`</summary>

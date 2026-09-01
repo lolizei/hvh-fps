@@ -148,8 +148,9 @@ doesn't exist, say so rather than building a second one alongside.
 Good places to jump in:
 
 - **The current goal** — shot feedback: muzzle flash, tracers, impacts, hit markers, sounds.
-  s&box already ships `default_muzzleflash`, `default_tracer` and `default_brasseject`
-  prefabs plus plenty of gunshot and footstep sounds, so much of this is wiring, not art.
+  s&box ships `default_muzzleflash`, `default_tracer` and `default_brasseject` prefabs,
+  plus impact and footstep sounds, so much of this is wiring rather than art. Note there
+  is **no gunshot sound** in s&box — that one needs an asset dropping in.
 - **A viewmodel.** The gun is currently invisible. Needs a model and animation.
 - **Multiplayer testing.** If you can run a second client, you are more useful than anyone
   else on this list — none of the netcode has ever run with two real players.
@@ -169,7 +170,14 @@ Good places to jump in:
 
 ## Traps we already fell into
 
-Documented so you don't lose the same afternoon we did.
+Documented so you don't lose the same afternoon we did. Fuller detail, with the
+fixes, is in [`Docs/NOTES.md`](Docs/NOTES.md).
+
+- **Asset paths need the `prefabs/` prefix, and a wrong path fails silently.**
+  `GameObject.Clone` with a bad path throws nothing, logs nothing and spawns
+  nothing. Confirm the real path in the asset browser before using it.
+- **`download/assets/…` is other people's cloud cache, not base content.** If
+  you find an asset only there, it is not available to this project.
 
 - **`[Sync]` writes before `NetworkSpawn()` are silently discarded.** Set networked values
   *after* spawning. This produced bots that reported `IsBot == false` and inherited the
