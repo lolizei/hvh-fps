@@ -32,6 +32,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | HVH features (aim assist, ESP, etc.) | Written, **all default off, never tuned or tested** |
 | Multiplayer with 2+ real clients | **Never tested.** Biggest unknown in the project |
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
+| Reload audio | Written, **not yet heard** — needs a runtime pass |
 | Viewmodel | Not implemented — the gun is invisible |
 | Real map | Not started. Current arena is a grey box |
 
@@ -131,6 +132,7 @@ Open the console in-game. These made everything above testable.
 | `hvh_aim [height]` / `hvh_fire [n]` | the two halves separately |
 | `hvh_centerray` | what the centre of your view is on — **states that it does not model spread** |
 | `hvh_hurt <n>` / `hvh_kill` | damage or kill yourself |
+| `hvh_reload` | reload the active weapon through its real path |
 | `hvh_refill` / `hvh_slot <n>` | refill ammo / switch weapon |
 | `hvh_sandbox` | hold the round in Playing and revive everything |
 | `hvh_steptest <mode> [s]` | drive the pawn under scripted input and measure step cadence |

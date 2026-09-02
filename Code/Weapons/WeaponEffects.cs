@@ -26,6 +26,23 @@ public static class WeaponEffects
 	/// </summary>
 	public const string FallbackImpactSound = "sounds/impacts/bullets/impact-bullet-concrete.sound";
 
+	/// <summary>
+	/// Reload cues. s&amp;box ships no weapon-handling audio, so these are engine
+	/// bullet-impact sounds pitched to read as a magazine leaving and seating -
+	/// a stand-in, and the first thing to replace when real audio arrives.
+	///
+	/// Deliberately NOT the melee-metal event: <see cref="HitMarker"/> uses that
+	/// for a kill, and a reload that sounds like a kill confirmation is worse
+	/// than a reload that sounds like nothing.
+	/// </summary>
+	public const string ReloadSound = "sounds/impacts/bullets/impact-bullet-metal.sound";
+
+	private const float ReloadOutPitch = 0.8f;
+	private const float ReloadInPitch = 1.25f;
+
+	/// <summary>Reload cues played on this machine. Diagnostics only.</summary>
+	public static int ReloadCues { get; private set; }
+
 	/// <summary>How far in front of the eye effects are treated as starting.</summary>
 	private const float MuzzleOffset = 40f;
 
@@ -103,6 +120,36 @@ public static class WeaponEffects
 
 		PlayAt( FallbackImpactSound, position );
 	}
+
+	/// <summary>
+	/// One end of a reload, at the weapon.
+	///
+	/// Positional, because an enemy reloading near you is information you should
+	/// be able to act on - the same reason footsteps are spatialised.
+	/// </summary>
+	public static void Reload( Vector3 position, bool finished )
+	{
+		try
+		{
+			var handle = Sound.Play( ReloadSound, position );
+			if ( handle is null ) return;
+
+			handle.Position = position;
+			handle.DistanceAttenuation = true;
+			handle.OcclusionEnabled = true;
+			handle.Pitch = finished ? ReloadInPitch : ReloadOutPitch;
+			handle.Volume = finished ? 0.9f : 0.7f;
+
+			ReloadCues++;
+		}
+		catch ( Exception )
+		{
+			// A missing sound must never interrupt a reload.
+		}
+	}
+
+	/// <summary>Reset the reload cue count. Diagnostics only.</summary>
+	public static void ResetReloadCues() => ReloadCues = 0;
 
 	/// <summary>Play a sound at a world position, by engine asset path.</summary>
 	public static void PlayAt( string soundPath, Vector3 position )

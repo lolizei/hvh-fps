@@ -18,7 +18,7 @@ The game is mechanically complete — movement, weapons, rounds, and an opponent
 - [x] Shots that hit the world leave an impact effect at the hit point (surface-appropriate, with sound)
 - [x] Hitting a player shows a hit marker on your crosshair and plays a distinct hit sound
 - [x] Killing a player gives a clearly different confirmation from a body hit (plus a separate headshot marker)
-- [ ] Reloading is audible
+- [~] Reloading is audible — implemented and compile-verified; **not yet runtime-verified** (editor was closed)
 - [x] Footsteps are audible — speed-dependent cadence, surface-appropriate, spatialised, and produced by bots through the same path
 - [x] The bot's shots produce the same flash, tracer and impact **(observed via a bot duel)** — sound still blocked, so you can tell where you are being shot from
 
@@ -54,7 +54,7 @@ The game is mechanically complete — movement, weapons, rounds, and an opponent
 1. [~] **Fire is visible (done) and audible (blocked).** Muzzle flash at the muzzle and a fire sound, broadcast from the host so every player sees and hears every shot — the bot's included.
 2. [x] **Tracer and impact.** A tracer along the shot path and an impact effect where it lands.
 3. [x] **Hit confirmation.** The shooter gets a crosshair hit marker and a hit sound when damage lands; a kill reads differently from a body hit.
-4. [~] **Reload and footsteps.** Footsteps **(done)**; reload sound still open.
+4. [~] **Reload and footsteps.** Footsteps **(done)**; reload audio written, runtime check outstanding.
 
 ## Verification
 Single player, `scenes/game.scene`, editor Play, one human + one bot.
@@ -86,6 +86,47 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 - The effect prefabs DO exist and work: `prefabs/effects/default_muzzleflash.prefab` and `prefabs/effects/default_tracer.prefab`. Note the `prefabs/` prefix - the on-disk folder layout is misleading and the path without it silently resolves to nothing.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
+
+## Task 8 - reload audio (2026-09-01) - INCOMPLETE
+
+**Written and compile-clean, but NOT runtime-verified: the s&box editor was
+closed for this task and never came back, so nothing here has been heard.**
+Treat every claim below as unproven until it is played.
+
+### What was built
+Two positional cues driven off the existing synced `IsReloading` flag - one as
+the magazine leaves, one as it seats - via `WeaponEffects.Reload`. No new RPC:
+`IsReloading` already replicates, so watching its transitions gives both cues on
+every machine for free.
+
+The watch sits **above** the `IsSimulatedHere` gate in `Weapon.OnUpdate`, which
+is the whole point: a reload you can only hear when you are the one reloading is
+worth nothing. Hearing an enemy reload is information, so it is spatialised the
+same way footsteps are.
+
+`RestoreAmmo` clears the flag on respawn, which is not a completed reload, so it
+also clears the watch to stop a phantom "magazine seated" cue.
+
+### Sound choice, and a correction
+`sounds/impacts/bullets/impact-bullet-metal` at pitch 0.8 (out) and 1.25 (in).
+Deliberately **not** `impact-melee-metal`, which `HitMarker` already uses for a
+kill - a reload that sounds like a kill confirmation is worse than a silent one.
+
+Correcting two things I wrote earlier:
+- **NOTES claimed `core/` has "763 sounds".** It has **63 playable sound
+  events**. The 763 counted raw `.vsnd_c` audio, most of which is not
+  addressable at all - `core/sounds/Physics` has 68 audio files and zero events.
+  Corrected in NOTES with the command that produces the real number.
+- **`HitMarker` claimed s&box has no UI click sound event.** It has thirteen
+  (`sounds/kenney/ui/*`). The melee-impact marker ticks were chosen on a false
+  premise. Left alone because they are approved and changing them changes feel,
+  but worth revisiting deliberately.
+
+### Still to do
+- Play it. Confirm both cues fire, at the right moments, from a bot's reload as
+  well as the local player's.
+- Confirm the counters: one reload = exactly 2 cues.
+- Confirm no phantom cue on respawn-mid-reload.
 
 ## Task 7 - console command consolidation (2026-09-01)
 

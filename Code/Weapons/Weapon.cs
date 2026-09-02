@@ -49,6 +49,7 @@ public sealed class Weapon : Component
 
 	private float _nextFire;
 	private float _reloadFinishTime;
+	private bool _wasReloading;
 
 	protected override void OnAwake() => EnsureSetup();
 
@@ -85,6 +86,7 @@ public sealed class Weapon : Component
 		Ammo = data.MagazineSize;
 		Reserve = data.ReserveAmmo;
 		IsReloading = false;
+		_wasReloading = false;
 		_reloadFinishTime = 0f;
 		_nextFire = 0f;
 	}
@@ -103,6 +105,11 @@ public sealed class Weapon : Component
 
 	protected override void OnUpdate()
 	{
+		// Reload audio runs on EVERY machine, above the simulation gate. Hearing
+		// someone else reload is information you play on, and IsReloading is
+		// synced, so both transitions arrive everywhere with no extra RPC.
+		TickReloadAudio();
+
 		// Simulated by whoever owns the pawn - the local human, or the host for
 		// its bots. Intent comes from the pawn, never from the keyboard, so a
 		// bot cannot fire on the human's mouse clicks.
@@ -124,6 +131,18 @@ public sealed class Weapon : Component
 		if ( !CanFire() ) return;
 
 		Fire();
+	}
+
+	/// <summary>
+	/// Turn the synced reloading flag into two audible cues: one as the magazine
+	/// comes out, one as it seats.
+	/// </summary>
+	private void TickReloadAudio()
+	{
+		if ( IsReloading == _wasReloading ) return;
+
+		_wasReloading = IsReloading;
+		WeaponEffects.Reload( WorldPosition, finished: !IsReloading );
 	}
 
 	private void TickReload()

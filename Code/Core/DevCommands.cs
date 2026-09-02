@@ -111,7 +111,11 @@ public static class DevCommands
 		var key = what.ToLowerInvariant();
 
 		if ( key is "all" or "marker" ) HitMarkerClear();
-		if ( key is "all" or "counters" ) Weapon.ResetCounters();
+		if ( key is "all" or "counters" )
+		{
+			Weapon.ResetCounters();
+			WeaponEffects.ResetReloadCues();
+		}
 
 		if ( key is not ( "all" or "marker" or "counters" ) )
 		{
@@ -299,7 +303,8 @@ public static class DevCommands
 			$" damageApplications={Weapon.DamageApplications}" +
 			$" confirmInvoked={Weapon.ConfirmHitInvocations}" +
 			$" confirmDelivered={Weapon.ConfirmHitDeliveries}" +
-			$" markerShows={HitMarker.ShowCount}" );
+			$" markerShows={HitMarker.ShowCount}" +
+			$" reloadCues={WeaponEffects.ReloadCues}" );
 		Log.Info(
 			$"  live UI: Hud={huds} ScreenPanel={screens}" +
 			$" Crosshair={HvH.UI.Crosshair.LiveCount}" +
@@ -336,6 +341,31 @@ public static class DevCommands
 				$" height={b.Size.z:0.#} standHeight={stand:0.#}" +
 				$" | originIsFeet={( MathF.Abs( originZ - b.Mins.z ) < 4f )}" );
 		}
+	}
+
+	/// <summary>
+	/// Reload the active weapon through its real code path. `hvh_reload`
+	/// Spends ammo first if the magazine is full, since a full magazine refuses.
+	/// </summary>
+	[ConCmd( "hvh_reload" )]
+	public static void Reload()
+	{
+		var weapon = Player.Local?.Inventory?.ActiveWeapon;
+		if ( !weapon.IsValid() )
+		{
+			Log.Warning( "hvh_reload: no active weapon" );
+			return;
+		}
+
+		var before = weapon.Ammo;
+		weapon.RequestReload();
+
+		Log.Info( $"hvh_reload -> {weapon.DisplayName} ammo {before}/{weapon.Reserve}, " +
+			$"reloading={weapon.IsReloading}" );
+
+		if ( !weapon.IsReloading )
+			Log.Warning( "hvh_reload: refused - magazine already full, or no reserve. " +
+				"Fire a shot first (hvh_fire), then retry." );
 	}
 
 	/// <summary>Damage yourself. `hvh_hurt 25`</summary>

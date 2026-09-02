@@ -23,9 +23,14 @@ public enum HitKind
 /// </summary>
 public static class HitMarker
 {
-	// Engine core/ sound events. s&box has no UI click registered as a sound
-	// event - the kenney clicks are raw audio - so these short melee impacts are
-	// the closest thing to a marker tick that actually exists.
+	// Engine core/ sound events.
+	//
+	// Correction: an earlier comment here claimed s&box has no UI click
+	// registered as a sound event. It does - sounds/kenney/ui/ui.button.press
+	// and twelve siblings are real events. These melee impacts were chosen on a
+	// false premise, and the kenney clicks are worth trying as marker ticks.
+	// Left as-is because the current sounds are approved and changing them
+	// changes game feel; noted so the choice can be revisited deliberately.
 	public const string BodySound = "sounds/impacts/melee/impact-melee-cloth.sound";
 	public const string HeadshotSound = "sounds/impacts/melee/impact-melee-glass.sound";
 	public const string KillSound = "sounds/impacts/melee/impact-melee-metal.sound";

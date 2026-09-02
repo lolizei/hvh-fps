@@ -50,21 +50,45 @@ What you can actually rely on:
 
 | Location | Contains |
 |---|---|
-| `core/` | 763 sounds — 294 footsteps, 123 impacts, UI clicks, ambience. No weapons. |
+| `core/` | **63 playable sound events** — see below. No weapons. |
 | `addons/base/Assets/` | prefabs, models, materials, fonts. **Zero sound files.** |
+| `addons/menu/Assets/` | 8 sound events, but this is the *menu* addon — do not assume a game mounts it |
 | `download/assets/` | **not yours** — cloud cache |
 
-Concretely: there is **no gunshot sound in s&box**. Useful things that *are*
-guaranteed present:
+### Count sound EVENTS, not audio files
+
+An earlier version of this note said "763 sounds — 294 footsteps, 123 impacts".
+That counted raw `.vsnd_c` audio, and **most of it is not addressable**.
+`Sound.Play( path )` needs a `.sound` event (compiled `.sound_c`), and `core/`
+has exactly **63**. The 304 files under `core/sounds/footsteps` collapse into 10
+events; the 68 under `core/sounds/Physics` collapse into **none at all**.
+
+```bash
+find "$SBOX/core" -name "*.sound_c" | wc -l     # 63 - the only count that matters
+```
+
+The full non-impact set: 10 footsteps, 13 kenney UI, 4 ambience stings, 2 water,
+`explosion_small`, `fire_burn_loop01`, `error`, `player_use_fail`, and the
+engine's own voip/soundscape plumbing. Plus 24 impacts (14 bullet, 10 melee).
+
+Concretely: there is **no gunshot and no weapon-handling audio in s&box**.
+Guaranteed present and useful:
 
 ```
 sounds/impacts/bullets/impact-bullet-flesh
 sounds/impacts/bullets/impact-bullet-concrete
+sounds/impacts/bullets/impact-bullet-metal
+sounds/impacts/melee/impact-melee-metal
 sounds/footsteps/footstep-concrete
+sounds/kenney/ui/ui.button.press     # a real UI click event - contrary to the
+                                     # comment that used to sit in HitMarker
 prefabs/effects/default_muzzleflash.prefab
 prefabs/effects/default_tracer.prefab
 prefabs/effects/default_brasseject.prefab
 ```
+
+Addressable paths are **lowercase** even though the folders on disk are
+`Impacts/Bullets`.
 
 ---
 
