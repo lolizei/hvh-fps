@@ -31,7 +31,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | **Bot opponent** | Working — searches, chases, strafes, shoots, reloads, kills you |
 | Mod framework + example mod | Loads at runtime, API documented |
 | HVH features (aim assist, ESP, etc.) | Written, **all default off, never tuned or tested** |
-| Multiplayer with 2+ real clients | **Never tested.** Biggest unknown — audited in [`Docs/MULTIPLAYER.md`](Docs/MULTIPLAYER.md), two certain breakages found by reading |
+| Multiplayer with 2+ real clients | **Never tested — and there is currently no way to join a game.** The only networking call in the codebase is `Disconnect()`. This is the current goal |
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
 | Reload audio | Working — two positional cues, audible for other players too |
 | Viewmodel | Not implemented — the gun is invisible |
