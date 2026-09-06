@@ -57,6 +57,9 @@ public sealed class PlayerPresentation : Component
 
 		if ( team != CurrentTeam || Style != _currentStyle || !Current.IsValid() )
 			Rebuild( team );
+
+		// Renderers can appear after the model loads, so keep enforcing this.
+		HideFromOwner();
 	}
 
 	private void Rebuild( Team team )
@@ -107,11 +110,26 @@ public sealed class PlayerPresentation : Component
 		_renderers.Clear();
 		_renderers.AddRange( Current.GetComponentsInChildren<ModelRenderer>( true ) );
 
-		// We are inside our own body in first person. Keep the shadow so you can
-		// still see yourself on the floor, but do not render the body itself.
-		if ( _player.IsValid() && _player.IsLocallyControlled )
+		HideFromOwner();
+	}
+
+	/// <summary>
+	/// We are inside our own body in first person. Keep the shadow so you can
+	/// still see yourself on the floor, but do not render the body itself.
+	///
+	/// Re-applied every frame rather than once at spawn: the Citizen creates
+	/// more renderers after the model loads - the eyes among them - and setting
+	/// this only at build time left a pair of eyeballs filling the screen from
+	/// the inside of your own head.
+	/// </summary>
+	private void HideFromOwner()
+	{
+		if ( !_player.IsValid() || !_player.IsLocallyControlled ) return;
+		if ( !Current.IsValid() ) return;
+
+		foreach ( var r in Current.GetComponentsInChildren<ModelRenderer>( true ) )
 		{
-			foreach ( var r in _renderers )
+			if ( r.RenderType != ModelRenderer.ShadowRenderType.ShadowsOnly )
 				r.RenderType = ModelRenderer.ShadowRenderType.ShadowsOnly;
 		}
 	}

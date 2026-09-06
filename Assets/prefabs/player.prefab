@@ -66,6 +66,11 @@
         "__enabled": true
       },
       {
+        "__type": "HvH.HeldWeaponPresentation",
+        "__guid": "cadd09b0-57ad-4742-8224-b113eb52cf73",
+        "__enabled": true
+      },
+      {
         "__type": "HvH.PlayerState",
         "__guid": "60c98a89-555f-4fa5-8e1d-97f02b0c3dac",
         "__enabled": true

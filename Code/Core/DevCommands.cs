@@ -36,13 +36,16 @@ public static class DevCommands
 			case "hits": HitDebug(); return;
 			case "bounds": Bounds(); return;
 			case "view": ViewModel(); return;
+			case "bones": Bones(); return;
+			case "anim": AnimParams(); return;
+			case "hold": HoldTypes(); return;
 			case "all":
 				State(); Players(); BotInfo(); Steps();
 				Dummies(); HitMarkerState(); HitDebug(); Bounds();
 				return;
 			default:
 				Log.Warning( $"hvh_report: unknown '{what}' - use state, players, bots, " +
-					"steps, dummies, marker, hits, bounds, view or all" );
+					"steps, dummies, marker, hits, bounds, view, bones, anim, hold or all" );
 				return;
 		}
 	}
@@ -196,6 +199,197 @@ public static class DevCommands
 		return spread;
 	}
 
+	/// <summary>
+	/// Find which holdtype value actually produces a two-handed carry.
+	///
+	/// The parameter is real - it moves the pose - but the meaning of each value
+	/// is not written down anywhere reachable from here. So measure it: a hand
+	/// brought up and forward of the pelvis is a hand on a weapon.
+	/// </summary>
+	private static void HoldTypes()
+	{
+		var body = Player.Local?.GetComponent<PlayerPresentation>()?.Current;
+		var skinned = body.IsValid() ? body.GetComponentInChildren<SkinnedModelRenderer>( true ) : null;
+
+		if ( !skinned.IsValid() )
+		{
+			Log.Warning( "hvh_report hold: local pawn has no Citizen body" );
+			return;
+		}
+
+		_ = ProbeHoldTypes( skinned );
+	}
+
+	private static async System.Threading.Tasks.Task ProbeHoldTypes( SkinnedModelRenderer skinned )
+	{
+		Log.Info( "holdtype: hand height and forward reach, relative to the pelvis" );
+
+		for ( var value = 0; value <= 7; value++ )
+		{
+			skinned.Set( "holdtype", value );
+			await GameTask.DelayRealtimeSeconds( 0.45f );
+
+			skinned.TryGetBoneTransform( "pelvis", out var root );
+			skinned.TryGetBoneTransform( "hand_L", out var left );
+			skinned.TryGetBoneTransform( "hand_R", out var right );
+
+			var fwd = root.Rotation.Forward;
+			var lUp = left.Position.z - root.Position.z;
+			var rUp = right.Position.z - root.Position.z;
+			var lFwd = ( left.Position - root.Position ).Dot( fwd );
+			var rFwd = ( right.Position - root.Position ).Dot( fwd );
+
+			Log.Info( $"  holdtype {value}: left up {lUp,6:0.0} fwd {lFwd,6:0.0}" +
+				$" | right up {rUp,6:0.0} fwd {rFwd,6:0.0}" +
+				$"{( lUp > 6f && lFwd > 6f ? "   <-- both hands up and forward" : "" )}" );
+		}
+
+		skinned.Set( "holdtype", 2 );
+		Log.Info( "holdtype probe done, left at 2" );
+	}
+
+	/// <summary>
+	/// Work out which animation graph parameters this model actually responds to.
+	///
+	/// Parameter names cannot be read back from a compiled graph and Set() on an
+	/// unknown name silently does nothing, so guessing is untestable. Instead:
+	/// set a candidate, let a frame pass, and see whether the pose moved. A
+	/// parameter that changes the hand is real; one that does not, is not.
+	/// </summary>
+	private static void AnimParams()
+	{
+		// Probe the LOCAL player's body. A bot is walking, so its pose changes on
+		// its own and every parameter looks real - that confounder made the first
+		// run report all seventeen as working.
+		var body = Player.Local?.GetComponent<PlayerPresentation>()?.Current;
+		var skinned = body.IsValid() ? body.GetComponentInChildren<SkinnedModelRenderer>( true ) : null;
+
+		if ( !skinned.IsValid() )
+		{
+			Log.Warning( "hvh_report anim: local pawn has no Citizen body - set Style to Citizen" );
+			return;
+		}
+
+		_ = ProbeAnim( skinned );
+	}
+
+	private static async System.Threading.Tasks.Task ProbeAnim( SkinnedModelRenderer skinned )
+	{
+		// World bone transforms relative to the pelvis. The *Local* variants can
+		// hand back bind-pose data, which never changes no matter what the graph
+		// is doing - a probe that always reads zero proves nothing.
+		Vector3 Pose()
+		{
+			skinned.TryGetBoneTransform( "pelvis", out var root );
+			skinned.TryGetBoneTransform( "hand_R", out var r );
+			skinned.TryGetBoneTransform( "arm_lower_R", out var l );
+			return ( r.Position - root.Position ) + ( l.Position - root.Position );
+		}
+
+		var ints = new[] { "holdtype", "holdtype_pose", "holdtype_handedness", "handedness" };
+		var bools = new[] { "b_attack", "b_reload", "b_grounded", "b_swim", "b_noclip" };
+		var floats = new[] { "move_speed", "move_groundspeed", "move_direction", "duck",
+			"aim_body_weight", "aim_head_weight", "wish_x", "wish_y" };
+
+		// How much the pose drifts on its own over the same window. Anything that
+		// does not clearly beat this is indistinguishable from doing nothing.
+		var drift = 0f;
+		for ( var i = 0; i < 4; i++ )
+		{
+			var a = Pose();
+			await GameTask.DelayRealtimeSeconds( 0.25f );
+			drift = MathF.Max( drift, ( Pose() - a ).Length );
+		}
+
+		var threshold = MathF.Max( 1.5f, drift * 3f );
+		Log.Info( $"idle drift {drift:0.00} -> a parameter must move the pose more than {threshold:0.00}" );
+
+		foreach ( var name in ints )
+		{
+			skinned.Set( name, 0 );
+			await GameTask.DelayRealtimeSeconds( 0.15f );
+			var before = Pose();
+
+			skinned.Set( name, 2 );
+			await GameTask.DelayRealtimeSeconds( 0.25f );
+			var delta = ( Pose() - before ).Length;
+
+			Log.Info( $"  int   {name,-22} pose moved {delta:0.00}{( delta > threshold ? "   <-- REAL" : "" )}" );
+			skinned.Set( name, 0 );
+		}
+
+		foreach ( var name in bools )
+		{
+			skinned.Set( name, false );
+			await GameTask.DelayRealtimeSeconds( 0.15f );
+			var before = Pose();
+
+			skinned.Set( name, true );
+			await GameTask.DelayRealtimeSeconds( 0.25f );
+			var delta = ( Pose() - before ).Length;
+
+			Log.Info( $"  bool  {name,-22} pose moved {delta:0.00}{( delta > threshold ? "   <-- REAL" : "" )}" );
+			skinned.Set( name, false );
+		}
+
+		foreach ( var name in floats )
+		{
+			skinned.Set( name, 0f );
+			await GameTask.DelayRealtimeSeconds( 0.15f );
+			var before = Pose();
+
+			skinned.Set( name, name.Contains( "direction" ) ? 90f : 1f );
+			await GameTask.DelayRealtimeSeconds( 0.25f );
+			var delta = ( Pose() - before ).Length;
+
+			Log.Info( $"  float {name,-22} pose moved {delta:0.00}{( delta > threshold ? "   <-- REAL" : "" )}" );
+			skinned.Set( name, 0f );
+		}
+
+		Log.Info( "probe done" );
+	}
+
+	/// <summary>
+	/// Ask the Citizen model which bones and attachments it actually has.
+	///
+	/// Guessing bone names from a compiled model is how an afternoon disappears -
+	/// TryGetBoneTransform answers definitively, so ask it.
+	/// </summary>
+	private static void Bones()
+	{
+		var skinned = Game.ActiveScene?.GetAllComponents<SkinnedModelRenderer>()
+			.FirstOrDefault( x => x.Model is not null );
+
+		if ( !skinned.IsValid() )
+		{
+			Log.Warning( "hvh_report bones: no SkinnedModelRenderer in the scene" );
+			return;
+		}
+
+		Log.Info( $"model: {skinned.Model?.Name}" );
+
+		var candidates = new[]
+		{
+			"hand_R", "hand_L", "hold_R", "hold_L", "arm_upper_R", "arm_lower_R",
+			"arm_upper_L", "arm_lower_L", "clavicle_R", "clavicle_L",
+			"spine_0", "spine_1", "spine_2", "pelvis", "head", "hand", "hand2",
+			"finger_index_0_R", "weapon", "hold",
+		};
+
+		foreach ( var name in candidates )
+		{
+			if ( skinned.TryGetBoneTransform( name, out var tx ) )
+				Log.Info( $"  BONE {name,-18} world {tx.Position}" );
+		}
+
+		foreach ( var name in new[] { "hand_R", "hand_L", "hold_R", "hold_L", "eyes", "muzzle", "weapon" } )
+		{
+			var a = skinned.GetAttachment( name, true );
+			if ( a.HasValue )
+				Log.Info( $"  ATTACH {name,-16} world {a.Value.Position}" );
+		}
+	}
+
 	/// <summary>Presentation state - what the local pawn is actually showing.</summary>
 	private static void ViewModel()
 	{
@@ -214,6 +408,18 @@ public static class DevCommands
 			  $" | weapon={vm.CurrentWeapon?.DisplayName ?? "none"}"
 			: "viewmodel: component missing from the pawn" );
 
+		var held = player.GetComponent<HeldWeaponPresentation>();
+		if ( held.IsValid() && held.Current.IsValid() )
+		{
+			var body = pres?.Current;
+			var sk = body.IsValid() ? body.GetComponentInChildren<SkinnedModelRenderer>( true ) : null;
+			if ( sk.IsValid() && sk.TryGetBoneTransform( "hand_L", out var lh ) )
+			{
+				var grip = held.Current.WorldPosition + held.Current.WorldRotation * held.SupportGrip;
+				Log.Info( $"support hand: hand_L is {lh.Position.Distance( grip ):0.0}u from the foregrip" );
+			}
+		}
+
 		Log.Info( pres.IsValid()
 			? $"body: team={pres.CurrentTeam} | object={( pres.Current.IsValid() ? pres.Current.Name : "none" )}"
 			: "body: component missing from the pawn" );
@@ -221,8 +427,11 @@ public static class DevCommands
 		foreach ( var other in Player.All )
 		{
 			var p2 = other.GetComponent<PlayerPresentation>();
+			var h = other.GetComponent<HeldWeaponPresentation>();
 			Log.Info( $"  {other.State?.DisplayName}: team={other.Team}" +
-				$" body={( p2.IsValid() && p2.Current.IsValid() ? "yes" : "NO" )}" );
+				$" body={( p2.IsValid() && p2.Current.IsValid() ? "yes" : "NO" )}" +
+				$" | held={( h.IsValid() ? ( h.Current.IsValid() ? "yes" : "NO" ) : "no component" )}" +
+				$" [{( h.IsValid() ? h.Status : "-" )}]" );
 		}
 	}
 
