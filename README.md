@@ -34,7 +34,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
 | Reload audio | Working — two positional cues, audible for other players too |
 | Viewmodel | Not implemented — the gun is invisible |
-| Real map | Not started. Current arena is a grey box |
+| Real map | **Compound** greybox built and sightline-verified — `scenes/compound.scene`, deathmatch layout |
 
 Roughly 7k lines of C# and Razor. Every "Working" row above was verified by actually
 playing it, not by the code compiling.
@@ -79,8 +79,10 @@ Code/
   HVH/         the built-in mod and its features
   Examples/    a third-party mod proving the API works
 Assets/
-  scenes/      menu.scene (startup), game.scene (gameplay)
+  scenes/      menu.scene (startup), game.scene (test arena), compound.scene (the map)
   prefabs/     player.prefab
+Tools/
+  build_compound.py  regenerates compound.scene; the scale knob lives here
 Docs/
   GOAL.md      the ONE current goal — read this first
   MODDING.md   how to write a mod
