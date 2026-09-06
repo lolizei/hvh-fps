@@ -16,6 +16,16 @@ BOX = 50.0         # models/dev/box.vmdl is a 50-unit cube
 PLANE = 100.0      # models/dev/plane.vmdl is 100 units per scale unit
 WALL_H, WALL_T = 200.0, 24.0
 
+# Materials by surface class. The point is readability: a grid on the floor
+# reads as ground and gives scale, a different grid on walls reads as wall, and
+# cover is a flat lighter tone so it pops against both.
+MAT_FLOOR = "materials/dev/gray_grid_8.vmat"
+MAT_WALL = "materials/dev/reflectivity_30.vmat"
+MAT_BUILDING = "materials/dev/reflectivity_30.vmat"
+MAT_COVER = "materials/dev/reflectivity_50.vmat"
+MAT_METAL = "materials/dev/black_grid_8.vmat"
+MAT_FLAT = "materials/dev/reflectivity_20.vmat"
+
 GROUND_T = "0.35,0.38,0.42,1"
 BLD_T = "0.50,0.48,0.44,1"
 COVER_T = "0.55,0.50,0.42,1"
@@ -32,12 +42,12 @@ def quat_yaw(deg):
     return "0,0,%.9f,%.9f" % (math.sin(r), math.cos(r))
 
 
-def renderer(model, tint):
+def renderer(model, tint, mat=None):
     return {
         "__type": "Sandbox.ModelRenderer", "__guid": guid(), "__enabled": True,
         "Flags": 0, "BodyGroups": 18446744073709551615, "CreateAttachments": False,
         "LodOverride": None, "MaterialGroup": None,
-        "MaterialOverride": "materials/dev/reflectivity_50.vmat", "Materials": None,
+        "MaterialOverride": mat or MAT_COVER, "Materials": None,
         "Model": model, "OnComponentDestroy": None, "OnComponentDisabled": None,
         "OnComponentEnabled": None, "OnComponentFixedUpdate": None,
         "OnComponentStart": None, "OnComponentUpdate": None,
@@ -69,7 +79,7 @@ def obj(name, pos, rot, scale, tags, comps):
     }
 
 
-def block(name, cx, cy, size, tint, yaw=0.0, z=None):
+def block(name, cx, cy, size, tint, yaw=0.0, z=None, mat=None):
     """A dev-box block. size is (sx, sy, sz) in world units; z is centre height."""
     sx, sy, sz = size
     cz = sz / 2.0 if z is None else z
@@ -78,16 +88,16 @@ def block(name, cx, cy, size, tint, yaw=0.0, z=None):
                quat_yaw(yaw),
                "%.6f,%.6f,%.6f" % (sx / BOX, sy / BOX, sz / BOX),
                "solid",
-               [renderer("models/dev/box.vmdl", tint), collider()])
+               [renderer("models/dev/box.vmdl", tint, mat), collider()])
 
 
-def wall_between(name, a, b, height=WALL_H, thick=WALL_T, tint="0.45,0.47,0.5,1"):
+def wall_between(name, a, b, height=WALL_H, thick=WALL_T, tint="0.45,0.47,0.5,1", mat=None):
     """A wall spanning two points - used for the angled boundary."""
     (x1, y1), (x2, y2) = a, b
     cx, cy = (x1 + x2) / 2.0, (y1 + y2) / 2.0
     length = math.hypot(x2 - x1, y2 - y1)
     yaw = math.degrees(math.atan2(y2 - y1, x2 - x1))
-    return block(name, cx, cy, (length, thick, height), tint, yaw=yaw)
+    return block(name, cx, cy, (length, thick, height), tint, yaw=yaw, mat=mat or MAT_WALL)
 
 
 def spawn(name, x, y, yaw):
@@ -99,13 +109,72 @@ def spawn(name, x, y, yaw):
                  "OnComponentUpdate": None}])
 
 
+
+def prop(name, model, cx, cy, cz=0.0, yaw=0.0, scale=1.0, solid=True):
+    """
+    A real engine prop. These come from addons/citizen, which is base content
+    and mounted - verified by asset_search resolving models/citizen_props/... -
+    not from download/assets, which is other people's cloud cache.
+
+    ModelCollider so the prop uses its own collision rather than a box guess.
+    """
+    comps = [{
+        "__type": "Sandbox.ModelRenderer", "__guid": guid(), "__enabled": True,
+        "Flags": 0, "BodyGroups": 18446744073709551615, "CreateAttachments": False,
+        "LodOverride": None, "MaterialGroup": None, "MaterialOverride": None,
+        "Materials": None, "Model": model, "OnComponentDestroy": None,
+        "OnComponentDisabled": None, "OnComponentEnabled": None,
+        "OnComponentFixedUpdate": None, "OnComponentStart": None,
+        "OnComponentUpdate": None,
+        "RenderOptions": {"GameLayer": True, "OverlayLayer": False,
+                          "BloomLayer": False, "AfterUILayer": False},
+        "RenderType": "On", "Tint": "1,1,1,1",
+    }]
+    if solid:
+        comps.append({
+            "__type": "Sandbox.ModelCollider", "__guid": guid(), "__enabled": True,
+            "Flags": 0, "ColliderFlags": 0, "Elasticity": None, "Friction": None,
+            "IsTrigger": False, "Model": model, "OnComponentDestroy": None,
+            "OnComponentDisabled": None, "OnComponentEnabled": None,
+            "OnComponentFixedUpdate": None, "OnComponentStart": None,
+            "OnComponentUpdate": None, "OnTriggerEnter": None, "OnTriggerExit": None,
+            "Static": True, "Surface": None,
+        })
+    return {
+        "__guid": guid(), "__version": 2, "Flags": 0, "Name": name,
+        "Position": "%.2f,%.2f,%.2f" % (cx, cy, cz), "Rotation": quat_yaw(yaw),
+        "Scale": "%.3f,%.3f,%.3f" % (scale, scale, scale),
+        "Tags": "solid" if solid else "", "Enabled": True, "NetworkMode": 1,
+        "NetworkFlags": 0, "NetworkOrphaned": 0, "NetworkTransmit": True,
+        "OwnerTransfer": 0, "Components": comps,
+    }
+
+
+def point_light(name, cx, cy, cz, radius, colour, brightness):
+    return {
+        "__guid": guid(), "__version": 2, "Flags": 0, "Name": name,
+        "Position": "%.2f,%.2f,%.2f" % (cx, cy, cz), "Rotation": "0,0,0,1",
+        "Scale": "1,1,1", "Tags": "", "Enabled": True, "NetworkMode": 1,
+        "NetworkFlags": 0, "NetworkOrphaned": 0, "NetworkTransmit": True,
+        "OwnerTransfer": 0,
+        "Components": [{
+            "__type": "Sandbox.PointLight", "__guid": guid(), "__enabled": True,
+            "Flags": 0, "Attenuation": 1.0, "FogMode": 1, "FogStrength": 1.0,
+            "LightColor": colour, "Radius": radius, "Shadows": True,
+            "OnComponentDestroy": None, "OnComponentDisabled": None,
+            "OnComponentEnabled": None, "OnComponentFixedUpdate": None,
+            "OnComponentStart": None, "OnComponentUpdate": None,
+        }],
+    }
+
+
 objs = []
 
 # ---- ground ---------------------------------------------------------------
 objs.append(obj("Ground", "0,0,0", "0,0,0,1",
                 "%.4f,%.4f,1" % ((HALF_X * 2 + 2400) / PLANE, (HALF_Y * 2 + 1600) / PLANE),
                 "solid",
-                [renderer("models/dev/plane.vmdl", GROUND_T),
+                [renderer("models/dev/plane.vmdl", GROUND_T, MAT_FLOOR),
                  collider(scale="%.0f,%.0f,50" % (HALF_X * 2 + 2400, HALF_Y * 2 + 1600),
                           center="0,0,-25", static=True)]))
 
@@ -193,7 +262,7 @@ RING = [(-560, 470, 200, 70, 128, 20), (560, 430, 200, 70, 128, -25),
         (-660, 0, 70, 220, 128, 0), (660, 0, 70, 220, 128, 0),
         (-330, 780, 160, 70, 96, 40), (350, -800, 160, 70, 96, -40)]
 for i, (x, y, sx, sy, sz, yaw) in enumerate(RING):
-    objs.append(block("Ring Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw))
+    objs.append(block("Ring Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw, mat=MAT_COVER))
 
 # ---- the Yards: denser and slower on the flanks ---------------------------
 YARD = [(-780, 900, 150, 90, 128, 25), (-720, 640, 120, 120, 96, 0),
@@ -201,18 +270,18 @@ YARD = [(-780, 900, 150, 90, 128, 25), (-720, 640, 120, 120, 96, 0),
         (-770, -760, 150, 90, 128, -30), (-700, -520, 120, 120, 96, 0),
         (760, -740, 150, 90, 128, 30), (700, -500, 120, 120, 96, 0)]
 for i, (x, y, sx, sy, sz, yaw) in enumerate(YARD):
-    objs.append(block("Yard Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw))
+    objs.append(block("Yard Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw, mat=MAT_COVER))
 
 # ---- panel arrays: break the diagonals asymmetrically ---------------------
-objs.append(block("Panel Array NE", 620, 760, (230, 40, 190), PANEL_T, yaw=-35))
-objs.append(block("Panel Array W", -690, 180, (40, 260, 190), PANEL_T, yaw=10))
+objs.append(block("Panel Array NE", 620, 760, (230, 40, 190), PANEL_T, yaw=-35, mat=MAT_METAL))
+objs.append(block("Panel Array W", -690, 180, (40, 260, 190), PANEL_T, yaw=10, mat=MAT_METAL))
 
 # ---- motor pool: chest-high, irregular, partial blockers ------------------
 VEH = [(-430, 980, 210, 90, 68, 15), (-250, 1120, 210, 90, 68, -10),
        (300, 1050, 210, 90, 68, 25), (-380, -1000, 210, 90, 68, -20),
        (250, -1120, 210, 90, 68, 12), (470, -930, 210, 90, 68, -35)]
 for i, (x, y, sx, sy, sz, yaw) in enumerate(VEH):
-    objs.append(block("Vehicle %d" % (i + 1), x, y, (sx, sy, sz), VEH_T, yaw=yaw))
+    objs.append(block("Vehicle %d" % (i + 1), x, y, (sx, sy, sz), VEH_T, yaw=yaw, mat=MAT_FLAT))
 
 # ---- the Core's upper floor ----------------------------------------------
 # Enclosed, NOT an open roof. An open platform above the middle of the map sees
@@ -267,14 +336,14 @@ for i in range(46):
     jitter = 60.0 * math.sin(i * 2.3)
     objs.append(block("Tree %d" % (i + 1), rx + jitter, ry + jitter * 0.6,
                       (70, 70, 300 + 60 * math.cos(i * 1.7)), "0.18,0.26,0.18,1",
-                      yaw=i * 23.0))
+                      yaw=i * 23.0, mat=MAT_FLAT))
 
 # ---- outfields: greenhouse rows east and west, never enterable ------------
 for side in (-1, 1):
     for r in range(4):
         objs.append(block("Outfield %s%d" % ("E" if side > 0 else "W", r + 1),
                           side * (HALF_X + 760), -700 + r * 470,
-                          (420, 240, 150), "0.42,0.46,0.44,1", yaw=side * 4.0))
+                          (420, 240, 150), "0.42,0.46,0.44,1", yaw=side * 4.0, mat=MAT_BUILDING))
 
 # ---- cover pass: the ring was too bare ------------------------------------
 EXTRA = [(-300, 300, 150, 70, 96, 55), (300, -300, 150, 70, 96, -55),
@@ -284,7 +353,44 @@ EXTRA = [(-300, 300, 150, 70, 96, 55), (300, -300, 150, 70, 96, -55),
          (-80, 1180, 190, 70, 96, 8), (60, -1200, 190, 70, 96, -8),
          (-830, -200, 70, 190, 128, 0), (830, 220, 70, 190, 128, 0)]
 for i, (x, y, sx, sy, sz, yaw) in enumerate(EXTRA):
-    objs.append(block("Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw))
+    objs.append(block("Cover %d" % (i + 1), x, y, (sx, sy, sz), COVER_T, yaw=yaw, mat=MAT_COVER))
+
+
+# ---- props: readable clutter, placed at cover rather than scattered --------
+# Engine props from addons/citizen. Used sparingly - they mark cover and give
+# the greybox a sense of scale, they are not decoration for its own sake.
+CRATE = "models/citizen_props/crate01.vmdl"
+CARDBOARD = "models/citizen_props/cardboardbox01.vmdl"
+DIVIDER = "models/citizen_props/concreteroaddivider01.vmdl"
+CONE = "models/citizen_props/roadcone01.vmdl"
+BIN = "models/citizen_props/trashcan01.vmdl"
+RECYCLE = "models/citizen_props/recyclingbin01.vmdl"
+
+PROPS = [
+    ("Crate", CRATE, -600, 520, 40), ("Crate", CRATE, 600, 470, -25),
+    ("Crate", CRATE, -540, -470, 15), ("Crate", CRATE, 560, -500, 60),
+    ("Cardboard", CARDBOARD, -250, 690, 10), ("Cardboard", CARDBOARD, 250, -700, -10),
+    ("Cardboard", CARDBOARD, -700, 60, 0), ("Cardboard", CARDBOARD, 700, -60, 0),
+    ("Divider", DIVIDER, -430, 300, 90), ("Divider", DIVIDER, 430, -300, 90),
+    ("Divider", DIVIDER, 0, 980, 0), ("Divider", DIVIDER, 0, -980, 0),
+    ("Cone", CONE, -180, 470, 0), ("Cone", CONE, 200, -480, 0),
+    ("Cone", CONE, -480, 1090, 0), ("Cone", CONE, 470, -1100, 0),
+    ("Bin", BIN, -760, 880, 0), ("Bin", BIN, 760, -860, 0),
+    ("Recycling", RECYCLE, -740, -540, 0), ("Recycling", RECYCLE, 740, 560, 0),
+]
+for i, (nm, model, x, y, yaw) in enumerate(PROPS):
+    objs.append(prop("Prop %s %d" % (nm, i + 1), model, x, y, 0.0, yaw))
+
+# ---- lighting -------------------------------------------------------------
+# The Core is enclosed now, so without interior lights it is a black box you
+# cannot fight in. Warm inside, cool outside, so the building reads as somewhere
+# distinct the moment you step through a door.
+objs.append(point_light("Core Light N", -120, 120, 150, 460, "1,0.86,0.66,1", 1.7))
+objs.append(point_light("Core Light S", 120, -120, 150, 460, "1,0.86,0.66,1", 1.7))
+objs.append(point_light("Core Upper Light", 0, 0, 330, 420, "1,0.88,0.70,1", 1.4))
+objs.append(point_light("North Block Light", 0, HALF_Y * 0.72, 150, 520, "0.85,0.90,1,1", 1.5))
+objs.append(point_light("South Gate Light", 0, -HALF_Y * 0.72, 150, 520, "0.85,0.90,1,1", 1.5))
+objs.append(point_light("Stair Light", -200, -430, 210, 340, "1,0.86,0.66,1", 1.2))
 
 # ---- spawn placement, validated ------------------------------------------
 # A spawn inside a solid is a player who cannot move. The first pass put one
@@ -465,6 +571,17 @@ for a, b, d in exposed:
 src = json.load(open(SRC, encoding="utf-8"))
 KEEP = {"Scene Information", "Sun", "Skybox", "Fallback Camera", "Game", "HUD"}
 carried = [copy.deepcopy(o) for o in src["GameObjects"] if o.get("Name") in KEEP]
+
+for o in carried:
+    if o.get("Name") == "Sun":
+        for c in o.get("Components", []):
+            if "DirectionalLight" in c.get("__type", ""):
+                # Bright and slightly cool, with a lifted sky term so shadowed
+                # sides of cover stay readable instead of going to black.
+                c["LightColor"] = "1,0.97,0.92,1"
+                c["SkyColor"] = "0.45,0.52,0.62,1"
+                c["Shadows"] = True
+        o["Rotation"] = quat_yaw(0.0)
 
 for o in carried:
     for c in o.get("Components", []):
