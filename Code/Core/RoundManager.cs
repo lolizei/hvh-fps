@@ -40,14 +40,36 @@ public sealed class RoundManager : Component
 
 	[Sync( Flags = SyncFlags.FromHost )] public RoundState State { get; set; } = RoundState.Warmup;
 
-	/// <summary>Scene time the current phase ends at. Drives every clock in the HUD.</summary>
+	/// <summary>
+	/// Scene time the current phase ends at, in the HOST's clock.
+	///
+	/// Host-side logic only. Do NOT compare this against a client's Time.Now:
+	/// scene time is per-machine and starts when that machine loaded the scene,
+	/// so the two never agree and the error grows the later someone joins.
+	/// <see cref="SecondsRemaining"/> is what clients read.
+	/// </summary>
 	[Sync( Flags = SyncFlags.FromHost )] public float PhaseEndTime { get; set; }
+
+	/// <summary>
+	/// Seconds left in this phase, written by the host every tick.
+	///
+	/// Replicated as a duration rather than a deadline precisely because a
+	/// duration means the same thing on every machine and a deadline does not.
+	/// </summary>
+	[Sync( Flags = SyncFlags.FromHost )] public float SecondsRemaining { get; set; }
 
 	[Sync( Flags = SyncFlags.FromHost )] public int RoundNumber { get; set; }
 
 	[Sync( Flags = SyncFlags.FromHost )] public Team LastWinner { get; set; } = Team.None;
 
-	public float TimeRemaining => MathF.Max( 0f, PhaseEndTime - Time.Now );
+	/// <summary>
+	/// Time left in the current phase. The host computes it; everyone else reads
+	/// the replicated duration, because only the host's clock matches
+	/// <see cref="PhaseEndTime"/>.
+	/// </summary>
+	public float TimeRemaining => Networking.IsHost
+		? MathF.Max( 0f, PhaseEndTime - Time.Now )
+		: MathF.Max( 0f, SecondsRemaining );
 
 	/// <summary>Players are frozen at spawn during the pre-round freeze.</summary>
 	public bool AllowMovement => State != RoundState.RoundStart;
@@ -80,6 +102,10 @@ public sealed class RoundManager : Component
 	{
 		// Clients just read the synced state; only the host advances it.
 		if ( !Networking.IsHost ) return;
+
+		// Publish the phase clock as a duration so clients have something whose
+		// meaning survives the trip.
+		SecondsRemaining = MathF.Max( 0f, PhaseEndTime - Time.Now );
 
 		switch ( State )
 		{

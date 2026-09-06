@@ -34,7 +34,7 @@ These are load-bearing and look correct:
 
 ## What will break
 
-### 1. The round clock will be wrong on every client — CERTAIN
+### 1. The round clock — FIXED 2026-09-06
 
 ```csharp
 [Sync( Flags = SyncFlags.FromHost )] public float PhaseEndTime { get; set; }
@@ -49,11 +49,16 @@ the difference in scene start times — which grows the later someone joins.
 `RoundBar.razor` shows this number to the player. A client sees a round timer
 that is simply wrong, possibly wildly, possibly already at zero.
 
-**Fix:** replicate the remaining duration and a host tick, or convert to a
-network-synced clock. Do not compare a replicated absolute time against local
-`Time.Now`.
+**Fixed.** `RoundManager` now replicates `SecondsRemaining` - a *duration*,
+written by the host each tick - and `TimeRemaining` reads it on any machine that
+is not the host. `PhaseEndTime` stays for host-side logic only, with a comment
+saying never to compare it against a client's clock.
 
-### 2. Every other player will be silent — CERTAIN
+A duration means the same thing on every machine; a deadline does not. Host
+behaviour is byte-identical, and the host clock was re-verified counting down.
+**The client half remains unverified - it needs two machines.**
+
+### 2. Every other player was silent — FIXED 2026-09-06
 
 `PlayerFootsteps` reads `PlayerMovement.Velocity`, `IsOnGround` and
 `IsCrouching`. All three come from `CharacterController`, which is **only
@@ -67,12 +72,21 @@ never updated, so `speed < MinimumSpeed` and the component returns immediately.
 This negates the feature. Footsteps were built specifically as information you
 play on; on two machines you would only ever hear yourself.
 
-**Fix:** derive speed from world-position delta rather than controller velocity,
-so it works the same for a simulated pawn and an interpolated one, and sync the
-crouch flag. That is a contained change to `PlayerFootsteps` plus one `[Sync]`.
+**Fixed.** `PlayerFootsteps` now derives speed from the transform for pawns this
+machine does not simulate, infers ground state from vertical speed for them, and
+`PlayerMovement.IsCrouching` is `[Sync]` so a crouching enemy still sounds like
+one.
 
-The same reasoning applies to anything else that ever reads controller state for
-a pawn it does not simulate.
+**The simulated path was deliberately left untouched** - same source, same
+numbers - so the existing cadence measurements still describe it. Re-measured
+after the change: stride 92.0 / 83.8 / 155.5 for walk / run / crouch, against
+85 / 85 / 153 configured and the same band as before. No regression.
+
+The proxy half is unverifiable without a second machine, by definition: there are
+no proxies in a single-player session.
+
+The same reasoning applies to anything else that reads controller state for a
+pawn it does not simulate.
 
 ### 3. Fire rate is client-authoritative — CERTAIN, but a design question
 

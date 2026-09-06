@@ -46,6 +46,9 @@ public sealed class PlayerFootsteps : Component
 	public float Accumulator => _accumulator;
 
 	private PlayerMovement _movement;
+	private Player _player;
+	private Vector3 _lastPosition;
+	private float _proxySpeed;
 	private float _accumulator;
 	private bool _leftFoot;
 	private bool _wasOnGround = true;
@@ -53,13 +56,55 @@ public sealed class PlayerFootsteps : Component
 	protected override void OnAwake()
 	{
 		_movement = GetComponent<PlayerMovement>();
+		_player = GetComponent<Player>();
+		_lastPosition = WorldPosition;
+	}
+
+	/// <summary>
+	/// How fast this pawn is actually moving, in a way that works for a pawn we
+	/// do not simulate.
+	///
+	/// <see cref="PlayerMovement"/> returns early for proxies, so a remote
+	/// pawn's controller velocity, ground flag and crouch state are never
+	/// updated - a client would hear its own footsteps and nobody else's, which
+	/// guts the feature. Remote pawns move by transform interpolation, so their
+	/// speed has to come from the transform.
+	///
+	/// The simulated path is deliberately left exactly as it was: same source,
+	/// same numbers, so the cadence measurements still describe it.
+	/// </summary>
+	private float CurrentSpeed()
+	{
+		if ( _player.IsValid() && !_player.IsSimulatedHere )
+			return _proxySpeed;
+
+		return _movement.Velocity.WithZ( 0f ).Length;
+	}
+
+	/// <summary>
+	/// Ground state for a pawn we do not simulate. Its controller is not ticking,
+	/// so infer it: anything falling or rising quickly is treated as airborne.
+	/// </summary>
+	private bool CurrentlyOnGround( float verticalSpeed )
+	{
+		if ( _player.IsValid() && !_player.IsSimulatedHere )
+			return MathF.Abs( verticalSpeed ) < 120f;
+
+		return _movement.IsOnGround;
 	}
 
 	protected override void OnUpdate()
 	{
 		if ( !_movement.IsValid() ) return;
 
-		var onGround = _movement.IsOnGround;
+		// Measure transform motion every frame - it is the only signal a proxy has.
+		var delta = WorldPosition - _lastPosition;
+		var dt = MathF.Max( 0.0001f, Time.Delta );
+		_proxySpeed = delta.WithZ( 0f ).Length / dt;
+		var verticalSpeed = delta.z / dt;
+		_lastPosition = WorldPosition;
+
+		var onGround = CurrentlyOnGround( verticalSpeed );
 
 		// Landing gets its own sound; the surface provides one, so it is free.
 		if ( onGround && !_wasOnGround )
@@ -74,7 +119,7 @@ public sealed class PlayerFootsteps : Component
 		// Silent in the air. No step until we are back on something.
 		if ( !onGround ) return;
 
-		var speed = _movement.Velocity.WithZ( 0f ).Length;
+		var speed = CurrentSpeed();
 		if ( speed < MinimumSpeed ) return;
 
 		// Cadence comes from distance covered, not from a clock - so running

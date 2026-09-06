@@ -184,11 +184,18 @@ Radial traces from inside the room are the honest test.
 ## Known rough edges
 
 - Cover placement is still by eye. It wants a play session, not more traces.
-- Bots have no navmesh; they steer directly. They cope with the Core, but the
-  stair and upper storey are almost certainly ignored by them.
+- **Bots never use the upper storey. Measured, not assumed:** across 16 samples
+  each, five bots had a maximum height of exactly z=0.0 - they never set foot on
+  even the first 46-unit stair block. They steer directly with no navmesh and no
+  intent to climb.
+
+  So the storey is human-only. Against other humans that is ordinary map design;
+  in bot-populated testing it is an uncontested perch, and anyone evaluating the
+  map solo should know a bot will never come up after them. Teaching bots to use
+  it is real pathfinding work and is not scheduled.
 - The upper storey is reachable but nothing draws you there yet.
 
 ## Open questions
 
 - Player count this map is balanced for? Ten spawns suggests 8-10.
-- Whether bots should be taught to use the upper storey at all.
+- Whether bots should be taught to use the upper storey at all - confirmed today that they do not.

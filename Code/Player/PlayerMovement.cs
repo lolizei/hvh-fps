@@ -36,7 +36,12 @@ public sealed class PlayerMovement : Component
 	/// <summary>Where the player is trying to go this frame, in world space.</summary>
 	public Vector3 WishVelocity { get; private set; }
 
-	public bool IsCrouching { get; private set; }
+	/// <summary>
+	/// Replicated so other machines can tell a crouching pawn from a walking
+	/// one. Written only where it always was, in UpdateCrouch, which runs on the
+	/// machine that simulates this pawn - so the owner is the writer.
+	/// </summary>
+	[Sync] public bool IsCrouching { get; set; }
 	public bool IsOnGround => Controller.IsValid() && Controller.IsOnGround;
 	public Vector3 Velocity => Controller.IsValid() ? Controller.Velocity : Vector3.Zero;
 
