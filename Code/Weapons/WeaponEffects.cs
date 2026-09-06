@@ -37,6 +37,17 @@ public static class WeaponEffects
 	/// </summary>
 	public const string ReloadSound = "sounds/impacts/bullets/impact-bullet-metal.sound";
 
+	/// <summary>
+	/// Stand-in gunshot. s&amp;box ships no weapon audio at all - 63 playable
+	/// sound events and not one gun - so this is a bullet impact pitched down
+	/// hard to give the crack a body. It is a placeholder and sounds like one;
+	/// the moment a real .wav lands in Assets/sounds this points at it instead.
+	/// </summary>
+	public const string FireSoundPlaceholder = "sounds/impacts/bullets/impact-bullet-concrete.sound";
+
+	/// <summary>Dry click when the trigger comes back on an empty magazine.</summary>
+	public const string EmptySound = "sounds/kenney/ui/ui.button.deny.sound";
+
 	private const float ReloadOutPitch = 0.8f;
 	private const float ReloadInPitch = 1.25f;
 
@@ -50,12 +61,22 @@ public static class WeaponEffects
 	/// Play one complete shot: flash at the muzzle, a tracer along its path, and
 	/// an impact where it landed.
 	/// </summary>
-	public static void Shot( Vector3 origin, Vector3 end, Vector3 normal, bool hit, string surfacePath )
+	/// <remarks>
+	/// <c>viewMuzzle</c> is where the shooter's own view model muzzle is, when
+	/// this machine is the one holding the gun. Without it the flash spawns 40
+	/// units from the eye and renders as a fireball covering the target.
+	/// </remarks>
+	public static void Shot( Vector3 origin, Vector3 end, Vector3 normal, bool hit,
+		string surfacePath, Vector3? viewMuzzle = null )
 	{
 		var direction = ( end - origin ).Normal;
-		var muzzle = origin + direction * MuzzleOffset;
+		var muzzle = viewMuzzle ?? origin + direction * MuzzleOffset;
 
-		MuzzleFlash( origin, direction );
+		if ( viewMuzzle.HasValue )
+			ViewMuzzleFlash( viewMuzzle.Value, direction );
+		else
+			MuzzleFlash( origin, direction );
+
 		Tracer( muzzle, end );
 
 		if ( hit )
@@ -75,6 +96,50 @@ public static class WeaponEffects
 		var position = eyePosition + direction * MuzzleOffset - rotation.Up * 6f;
 
 		Spawn( MuzzleFlashPrefab, position, rotation, "muzzleflash" );
+	}
+
+	/// <summary>
+	/// Flash on the shooter's own view model. Small, because it sits right in
+	/// front of the camera - the world-space one is sized for being seen from
+	/// across the map.
+	/// </summary>
+	public static void ViewMuzzleFlash( Vector3 position, Vector3 direction )
+	{
+		var go = Spawn( MuzzleFlashPrefab, position, Rotation.LookAt( direction ), "muzzleflash" );
+		if ( !go.IsValid() ) return;
+
+		go.LocalScale = 0.22f;
+	}
+
+	/// <summary>Play the stand-in gunshot at a world position.</summary>
+	public static void FireSound( Vector3 position )
+	{
+		try
+		{
+			var handle = Sound.Play( FireSoundPlaceholder, position );
+			if ( handle is null ) return;
+
+			handle.Position = position;
+			handle.DistanceAttenuation = true;
+			handle.OcclusionEnabled = true;
+			handle.Pitch = 0.45f;
+			handle.Volume = 1f;
+		}
+		catch ( Exception )
+		{
+		}
+	}
+
+	/// <summary>Dry click on an empty magazine. Local feedback, so 2D.</summary>
+	public static void EmptyClick()
+	{
+		try
+		{
+			Sound.Play( EmptySound );
+		}
+		catch ( Exception )
+		{
+		}
 	}
 
 	/// <summary>

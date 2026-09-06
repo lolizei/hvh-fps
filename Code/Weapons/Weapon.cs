@@ -128,6 +128,12 @@ public sealed class Weapon : Component
 		var wantsFire = data.Automatic ? input.AttackDown : input.AttackPressed;
 
 		if ( !wantsFire ) return;
+
+		// Empty magazine: click rather than nothing, so a dry trigger reads as
+		// out-of-ammo instead of a broken gun. Only the person pulling it hears.
+		if ( Ammo <= 0 && !IsReloading && input.AttackPressed && Owner.IsLocallyControlled )
+			WeaponEffects.EmptyClick();
+
 		if ( !CanFire() ) return;
 
 		Fire();
@@ -333,8 +339,21 @@ public sealed class Weapon : Component
 	[Rpc.Broadcast]
 	private void BroadcastShot( Vector3 origin, Vector3 end, Vector3 normal, bool hit, string surfacePath )
 	{
-		WeaponEffects.Shot( origin, end, normal, hit, surfacePath );
-		WeaponEffects.PlayAt( FireSound, origin );
+		// If this machine is holding the gun, the flash belongs on the view
+		// model's muzzle, not 40 units in front of the eye. Presentation only -
+		// the shot itself was already resolved on the host.
+		Vector3? viewMuzzle = null;
+		if ( Owner.IsValid() && Owner.IsLocallyControlled )
+			viewMuzzle = Owner.GetComponent<WeaponViewModel>()?.MuzzleWorld;
+
+		WeaponEffects.Shot( origin, end, normal, hit, surfacePath, viewMuzzle );
+
+		// An authored sound wins; otherwise fall back to the stand-in so firing
+		// is at least audible. FireSound is still deliberately unassigned.
+		if ( FireSound is not null )
+			WeaponEffects.PlayAt( FireSound, origin );
+		else
+			WeaponEffects.FireSound( origin );
 	}
 
 	/// <summary>
