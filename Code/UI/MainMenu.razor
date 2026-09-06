@@ -22,11 +22,25 @@
 	@if ( Page == MenuPage.Root )
 	{
 		<div class="buttons">
-			<div class="button primary" onclick=@Play>PLAY</div>
+			<div class="button primary" onclick=@( () => { Page = MenuPage.Play; } )>PLAY</div>
 			<div class="button disabled">LOADOUT</div>
 			<div class="button disabled">MODS</div>
 			<div class="button" onclick=@( () => { Page = MenuPage.Settings; } )>SETTINGS</div>
 			<div class="button quit" onclick=@Quit>QUIT</div>
+		</div>
+	}
+	else if ( Page == MenuPage.Play )
+	{
+		<div class="buttons">
+			<div class="button primary" onclick=@Play>
+				<div class="label">PRACTICE</div>
+				<div class="hint">Compound, deathmatch, against bots</div>
+			</div>
+			<div class="button disabled">
+				<div class="label">MULTIPLAYER</div>
+				<div class="hint">Needs a second client - not built yet</div>
+			</div>
+			<div class="button" onclick=@( () => { Page = MenuPage.Root; } )>BACK</div>
 		</div>
 	}
 	else
@@ -36,12 +50,35 @@
 </root>
 
 @code {
-	private enum MenuPage { Root, Settings }
+	private enum MenuPage { Root, Play, Settings }
 
 	/// <summary>The gameplay scene to load when Play is pressed.</summary>
 	[Property] public SceneFile GameScene { get; set; }
 
 	private MenuPage Page { get; set; } = MenuPage.Root;
+
+	/// <summary>
+	/// Show the cursor while the menu is up.
+	///
+	/// The engine hides it during play, and this scene is "play" as far as it is
+	/// concerned - so without this the menu renders perfectly and you cannot
+	/// point at any of it. Scoped to this panel, so gameplay is untouched: the
+	/// menu lives in its own scene and this component does not exist in-game.
+	/// </summary>
+	protected override void OnUpdate()
+	{
+		// Same API the mod menu already uses; Mouse.Visible is obsolete.
+		Mouse.Visibility = MouseVisibility.Visible;
+	}
+
+	/// <summary>
+	/// Hand the cursor back on the way out. Without this the menu's setting
+	/// survives into the game scene and you play with a cursor stuck on screen.
+	/// </summary>
+	protected override void OnDestroy()
+	{
+		Mouse.Visibility = MouseVisibility.Auto;
+	}
 
 	private void Play()
 	{
