@@ -141,7 +141,14 @@ public sealed class Weapon : Component
 	{
 		if ( IsReloading == _wasReloading ) return;
 
+		// Track the transition either way, so state never goes stale.
 		_wasReloading = IsReloading;
+
+		// A corpse does not reload. The timer keeps running through death and
+		// FinishReload lands on the body, which played a "magazine seated" cue
+		// for a dead player - measured, 4 times out of 4.
+		if ( !Owner.IsValid() || !Owner.IsAlive ) return;
+
 		WeaponEffects.Reload( WorldPosition, finished: !IsReloading );
 	}
 

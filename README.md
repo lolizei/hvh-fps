@@ -32,7 +32,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | HVH features (aim assist, ESP, etc.) | Written, **all default off, never tuned or tested** |
 | Multiplayer with 2+ real clients | **Never tested.** Biggest unknown — audited in [`Docs/MULTIPLAYER.md`](Docs/MULTIPLAYER.md), two certain breakages found by reading |
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
-| Reload audio | Written, **not yet heard** — needs a runtime pass |
+| Reload audio | Working — two positional cues, audible for other players too |
 | Viewmodel | Not implemented — the gun is invisible |
 | Real map | Not started. Current arena is a grey box |
 

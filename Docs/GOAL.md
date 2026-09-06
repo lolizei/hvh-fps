@@ -18,7 +18,7 @@ The game is mechanically complete — movement, weapons, rounds, and an opponent
 - [x] Shots that hit the world leave an impact effect at the hit point (surface-appropriate, with sound)
 - [x] Hitting a player shows a hit marker on your crosshair and plays a distinct hit sound
 - [x] Killing a player gives a clearly different confirmation from a body hit (plus a separate headshot marker)
-- [~] Reloading is audible — implemented and compile-verified; **not yet runtime-verified** (editor was closed)
+- [x] Reloading is audible — two positional cues, runtime-verified; tuning is an ear question
 - [x] Footsteps are audible — speed-dependent cadence, surface-appropriate, spatialised, and produced by bots through the same path
 - [x] The bot's shots produce the same flash, tracer and impact **(observed via a bot duel)** — sound still blocked, so you can tell where you are being shot from
 
@@ -54,7 +54,7 @@ The game is mechanically complete — movement, weapons, rounds, and an opponent
 1. [~] **Fire is visible (done) and audible (blocked).** Muzzle flash at the muzzle and a fire sound, broadcast from the host so every player sees and hears every shot — the bot's included.
 2. [x] **Tracer and impact.** A tracer along the shot path and an impact effect where it lands.
 3. [x] **Hit confirmation.** The shooter gets a crosshair hit marker and a hit sound when damage lands; a kill reads differently from a body hit.
-4. [~] **Reload and footsteps.** Footsteps **(done)**; reload audio written, runtime check outstanding.
+4. [x] **Reload and footsteps.** Both done and runtime-verified.
 
 ## Verification
 Single player, `scenes/game.scene`, editor Play, one human + one bot.
@@ -111,11 +111,30 @@ to add sits directly on the documented "`Networking.IsHost` is false before the
 lobby exists" trap. Making unverifiable edits to working netcode is how this
 project's worst afternoons started.
 
-## Task 8 - reload audio (2026-09-01) - INCOMPLETE
+## Task 8 - reload audio (2026-09-06)
 
-**Written and compile-clean, but NOT runtime-verified: the s&box editor was
-closed for this task and never came back, so nothing here has been heard.**
-Treat every claim below as unproven until it is played.
+Written while the editor was closed, then **verified once it came back**. The
+earlier "compile-verified only" caveat is now resolved.
+
+| Check | Result |
+|---|---|
+| One reload = exactly two cues | PASS - 10/10 (1 during, 2 after) |
+| Killed mid-reload leaves no "seated" cue | PASS - 4/4, **after a fix** |
+| A bot's reload produces cues | PASS - cues 0 -> 2 while my own ammo held at 26/89 |
+| Refused reload reports itself | PASS - full magazine warns instead of no-op |
+
+Whether it *sounds* right is an ear question, like the tracer visuals - the
+measurement only proves the cues fire at the right moments.
+
+### The edge case was a real bug, and I had guessed its cause wrong
+I predicted a phantom "magazine seated" cue on respawn and guarded `RestoreAmmo`
+against it. **The guard was aimed at the wrong mechanism** and the phantom fired
+anyway, 4 times out of 4: the reload timer keeps running through death, so
+`FinishReload` lands on a corpse and the transition plays there. Reload cues are
+now suppressed for a dead owner. Measured before and after.
+
+That is the second time this project a plausible-sounding cause survived until it
+was measured. The guess cost nothing because the check was run anyway.
 
 ### What was built
 Two positional cues driven off the existing synced `IsReloading` flag - one as
