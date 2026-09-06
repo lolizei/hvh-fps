@@ -57,6 +57,16 @@ public sealed class WeaponData : GameResource
 	/// </summary>
 	[Property] public float MovementInaccuracy { get; set; } = 4f;
 
+	// ---- presentation ------------------------------------------------------
+	// Kept as data so gameplay never branches on which weapon this is. Nothing
+	// in Weapon asks "am I the rifle?" - it asks this asset what to show.
+
+	/// <summary>First-person model for this weapon. Presentation only.</summary>
+	[Property] public string ViewModelPath { get; set; } = "";
+
+	/// <summary>Where the muzzle sits on the view model, in its local space.</summary>
+	[Property] public Vector3 MuzzleOffset { get; set; } = new( 26f, 0f, 1f );
+
 	[Property] public float HeadMultiplier { get; set; } = 4f;
 	[Property] public float BodyMultiplier { get; set; } = 1f;
 	[Property] public float LimbMultiplier { get; set; } = 0.75f;

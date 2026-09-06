@@ -35,13 +35,14 @@ public static class DevCommands
 			case "marker": HitMarkerState(); return;
 			case "hits": HitDebug(); return;
 			case "bounds": Bounds(); return;
+			case "view": ViewModel(); return;
 			case "all":
 				State(); Players(); BotInfo(); Steps();
 				Dummies(); HitMarkerState(); HitDebug(); Bounds();
 				return;
 			default:
 				Log.Warning( $"hvh_report: unknown '{what}' - use state, players, bots, " +
-					"steps, dummies, marker, hits, bounds or all" );
+					"steps, dummies, marker, hits, bounds, view or all" );
 				return;
 		}
 	}
@@ -117,9 +118,15 @@ public static class DevCommands
 			WeaponEffects.ResetReloadCues();
 		}
 
-		if ( key is not ( "all" or "marker" or "counters" ) )
+		if ( key is "all" or "weapons" )
 		{
-			Log.Warning( $"hvh_reset: unknown '{what}' - use all, marker or counters" );
+			WeaponDefinitions.Reset();
+			Log.Info( "  weapon definitions rebuilt from source" );
+		}
+
+		if ( key is not ( "all" or "marker" or "counters" or "weapons" ) )
+		{
+			Log.Warning( $"hvh_reset: unknown '{what}' - use all, marker, counters or weapons" );
 			return;
 		}
 
@@ -187,6 +194,36 @@ public static class DevCommands
 		}
 
 		return spread;
+	}
+
+	/// <summary>Presentation state - what the local pawn is actually showing.</summary>
+	private static void ViewModel()
+	{
+		var player = Player.Local;
+		if ( !player.IsValid() )
+		{
+			Log.Warning( "hvh_report view: no local player" );
+			return;
+		}
+
+		var vm = player.GetComponent<WeaponViewModel>();
+		var pres = player.GetComponent<PlayerPresentation>();
+
+		Log.Info( vm.IsValid()
+			? $"viewmodel: {vm.Status} | object={( vm.Current.IsValid() ? vm.Current.Name : "none" )}" +
+			  $" | weapon={vm.CurrentWeapon?.DisplayName ?? "none"}"
+			: "viewmodel: component missing from the pawn" );
+
+		Log.Info( pres.IsValid()
+			? $"body: team={pres.CurrentTeam} | object={( pres.Current.IsValid() ? pres.Current.Name : "none" )}"
+			: "body: component missing from the pawn" );
+
+		foreach ( var other in Player.All )
+		{
+			var p2 = other.GetComponent<PlayerPresentation>();
+			Log.Info( $"  {other.State?.DisplayName}: team={other.Team}" +
+				$" body={( p2.IsValid() && p2.Current.IsValid() ? "yes" : "NO" )}" );
+		}
 	}
 
 	/// <summary>

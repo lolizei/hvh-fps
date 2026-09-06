@@ -56,6 +56,16 @@
         "__enabled": true
       },
       {
+        "__type": "HvH.WeaponViewModel",
+        "__guid": "7662b714-cf2a-4977-87ff-6e70edec8bdc",
+        "__enabled": true
+      },
+      {
+        "__type": "HvH.PlayerPresentation",
+        "__guid": "8c19acae-5efc-45c2-9573-e8445ddb795b",
+        "__enabled": true
+      },
+      {
         "__type": "HvH.PlayerState",
         "__guid": "60c98a89-555f-4fa5-8e1d-97f02b0c3dac",
         "__enabled": true
