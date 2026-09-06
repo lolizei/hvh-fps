@@ -65,7 +65,10 @@ public sealed class PlayerPresentation : Component
 
 		try
 		{
-			Current = GameObject.Clone( path, global::Transform.Zero, GameObject, true, "body" );
+			// Clone at the pawn's transform, not Transform.Zero. That argument is
+			// a WORLD transform even when a parent is given, so Zero dropped every
+			// body at the map origin while the pawns walked around invisible.
+			Current = GameObject.Clone( path, WorldTransform, GameObject, true, "body" );
 		}
 		catch ( Exception e )
 		{
@@ -80,8 +83,17 @@ public sealed class PlayerPresentation : Component
 		}
 
 		// The placeholder box would sit inside the new body.
+		//
+		// Disable the renderer outright. RenderType is a SHADOW mode, so setting
+		// it to Off means "draw the model, cast no shadow" - the box carried on
+		// rendering as a red slab in front of the new body, which is what showed
+		// up on screen while every counter said the body was fine.
 		if ( PlaceholderBody.IsValid() )
-			PlaceholderBody.RenderType = ModelRenderer.ShadowRenderType.Off;
+			PlaceholderBody.Enabled = false;
+
+		// Sit exactly on the pawn and follow it.
+		Current.LocalPosition = Vector3.Zero;
+		Current.LocalRotation = Rotation.Identity;
 
 		_renderers.Clear();
 		_renderers.AddRange( Current.GetComponentsInChildren<ModelRenderer>( true ) );
@@ -97,6 +109,9 @@ public sealed class PlayerPresentation : Component
 
 	private void Clear()
 	{
+		if ( PlaceholderBody.IsValid() )
+			PlaceholderBody.Enabled = true;
+
 		if ( Current.IsValid() )
 			Current.Destroy();
 

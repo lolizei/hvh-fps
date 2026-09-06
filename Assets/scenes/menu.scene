@@ -66,7 +66,7 @@
           "__type": "HvH.UI.MainMenu",
           "__guid": "e43cd314-464c-4dec-8fc6-81b654ba84d7",
           "__enabled": true,
-          "GameScene": "scenes/game.scene"
+          "GameScene": "scenes/compound.scene"
         }
       ]
     }

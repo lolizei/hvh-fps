@@ -1,0 +1,67 @@
+@namespace HvH.UI
+@using System
+@using Sandbox
+@using Sandbox.UI
+@using HvH
+@inherits Panel
+
+@*
+	Shown only to a dead local player. Tells you what killed you and when you
+	are coming back - without it, dying is just a frozen screen with no
+	explanation and no idea how long you are waiting.
+
+	Read-only: it reports state, it never changes any.
+*@
+
+@if ( Visible )
+{
+	<root class="death-screen">
+		<div class="headline">ELIMINATED</div>
+
+		@if ( !string.IsNullOrWhiteSpace( KillerName ) )
+		{
+			<div class="killer">by <span class="name">@KillerName</span></div>
+		}
+
+		@if ( Waiting )
+		{
+			<div class="respawn">
+				<div class="count">@Countdown</div>
+				<div class="label">RESPAWNING</div>
+			</div>
+		}
+		else
+		{
+			<div class="respawn">
+				<div class="label wait">WAITING FOR THE NEXT ROUND</div>
+			</div>
+		}
+	</root>
+}
+
+@code {
+	private static Player Me => Player.Local;
+
+	private bool Visible => Me.IsValid() && !Me.IsAlive;
+
+	/// <summary>True when a respawn is actually on the way.</summary>
+	private bool Waiting => Me.IsValid() && Me.RespawnSeconds > 0f;
+
+	private string Countdown => Me.IsValid()
+		? MathF.Ceiling( Me.RespawnSeconds ).ToString( "0" )
+		: "";
+
+	private string KillerName
+	{
+		get
+		{
+			var attacker = Me.IsValid() && Me.Health.IsValid() ? Me.Health.LastAttacker : null;
+			if ( !attacker.IsValid() || attacker == Me.GameObject ) return "";
+
+			return attacker.GetComponentInParent<PlayerState>()?.DisplayName ?? "";
+		}
+	}
+
+	protected override int BuildHash()
+		=> HashCode.Combine( Visible, Waiting, Countdown, KillerName );
+}

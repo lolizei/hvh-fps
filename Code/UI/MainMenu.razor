@@ -67,6 +67,11 @@
 	/// </summary>
 	protected override void OnUpdate()
 	{
+		// base FIRST. PanelComponent.OnUpdate is what rebuilds the panel and
+		// services its input - overriding without calling it left the menu
+		// drawn but completely dead to clicks.
+		base.OnUpdate();
+
 		// Same API the mod menu already uses; Mouse.Visible is obsolete.
 		Mouse.Visibility = MouseVisibility.Visible;
 	}
@@ -77,6 +82,7 @@
 	/// </summary>
 	protected override void OnDestroy()
 	{
+		base.OnDestroy();
 		Mouse.Visibility = MouseVisibility.Auto;
 	}
 

@@ -20,6 +20,15 @@ public sealed class Player : Component
 	[Property] public float RespawnDelay { get; set; } = 3f;
 
 	/// <summary>
+	/// Seconds until this pawn respawns, or 0 when it is not waiting on one.
+	///
+	/// Replicated because the death screen needs it and the timer itself is
+	/// host-side. A duration, not a deadline - the same reason the round clock
+	/// is: scene time does not agree between machines.
+	/// </summary>
+	[Sync( Flags = SyncFlags.FromHost )] public float RespawnSeconds { get; set; }
+
+	/// <summary>
 	/// Where this player is looking. Owned by the controlling client and synced
 	/// so other machines can aim this pawn's model and know what it can see.
 	/// </summary>
@@ -198,6 +207,8 @@ public sealed class Player : Component
 		// everyone when the next one starts.
 		if ( RoundManager.Current?.AllowRespawn ?? true )
 			_respawnTimer = RespawnDelay;
+
+		RespawnSeconds = _respawnTimer;
 	}
 
 	/// <summary>Host-side: credit the kill and count the death.</summary>
@@ -231,6 +242,8 @@ public sealed class Player : Component
 		if ( _respawnTimer <= 0f ) return;
 
 		_respawnTimer -= Time.Delta;
+		RespawnSeconds = MathF.Max( 0f, _respawnTimer );
+
 		if ( _respawnTimer > 0f ) return;
 
 		Respawn();
@@ -242,6 +255,7 @@ public sealed class Player : Component
 		if ( !Networking.IsHost ) return;
 
 		_respawnTimer = 0f;
+		RespawnSeconds = 0f;
 
 		var spawn = SpawnSystem.Pick( Scene, Team );
 		Health.Revive();
