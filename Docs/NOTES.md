@@ -294,6 +294,15 @@ one and the screen says two, capture the screen.
 - The editor reopens the scene named in `.sbox/project.json` →
   `editor.activescene`, **not** the project's `StartupScene`. StartupScene only
   applies when the game itself launches.
+- **Pausing does not render particles.** `play_pause` freezes the scene with the
+  effect GameObjects still present - `find_game_objects` lists muzzleflash,
+  tracer and impact - but the frame draws none of them. Freeze-frame is
+  therefore useless for verifying effects; you have to catch them live, which in
+  practice means firing continuously and capturing into the burst.
+- `play_pause` takes a `paused` boolean that **defaults to true**. Calling it
+  repeatedly to toggle just pauses again; pass `paused: false` to resume. A
+  scene that is silently still paused looks exactly like a scene where nothing
+  spawns - effects pile up and never expire, which is the tell.
 - `camera_screenshot` over MCP renders all text as solid tofu boxes — the
   offscreen path has no font atlas. The HUD looks broken and is fine. Capture
   the real window instead (PowerShell `CopyFromScreen`).

@@ -111,6 +111,44 @@ to add sits directly on the documented "`Networking.IsHost` is false before the
 lobby exists" trap. Making unverifiable edits to working netcode is how this
 project's worst afternoons started.
 
+## Shot-effect visuals, captured (2026-09-06)
+
+The tracer and marker visuals had been carried as counter-verified only since
+Task 2. Screen truth now gets a capture.
+
+**Measured world positions during sustained fire** (player at `-420,-420,0`, eye
+z about 64):
+
+| Effect | Spawned at | Reading |
+|---|---|---|
+| `muzzleflash` | `-391.6, -391.3, 60.9` | ~40u in front of the eye, as coded |
+| `tracer` | `-391.7, -391.8, 66.5` | at the muzzle, drawing toward its endpoint |
+| `impact` | `-300.0, -300.4, 74.5` | ~170u downrange, on the hit surface |
+
+**Hit marker: verified on screen.** In live gameplay at 557u it draws as a single
+four-tick X. The Task 6 fix holds outside the test rig.
+
+**The muzzle flash is a problem, and it needs revisiting.** Two live captures
+show it as a large fireball centred just below the crosshair, overlapping the
+target, on every shot. `MuzzleFlash` places it at `eye + forward * 40 - up * 6`,
+and 40 units from the camera is close enough that `default_muzzleflash` fills a
+large part of the view. Sustained fire means it is essentially always there.
+
+This was deferred in Task 2 as "muzzle flash at eye+40 stays" - a decision made
+without a picture of it. Recommendation: **do not draw your own muzzle flash**.
+There is no viewmodel for it to belong to, so it is a fireball floating in front
+of the camera. Keep it for *other* players, where it is how you spot a shooter.
+That is a few lines in `WeaponEffects` and costs nothing that matters.
+
+**Tracer: still not visually confirmed.** The object spawns in the right place
+with the right endpoint, but no capture caught a visible streak. Not evidence of
+absence - the effect lives well under a second and the capture path is roughly
+a second of latency.
+
+**Tooling:** freeze-frame does not work here. `play_pause` holds the scene with
+all three effect objects present and draws none of them, so effects can only be
+caught live, mid-burst. Recorded in `NOTES.md` with the `paused: false` trap.
+
 ## Task 8 - reload audio (2026-09-06)
 
 Written while the editor was closed, then **verified once it came back**. The
