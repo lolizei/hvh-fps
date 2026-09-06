@@ -87,6 +87,30 @@ Single player, `scenes/game.scene`, editor Play, one human + one bot.
 - Per-shot effect broadcasts are the project's first per-shot RPC traffic. At 600 RPM this is the first thing that could flood the wire — keep the payload small and flag it if it looks heavy.
 - `Weapon.Fired` is local-only, while the host-side `RequestFire` is where hits are actually known. The two halves may need different effects.
 
+## Two-client audit (2026-09-06)
+
+Written while the editor was closed and runtime work was blocked. Full detail in
+`Docs/MULTIPLAYER.md`. Two breakages are **certain from the code**, without
+needing a second machine to see them:
+
+1. **The round clock is wrong on every client.** `PhaseEndTime` is an absolute
+   `Time.Now` taken on the host and replicated raw, then compared against the
+   client's own `Time.Now`. Scene time is per-machine, so they never agree.
+2. **Every other player is silent.** `PlayerFootsteps` reads controller velocity,
+   ground and crouch state - none replicated, and `PlayerMovement` does not
+   simulate proxies. You would hear only yourself.
+
+Two more are decisions rather than bugs: host-side fire rate is unenforced, and
+the shot `direction` and origin are client-supplied and unvalidated. Damage is
+host-resolved but client-aimed. In an HVH game that may be intended - but it
+should be chosen, not inherited.
+
+Nothing was changed. Both fixes touch working gameplay systems and the editor was
+closed, so they could not be verified; and the host-only command guard I wanted
+to add sits directly on the documented "`Networking.IsHost` is false before the
+lobby exists" trap. Making unverifiable edits to working netcode is how this
+project's worst afternoons started.
+
 ## Task 8 - reload audio (2026-09-01) - INCOMPLETE
 
 **Written and compile-clean, but NOT runtime-verified: the s&box editor was

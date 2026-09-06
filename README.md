@@ -30,7 +30,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | **Bot opponent** | Working — searches, chases, strafes, shoots, reloads, kills you |
 | Mod framework + example mod | Loads at runtime, API documented |
 | HVH features (aim assist, ESP, etc.) | Written, **all default off, never tuned or tested** |
-| Multiplayer with 2+ real clients | **Never tested.** Biggest unknown in the project |
+| Multiplayer with 2+ real clients | **Never tested.** Biggest unknown — audited in [`Docs/MULTIPLAYER.md`](Docs/MULTIPLAYER.md), two certain breakages found by reading |
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
 | Reload audio | Written, **not yet heard** — needs a runtime pass |
 | Viewmodel | Not implemented — the gun is invisible |
@@ -85,6 +85,7 @@ Docs/
   GOAL.md      the ONE current goal — read this first
   MODDING.md   how to write a mod
   MAP.md       planned map layout
+  MULTIPLAYER.md  what will break with two real clients, and what is unknown
   goals/       shipped goals, archived
 ```
 
@@ -160,7 +161,9 @@ Good places to jump in:
   is **no gunshot sound** in s&box — that one needs an asset dropping in.
 - **A viewmodel.** The gun is currently invisible. Needs a model and animation.
 - **Multiplayer testing.** If you can run a second client, you are more useful than anyone
-  else on this list — none of the netcode has ever run with two real players.
+  else on this list — none of the netcode has ever run with two real players. Read
+  `Docs/MULTIPLAYER.md` first: the round clock and everyone else's footsteps are
+  already known to be broken there, so don't spend your session rediscovering them.
 - **A real map.** `Docs/MAP.md` has the intended layout. The current arena is a grey box
   whose cover blocks sightlines in annoying ways.
 - **Weapon tuning.** The damage and recoil numbers were written blind and never balanced.
