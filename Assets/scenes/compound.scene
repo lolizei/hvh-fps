@@ -1,5 +1,5 @@
 {
-  "__guid": "c6f7eca1-58a1-468c-88dd-3f3e738a927c",
+  "__guid": "535e22e1-86c7-464b-9029-9bffed1de773",
   "GameObjects": [
     {
       "__guid": "d62bb921-a2e4-43a6-a08b-158b6e718134",
@@ -376,7 +376,7 @@
       "Children": []
     },
     {
-      "__guid": "2ae89e94-ce86-402b-bc20-63b2095a031b",
+      "__guid": "7c7e4dc8-70a4-4d84-97fd-aab45b9aa9ba",
       "__version": 2,
       "Flags": 0,
       "Name": "Ground",
@@ -393,7 +393,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d40e5bf7-6f9b-4678-8d7e-ae0d6744b9a2",
+          "__guid": "6b14c215-7ada-4dea-aab1-4cdb6c177946",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -420,7 +420,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "645e256d-cff7-420a-8784-bc4b04301ded",
+          "__guid": "2de3dfc0-8625-47dc-a37f-ffe586153f30",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,-25",
@@ -444,7 +444,7 @@
       ]
     },
     {
-      "__guid": "1ab158cb-b6c1-44a1-a486-00bcc28c780d",
+      "__guid": "46d114f9-9a1c-42ef-ab82-0103316cc024",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary North Edge",
@@ -461,7 +461,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "1fa03992-b4b1-4760-9706-b61417ea0976",
+          "__guid": "6cd24f4a-3d71-4e96-a689-19012df0bd84",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -488,7 +488,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "d17d5bb5-87eb-4553-beb4-4effd0c6d4ae",
+          "__guid": "baa91ae5-f678-4b7b-b7d9-f5832fbed08d",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -512,7 +512,7 @@
       ]
     },
     {
-      "__guid": "2aca7d49-5e4d-467d-a6e6-30d2ca9d9201",
+      "__guid": "51825bb7-91c5-41cc-a5e0-f0ed452ed1e5",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary NE Diagonal",
@@ -529,7 +529,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "34e8399d-97e1-4fd4-8181-f8c86e9b50e6",
+          "__guid": "93bf9b81-4e04-4d4a-bef8-008ce2c367a5",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -556,7 +556,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "63a484f3-862e-4109-b47e-2210c62cd845",
+          "__guid": "f8289562-843e-4988-925e-1438334560ee",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -580,7 +580,7 @@
       ]
     },
     {
-      "__guid": "c9fcdfe7-2b10-4934-8b47-a1976f78168a",
+      "__guid": "38fbbc56-5206-4207-8850-45d88d5b4e2d",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary East Edge",
@@ -597,7 +597,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "232db8e5-a63e-4f6c-a034-4b5848af633c",
+          "__guid": "1b25381b-8742-4050-b8e8-b9969e60faec",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -624,7 +624,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "84ec4965-ed71-4c66-9949-4335f810417d",
+          "__guid": "ca164827-949b-4902-8834-68a1233d533c",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -648,7 +648,7 @@
       ]
     },
     {
-      "__guid": "8aa9f22b-e61d-4113-bc16-898617ee5ff2",
+      "__guid": "55fed34b-1689-47b8-9e7c-60a64944422d",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary SE Diagonal",
@@ -665,7 +665,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "9f9d0086-f9ba-4dcb-ab09-9bcad6a4d430",
+          "__guid": "30cc91dd-65b8-4f37-af8c-27f84538940b",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -692,7 +692,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "dcfc353c-f545-4ccb-b4b8-d673e4ab9acf",
+          "__guid": "a8e9010b-093c-48a0-9a50-e045e6195271",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -716,7 +716,7 @@
       ]
     },
     {
-      "__guid": "2fa782ed-ea41-450b-9453-805e1343bed7",
+      "__guid": "72d0b4f4-866c-46f4-af52-14da0a6b406a",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary South Edge",
@@ -733,7 +733,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "22469362-62a0-4e33-8bd1-be7af1f77e69",
+          "__guid": "5295ae71-3045-437a-a690-02876d648681",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -760,7 +760,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "1a69a072-7e03-4857-98e6-97ed7fc4e3e4",
+          "__guid": "8ba0e09e-c5f6-4a75-b939-23b5eb5473b4",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -784,7 +784,7 @@
       ]
     },
     {
-      "__guid": "125b7a5b-2801-4844-bb8c-dd45c98df4ed",
+      "__guid": "739d6773-8e09-4823-869f-af87c994dc5a",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary SW Diagonal",
@@ -801,7 +801,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d43bfedb-fc4d-40b4-a32e-2908b90e1f05",
+          "__guid": "2c49073c-4fda-481a-a31d-6280dc69a2eb",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -828,7 +828,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "2bfd157e-f997-4f56-9292-3f97dc3d909e",
+          "__guid": "5012dbb1-9429-4bc6-8fb8-c64ffdec7922",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -852,7 +852,7 @@
       ]
     },
     {
-      "__guid": "0358065a-8a13-4ad3-b188-3a8faa61d5e6",
+      "__guid": "43d419f3-6e2f-4698-b798-db48a3a64c31",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary West Edge",
@@ -869,7 +869,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "ce22aaed-d191-4a4c-88db-a03cf3639e12",
+          "__guid": "dd7a1c48-fd48-49e3-94b0-ee39d3a0feaa",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -896,7 +896,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "bf19423a-5005-4a92-8a7f-c42f66533322",
+          "__guid": "2e08b545-014c-43d1-b733-07f1479b4e4f",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -920,7 +920,7 @@
       ]
     },
     {
-      "__guid": "b023a1e1-9f78-429f-a312-878de8476441",
+      "__guid": "1189cd1c-cc19-47bb-b707-e428ddd2ea31",
       "__version": 2,
       "Flags": 0,
       "Name": "Boundary NW Diagonal",
@@ -937,7 +937,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d4a944c5-ce20-4a48-968f-baa2d3ec668a",
+          "__guid": "d2b02165-aa26-4f44-8105-f4b1a7e566f5",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -964,7 +964,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "dcd46b4d-87b5-4ece-923c-ac28ba89f8fc",
+          "__guid": "6477137d-93e8-477e-974e-46e5dbaea1f3",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -988,7 +988,7 @@
       ]
     },
     {
-      "__guid": "04373b37-1489-405b-90b9-809c9af98610",
+      "__guid": "5e2c23eb-4927-4086-986f-468c71421f86",
       "__version": 2,
       "Flags": 0,
       "Name": "Core N Wall 1",
@@ -1005,7 +1005,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "669ea99b-c22d-4673-a7c1-212088cc2c35",
+          "__guid": "aa0f7cb0-823f-4256-9881-1cee797064c6",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1032,7 +1032,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "2f0ac075-9a71-435d-83cf-dffb89db433f",
+          "__guid": "187ee39a-0e08-4c06-a7e9-5ca6976bde0d",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1056,7 +1056,7 @@
       ]
     },
     {
-      "__guid": "bc168810-aec3-436e-ab7f-1e64c29182a2",
+      "__guid": "5ecf5a56-63bf-4593-bb68-5df7153b8700",
       "__version": 2,
       "Flags": 0,
       "Name": "Core N Wall 2",
@@ -1073,7 +1073,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "598e4c91-b989-4a2f-a285-3885324e4a6b",
+          "__guid": "c1ca1219-3269-4911-920d-70e7b31ff44b",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1100,7 +1100,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "3568d79f-602c-4bfc-9a27-30b348102de0",
+          "__guid": "e240a4d8-5bae-4387-a0eb-09abd905f21d",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1124,7 +1124,7 @@
       ]
     },
     {
-      "__guid": "f0f32f5b-9cba-43f3-9928-49c7bdbb43b4",
+      "__guid": "0793ec62-12cc-4c0e-8163-1e815debb892",
       "__version": 2,
       "Flags": 0,
       "Name": "Core S Wall 1",
@@ -1141,7 +1141,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "df9ffea4-ecb8-4e69-b1a0-f1a743bdee36",
+          "__guid": "c4dda6a0-bca2-425a-9723-363279be4eb3",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1168,7 +1168,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "0288ba2b-9edb-4fa1-9333-f886287d0c55",
+          "__guid": "834c24a4-5fa3-4346-afad-96d6c103203c",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1192,7 +1192,7 @@
       ]
     },
     {
-      "__guid": "b1dc80af-fd2f-49a1-8519-522b070c12f8",
+      "__guid": "03afa6e4-cfc0-4e54-9157-9df461c82891",
       "__version": 2,
       "Flags": 0,
       "Name": "Core S Wall 2",
@@ -1209,7 +1209,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "4c62f062-ef0f-4582-ae8a-74f864350edb",
+          "__guid": "51a08706-aa08-43a9-bb17-b7b135ef07da",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1236,7 +1236,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "9568c1ba-23e5-4c96-8843-040fbedaf9f9",
+          "__guid": "e2f836d1-8fc0-4656-b31d-bc578272092d",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1260,7 +1260,7 @@
       ]
     },
     {
-      "__guid": "31c5b9c8-2f20-4e4b-82d7-109d7322528f",
+      "__guid": "15260f75-6ce2-44e1-8050-2b18889a06ee",
       "__version": 2,
       "Flags": 0,
       "Name": "Core E Wall 1",
@@ -1277,7 +1277,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "a0a8015b-d459-48ae-8ba2-36d5dd07d257",
+          "__guid": "8cdcd7e8-837a-419b-be5f-96bac5cc4b1b",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1304,7 +1304,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "c5759870-f761-4210-81f6-976c79219a76",
+          "__guid": "153c2639-3d40-4b4b-99fc-09a635dac446",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1328,7 +1328,7 @@
       ]
     },
     {
-      "__guid": "f68035dd-50dd-47e4-badb-f281130a5911",
+      "__guid": "dd3a2465-1673-4cc4-b6ae-08d46fb0dfdc",
       "__version": 2,
       "Flags": 0,
       "Name": "Core E Wall 2",
@@ -1345,7 +1345,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "246dd47c-8806-4981-8a2f-e03b145b557d",
+          "__guid": "d6c66edc-541c-47e3-8b2d-6d0e08267926",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1372,7 +1372,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "31a1041d-c30e-4ae8-8ede-3727e9713050",
+          "__guid": "17211eef-6c3f-41bb-8895-4f87372610fc",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1396,7 +1396,7 @@
       ]
     },
     {
-      "__guid": "52110ec0-918a-41eb-89ac-0e52aa106add",
+      "__guid": "41516a4e-0c52-4c8e-9ac6-9634598980ef",
       "__version": 2,
       "Flags": 0,
       "Name": "Core W Wall 1",
@@ -1413,7 +1413,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "2cd23f1b-f1c0-4b47-aad1-185bac90a817",
+          "__guid": "e7fc4819-e521-442e-a679-4068ae6f7e7f",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1440,7 +1440,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "1679dea1-3796-4d3d-b205-d2ac13cce451",
+          "__guid": "e3897481-11f8-4b03-84e8-a50bc7351069",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1464,7 +1464,7 @@
       ]
     },
     {
-      "__guid": "88fd4fc5-7f6c-4a50-80ff-5ac83ad64b27",
+      "__guid": "4c68ad6e-c148-4bd0-b40b-dbb81c4bf8c7",
       "__version": 2,
       "Flags": 0,
       "Name": "Core W Wall 2",
@@ -1481,7 +1481,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "dbc00eac-648a-40df-83fe-0c24f54c7e83",
+          "__guid": "c848d6ba-c376-4ad6-b3a3-a79a60a9ced9",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1508,7 +1508,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "db80ea45-e9c6-4852-9137-83e1ff7a59c6",
+          "__guid": "e653cd9f-2fa8-404e-9efc-fa47d9fc0ba7",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1532,7 +1532,7 @@
       ]
     },
     {
-      "__guid": "4992db2d-eca2-4774-b8cf-a37cfa869569",
+      "__guid": "710349de-925d-4f73-850f-585ef9c27140",
       "__version": 2,
       "Flags": 0,
       "Name": "Core Partition NE",
@@ -1549,7 +1549,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "f9ff49e2-2771-4d07-8262-242964c176d7",
+          "__guid": "0a093d68-eee8-4c97-ae14-bfeae3b82356",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1576,7 +1576,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "e8bb9932-73d7-4a7d-9f4c-12b0b4a84b22",
+          "__guid": "dd2d5cee-d0bd-46e7-9e64-29b63133a776",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1600,7 +1600,279 @@
       ]
     },
     {
-      "__guid": "912d5921-77c0-4c24-8883-cbb63b3aa63d",
+      "__guid": "7af88b5e-8f2c-42f8-b9c8-58c199d1752e",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Core Annex NW",
+      "Position": "-440.00,340.00,85.00",
+      "Rotation": "0,0,0.173648178,0.984807753",
+      "Scale": "4.800000,1.400000,3.400000",
+      "Tags": "solid",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "dff40e15-1e76-4a89-818e-6bc202805803",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/dev/reflectivity_50.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "0.50,0.48,0.44,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "f71c289d-9bd8-4fd3-9481-8e384e5c9740",
+          "__enabled": true,
+          "Flags": 0,
+          "Center": "0,0,0",
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "Scale": "50,50,50",
+          "Static": false,
+          "Surface": null,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ]
+    },
+    {
+      "__guid": "06d8c508-5f9f-452f-bc80-cf9f260d0d2a",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Core Annex NE",
+      "Position": "440.00,340.00,85.00",
+      "Rotation": "0,0,-0.173648178,0.984807753",
+      "Scale": "4.800000,1.400000,3.400000",
+      "Tags": "solid",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "4e6cdec6-2faf-4fd5-bf3e-5dd72a6fc437",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/dev/reflectivity_50.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "0.50,0.48,0.44,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "631ef076-6836-4385-bfb3-f896eb2b0603",
+          "__enabled": true,
+          "Flags": 0,
+          "Center": "0,0,0",
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "Scale": "50,50,50",
+          "Static": false,
+          "Surface": null,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ]
+    },
+    {
+      "__guid": "ead2c0ab-396e-497f-96e0-85eb9705bd82",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Core Annex SW",
+      "Position": "-440.00,-340.00,85.00",
+      "Rotation": "0,0,-0.173648178,0.984807753",
+      "Scale": "4.800000,1.400000,3.400000",
+      "Tags": "solid",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "1308f40a-6a0c-4b1e-abda-0025d92aa11a",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/dev/reflectivity_50.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "0.50,0.48,0.44,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "eb33cd3f-4bf2-44e3-9319-0221d8ad6cb3",
+          "__enabled": true,
+          "Flags": 0,
+          "Center": "0,0,0",
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "Scale": "50,50,50",
+          "Static": false,
+          "Surface": null,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ]
+    },
+    {
+      "__guid": "ca7506af-8389-4af5-8b89-58ecf11c3bdb",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Core Annex SE",
+      "Position": "440.00,-340.00,85.00",
+      "Rotation": "0,0,0.173648178,0.984807753",
+      "Scale": "4.800000,1.400000,3.400000",
+      "Tags": "solid",
+      "Enabled": true,
+      "NetworkMode": 1,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 0,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "174a91b1-8185-46e2-bb23-e33bb5133003",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/dev/reflectivity_50.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "0.50,0.48,0.44,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "9a1827ba-7da4-4e96-b7fa-244da3e5c9b8",
+          "__enabled": true,
+          "Flags": 0,
+          "Center": "0,0,0",
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "Scale": "50,50,50",
+          "Static": false,
+          "Surface": null,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ]
+    },
+    {
+      "__guid": "3809830f-98de-400b-9f0f-05b096a84aba",
       "__version": 2,
       "Flags": 0,
       "Name": "Core Partition SW",
@@ -1617,7 +1889,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "3dc06902-d1ec-4d15-9584-96fe00964d54",
+          "__guid": "a52ad3c5-1130-4929-bc1f-60e04b4e0dd5",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1644,7 +1916,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "f244e1dd-5ce7-4979-b587-f4a7540a1468",
+          "__guid": "4671021a-9ee5-4cee-8d6f-dcd7129fcc26",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1668,7 +1940,7 @@
       ]
     },
     {
-      "__guid": "fc046462-e22a-4ee7-b218-fa66c1fe228c",
+      "__guid": "96686c64-e5c0-4c09-8c4d-4ba42165973c",
       "__version": 2,
       "Flags": 0,
       "Name": "North Block Back Wall",
@@ -1685,7 +1957,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "cd202ad4-0df9-4349-9864-7153c7b46222",
+          "__guid": "d554255a-16c6-4340-a193-d6b6d6a94456",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1712,7 +1984,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "a55bb10f-3098-496d-ade6-4d62a43f874c",
+          "__guid": "a86761fa-a521-4691-8933-b9ecd376527d",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1736,7 +2008,7 @@
       ]
     },
     {
-      "__guid": "32ff24d5-f8bb-41d7-a446-1ab6ee471831",
+      "__guid": "d5b6131b-a9d3-4d96-bb86-2626b75a0c94",
       "__version": 2,
       "Flags": 0,
       "Name": "North Block East Wall",
@@ -1753,7 +2025,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "3288642b-fdd4-4492-bae5-81da518d516d",
+          "__guid": "7ff3dc59-048a-4481-93b8-fb8276977db9",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1780,7 +2052,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "ad138d78-16a2-4106-840b-fb0173162359",
+          "__guid": "0f8ca797-61ca-443f-b08b-50ada6badd84",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1804,7 +2076,7 @@
       ]
     },
     {
-      "__guid": "3a202443-0523-4543-94d7-8ce33ac0da87",
+      "__guid": "ee2ef173-9c33-4545-8ad8-3b2cb52700db",
       "__version": 2,
       "Flags": 0,
       "Name": "North Block West Wall",
@@ -1821,7 +2093,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "11eb7ca8-7d21-4266-9411-7af718eab5b1",
+          "__guid": "d6f39309-9a55-4ae0-9729-a1ebf2f13941",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1848,7 +2120,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "77e1618c-3861-43e0-9cab-fca01cc8751c",
+          "__guid": "d7db3a45-abae-4ab2-bf91-1fdc6b07edb2",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1872,7 +2144,7 @@
       ]
     },
     {
-      "__guid": "6db470f8-02f8-4021-ba8e-ff914c4aa878",
+      "__guid": "515ab52d-9278-41aa-ace9-bd42ba9a64b9",
       "__version": 2,
       "Flags": 0,
       "Name": "North Block Front W",
@@ -1889,7 +2161,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "4829c772-e3fa-429c-ac0c-fe40fd5e8ddd",
+          "__guid": "5aaef26e-b8b4-4ea7-8ebe-e3de5558936c",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1916,7 +2188,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "0520855a-018a-4e60-866f-e74bc2c2c266",
+          "__guid": "5200658f-8399-455e-81f6-fe8f74c44e8a",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -1940,7 +2212,7 @@
       ]
     },
     {
-      "__guid": "3c1fe7ba-4fbe-40e5-80a3-534e2b2760a9",
+      "__guid": "5aa1c604-d5ce-400d-8420-730ade989f0a",
       "__version": 2,
       "Flags": 0,
       "Name": "North Block Front E",
@@ -1957,7 +2229,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "ee999093-1b42-4358-9728-1323290c3cb6",
+          "__guid": "c37723aa-a16a-45bf-afbc-03dd04bb6606",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1984,7 +2256,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "3d127fa9-4be1-4db8-a55e-a59853787d46",
+          "__guid": "fc62b01d-78cb-46c4-9cdf-8c0cd17168d2",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2008,7 +2280,7 @@
       ]
     },
     {
-      "__guid": "2ba39e06-c39f-4932-ad4c-f331ff68b430",
+      "__guid": "8dac546b-365a-452a-aac0-c869c30f905d",
       "__version": 2,
       "Flags": 0,
       "Name": "South Gate Back Wall",
@@ -2025,7 +2297,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d1f289ae-c645-4938-9c43-56a7eb0d3bad",
+          "__guid": "f88e1af9-e665-404a-8c54-be40eb2c04a3",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2052,7 +2324,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "619ba895-1aac-4284-b40d-347bfcde4c8c",
+          "__guid": "52f79c5a-495d-49cd-8362-45496ed92886",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2076,7 +2348,7 @@
       ]
     },
     {
-      "__guid": "bca6ba07-d4f7-421d-a3ac-b749092a658f",
+      "__guid": "7b08939e-907a-4889-88e4-2e281d185947",
       "__version": 2,
       "Flags": 0,
       "Name": "South Gate East Wall",
@@ -2093,7 +2365,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "02e59505-3ccc-4a68-bc37-a2ef18a89ab5",
+          "__guid": "29dcde18-de2c-4afa-93a7-fd41fcca31cc",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2120,7 +2392,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "d9690894-c57a-451e-b00a-1826f747d37b",
+          "__guid": "333f0f05-5519-47d5-8b5b-517343c4159b",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2144,7 +2416,7 @@
       ]
     },
     {
-      "__guid": "f9dd1fde-d450-48cf-8875-e4bc15081f22",
+      "__guid": "0b94d503-5453-4405-b919-6bdc1eaa4206",
       "__version": 2,
       "Flags": 0,
       "Name": "South Gate West Wall",
@@ -2161,7 +2433,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "3bccaa28-d9a0-4727-967c-8ad7ca3bef11",
+          "__guid": "3c3c0b59-7969-44ed-884b-2d04e9105ab3",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2188,7 +2460,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "1d6dd602-d476-4c25-b8f0-3f4e4f27a21f",
+          "__guid": "b6f03fcd-b44e-4ac6-af12-7b43f3123e1a",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2212,7 +2484,7 @@
       ]
     },
     {
-      "__guid": "edb3cb38-944c-4b83-9f47-331b67a1aa53",
+      "__guid": "1783cd1d-9474-4195-8c14-85d1c2c50824",
       "__version": 2,
       "Flags": 0,
       "Name": "South Gate Front W",
@@ -2229,7 +2501,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "b0e62212-23a5-4343-af4e-bc5d5e94517b",
+          "__guid": "8e7e014d-d151-4f49-a713-c2125583e0f4",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2256,7 +2528,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "51d24e61-5a1d-4893-b130-57a43097f203",
+          "__guid": "b2c53f6d-8f3b-454e-b43d-8159501e30fd",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2280,7 +2552,7 @@
       ]
     },
     {
-      "__guid": "001546c9-6e45-4fa1-9685-408d8d8a9227",
+      "__guid": "4761be69-562a-48bc-8910-951c84993187",
       "__version": 2,
       "Flags": 0,
       "Name": "South Gate Front E",
@@ -2297,7 +2569,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "b9606dbe-ba69-4156-b17c-106b6102d14e",
+          "__guid": "502e2521-ab3c-4a49-a2b1-bb64e9f00b25",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2324,7 +2596,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "10bd9394-c5f9-4a7e-8249-80745eec3b6c",
+          "__guid": "955496c9-cef5-43cc-92f2-cc2335fbeb69",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2348,7 +2620,7 @@
       ]
     },
     {
-      "__guid": "13167ab7-8f7b-416d-b385-4a1e9d90fe05",
+      "__guid": "87007af2-69e0-463f-845f-518c45913ee5",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 1",
@@ -2365,7 +2637,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "c50cf0d2-1afa-464c-a2c4-49ad8755030c",
+          "__guid": "61015557-191a-499e-ab85-f1e1cdd0d52a",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2392,7 +2664,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "e2306ade-d3c8-44a0-9a59-4b2531236af7",
+          "__guid": "194a669f-536e-4a28-94bb-19657c67f369",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2416,7 +2688,7 @@
       ]
     },
     {
-      "__guid": "51da6306-84a3-44a1-a6c4-060dadd38bf9",
+      "__guid": "b026dcf3-ace6-4499-b951-175b3dc23170",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 2",
@@ -2433,7 +2705,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "9799de5b-5478-48ca-846b-d3bba3d4eb09",
+          "__guid": "22a41c48-a6d4-444f-a07b-49511dcc10f4",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2460,7 +2732,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "d3da6660-4b79-4687-99bd-30a057b6923a",
+          "__guid": "33dd527b-f4c4-4126-b589-e8670def0dba",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2484,7 +2756,7 @@
       ]
     },
     {
-      "__guid": "b4eb7483-ca88-4980-b1da-8ba29db674fd",
+      "__guid": "ca9cd856-3f9f-453c-8749-748ea89b8126",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 3",
@@ -2501,7 +2773,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "c8747709-4623-49f7-9a8d-31dfe022a59c",
+          "__guid": "2ee1bf70-63eb-4eef-960f-dab9b700ba1d",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2528,7 +2800,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "0add126c-a3f0-44ab-ab63-c4eb8e0c208c",
+          "__guid": "dc4b2e5e-6c02-4aab-abd2-fd0796e2dcc3",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2552,7 +2824,7 @@
       ]
     },
     {
-      "__guid": "899b6214-3073-4e20-84e9-f958b293f95c",
+      "__guid": "6647da1b-5c40-4378-823d-d6bfe5454037",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 4",
@@ -2569,7 +2841,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "739b94ae-342e-446f-b496-a93a726db220",
+          "__guid": "49b01967-0673-472f-ae8f-7c8c4f809805",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2596,7 +2868,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "dedbf207-4e58-4fa4-baa1-a728241bb2e9",
+          "__guid": "670948f9-af99-44d3-b94a-42c25b9440ac",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2620,7 +2892,7 @@
       ]
     },
     {
-      "__guid": "7084be69-fb1e-44ab-b157-5f7c5d3b1ad9",
+      "__guid": "d9977bb4-5158-4a10-a07e-8f458ec4595e",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 5",
@@ -2637,7 +2909,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "6a29590e-f968-49d3-9b57-07e673bdecf6",
+          "__guid": "5682d057-feec-4cc0-b4a7-78a98ac45eb2",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2664,7 +2936,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "79689712-765a-4ff3-a929-ab991c2d4b8b",
+          "__guid": "ab8d7a22-c8ce-4bc9-820f-5adce2d07241",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2688,7 +2960,7 @@
       ]
     },
     {
-      "__guid": "39e7fd50-09c7-45f7-bf38-2d7b897ed453",
+      "__guid": "9103bcfd-f5a0-402d-8307-59ec6e6c2b32",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 6",
@@ -2705,7 +2977,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "57535325-53f0-4a1b-ba80-38e77abd308f",
+          "__guid": "280f49fc-f2a7-4cce-b637-30d6c751041f",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2732,7 +3004,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "d24ea70b-d203-469f-a164-24b5a008ddb6",
+          "__guid": "26083594-b1b0-4852-ba1d-907f0c46a7a2",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2756,7 +3028,7 @@
       ]
     },
     {
-      "__guid": "ad7e7faf-c844-4aac-bbe2-24a9e3e8303b",
+      "__guid": "28e47dbc-13b8-431c-a6a9-3bb9a8e0abf2",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 7",
@@ -2773,7 +3045,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "ae0fd824-ee70-4fc3-b2c7-3addb8949aba",
+          "__guid": "e1642016-a3ba-45db-81b3-92e6492d0c60",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2800,7 +3072,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "4628111d-d093-40f3-986e-a7e33fc0a91d",
+          "__guid": "86491b0f-48ca-4360-8b92-be16a6e8870f",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2824,7 +3096,7 @@
       ]
     },
     {
-      "__guid": "7290b18b-26f0-40f7-b994-50a053c23285",
+      "__guid": "7ba4470e-f718-4eee-bc5b-18d7583b9de2",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 8",
@@ -2841,7 +3113,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "fb07c504-ad3e-4302-abd2-f56ac28468c3",
+          "__guid": "967440f1-1894-4d51-b24a-69eec619966c",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2868,7 +3140,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "852d151c-b34d-4609-808b-d0a2e22d0f3f",
+          "__guid": "a6839b5a-0e7e-49d1-8a65-98b651db2743",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2892,7 +3164,7 @@
       ]
     },
     {
-      "__guid": "62f4e987-8a27-4c5e-809d-2468dbe24c00",
+      "__guid": "ee4fc63f-1107-440d-a253-4bceafbf1630",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 9",
@@ -2909,7 +3181,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "553b4e42-c09d-41b3-b34e-097a09c06c70",
+          "__guid": "690b2680-ace3-41b8-b82a-d43e4935af9c",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -2936,7 +3208,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "897615ad-beac-485b-aa90-86cdb5e0deee",
+          "__guid": "072187c0-4538-478c-b077-7e1e31b33bac",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -2960,7 +3232,7 @@
       ]
     },
     {
-      "__guid": "755903d9-158d-4be4-9444-5723f5df9507",
+      "__guid": "77da18f0-2f27-4cf3-9786-17d32c80fe14",
       "__version": 2,
       "Flags": 0,
       "Name": "Ring Cover 10",
@@ -2977,7 +3249,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "2d17dce0-93c8-4e00-80eb-23f5fa4ab9fd",
+          "__guid": "30508a51-55a7-4f0e-888f-8c75da88d558",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3004,7 +3276,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "6bee2f28-a847-40ec-949b-d96657a4366b",
+          "__guid": "a0297c8d-ac38-4f6c-a1f9-52293f3b58d5",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3028,7 +3300,7 @@
       ]
     },
     {
-      "__guid": "41bb36f6-b538-4184-a629-49a26e600c0f",
+      "__guid": "d5864a5b-4624-4000-8ab0-309216b30392",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 1",
@@ -3045,7 +3317,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "031a1892-7d66-43fb-a9f0-3057f6a8a4f4",
+          "__guid": "cd175919-15d7-42e6-8dd8-62ed593c868c",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3072,7 +3344,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "77f4f5a6-925b-47ce-889d-c8604af7abed",
+          "__guid": "b9d20bcd-7ccf-4daf-81d4-4826f86683f6",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3096,7 +3368,7 @@
       ]
     },
     {
-      "__guid": "6faa1751-4321-4714-b881-a90e20375d42",
+      "__guid": "c35524fa-fd27-4585-8939-69a39ce179ca",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 2",
@@ -3113,7 +3385,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "4d4cfea3-27aa-49ed-bb7d-89196c035dd0",
+          "__guid": "06f8b8a4-8637-43ac-a6b2-082c99fb5b1d",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3140,7 +3412,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "0b7d99ad-cd86-47bf-9c10-dc61f6c690e0",
+          "__guid": "6d126680-9dab-4bae-9137-1c27ce7bcc69",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3164,7 +3436,7 @@
       ]
     },
     {
-      "__guid": "635b3c90-bff6-44a4-84a6-6959b9cc497c",
+      "__guid": "85c26f75-f457-4c5b-ae06-26623042ba31",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 3",
@@ -3181,7 +3453,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d2abdc95-ee7c-4fd1-a08a-32715f522b14",
+          "__guid": "3743d0cb-5e68-4a11-9ece-e1e9e9e5e4db",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3208,7 +3480,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "d8501f35-64ad-4027-be32-2e7b5300e437",
+          "__guid": "bf2c92cd-3fcb-4096-bee8-c92ba6470fab",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3232,7 +3504,7 @@
       ]
     },
     {
-      "__guid": "8ee854a7-d5d5-4a05-9758-e98bb85f4915",
+      "__guid": "ed416bf0-4b52-4b5a-8f56-68d537bb757e",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 4",
@@ -3249,7 +3521,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "a587f7f1-3d21-4ac2-8fff-1cfacf1e4051",
+          "__guid": "2126ff93-65ee-4044-a0ce-1dd40394d5b7",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3276,7 +3548,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "8976ad33-b1b5-4a93-a408-58fdbe9711b7",
+          "__guid": "f384c756-18c2-4632-9b15-96128d8d4f75",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3300,7 +3572,7 @@
       ]
     },
     {
-      "__guid": "d9fef7ae-7632-45f2-b2b1-6c9e5c8fdf90",
+      "__guid": "12954c4b-447a-43ec-897d-cf045c9886ae",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 5",
@@ -3317,7 +3589,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "b6bce181-143b-4d4f-bf5a-b0bea6dc3fd7",
+          "__guid": "1becd6b0-eedd-4213-bbc8-4c38e3d3f8d4",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3344,7 +3616,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "89aae655-b859-44e6-b1c6-1170721ad9af",
+          "__guid": "802f8acb-14db-4e8d-86d9-fcf2a3e99f9c",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3368,7 +3640,7 @@
       ]
     },
     {
-      "__guid": "74a51ff8-f343-4377-b166-f7b5972236cb",
+      "__guid": "57471e2f-c2f9-46d8-a5f8-20cc9b6146bb",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 6",
@@ -3385,7 +3657,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "7b818306-79ed-4bf7-8241-ff07b5ec7518",
+          "__guid": "5aef65e7-0260-47f7-ab2a-34704757c4db",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3412,7 +3684,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "c0d7bddc-4717-4ead-89e8-16f1ceeb6857",
+          "__guid": "8ddf8be1-df0d-4845-b9d2-7ca46e626a05",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3436,7 +3708,7 @@
       ]
     },
     {
-      "__guid": "c3c8c57e-e06c-4a7e-9eeb-2bde1f687e1e",
+      "__guid": "a8165781-c828-4df1-b7d6-21d25ae149c4",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 7",
@@ -3453,7 +3725,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "524c2bfb-b75b-4ecb-9a5a-45b6531eb341",
+          "__guid": "cd88b2bf-5cf3-4083-8fc9-87e91a37b2a1",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3480,7 +3752,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "4af077c5-1103-4599-a3a0-d3eaf76af908",
+          "__guid": "4a315289-8872-4c2f-8fe0-87ec7f47839b",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3504,7 +3776,7 @@
       ]
     },
     {
-      "__guid": "00f9bbf8-5a20-498d-9682-d4560837ce45",
+      "__guid": "6094aff0-68f0-450b-9ee2-7759491c1197",
       "__version": 2,
       "Flags": 0,
       "Name": "Yard Cover 8",
@@ -3521,7 +3793,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "d90a5f90-1453-4560-b3e0-d09333e043da",
+          "__guid": "1ddb0e98-aa3f-42d5-aa33-75f1a38199d4",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3548,7 +3820,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "0812f0f9-8c10-4019-998e-dac98d70778a",
+          "__guid": "7534ced6-0a0c-477c-be87-56cc29034586",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3572,7 +3844,7 @@
       ]
     },
     {
-      "__guid": "a7a42837-6da1-4fd9-a668-ed614b4cb5ca",
+      "__guid": "80519e65-8690-461e-92f9-0ae62ca1dbd6",
       "__version": 2,
       "Flags": 0,
       "Name": "Panel Array NE",
@@ -3589,7 +3861,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "f513314f-0031-460b-a0c9-fec506e911d3",
+          "__guid": "4f48aaf4-5930-4bd0-8f60-099611781aab",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3616,7 +3888,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "b94804d1-9da6-4449-b722-962dfa92cf62",
+          "__guid": "8e24fcf5-aeae-4363-b08a-aba651c090ea",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3640,7 +3912,7 @@
       ]
     },
     {
-      "__guid": "90deb784-0463-44d1-b47a-d881abf24118",
+      "__guid": "d5109592-b524-493b-9bf5-a44a56f9de01",
       "__version": 2,
       "Flags": 0,
       "Name": "Panel Array W",
@@ -3657,7 +3929,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "7b5f62d5-dac1-472d-96c0-128c0a3dba85",
+          "__guid": "1683972e-2f57-4fa1-82ae-2e8eeb478ba4",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3684,7 +3956,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "016455a8-a8a3-46ae-b82e-65ae1c49ef3c",
+          "__guid": "08546792-25c2-40c5-9f52-aa28b323b281",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3708,7 +3980,7 @@
       ]
     },
     {
-      "__guid": "196e05bc-5a63-465a-844e-f3970f731d80",
+      "__guid": "3309a0de-c339-4023-98f9-7d64fb634d24",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 1",
@@ -3725,7 +3997,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "1264621d-49e2-4ade-819e-45d7f036bb4b",
+          "__guid": "92124d17-e808-4395-b2e9-9ff6e13ad296",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3752,7 +4024,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "ae99428e-17cf-4564-9797-826f9630877a",
+          "__guid": "5fdd3256-3627-4fea-9980-47f957e5b892",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3776,7 +4048,7 @@
       ]
     },
     {
-      "__guid": "84167d1c-b4ae-4024-a9b9-1774ed95cd53",
+      "__guid": "90e07e26-8cdb-4ccb-8364-859a6c5431bb",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 2",
@@ -3793,7 +4065,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "5e900e00-163e-40b2-a779-49f9e2d40289",
+          "__guid": "2efa3136-75a1-4b4a-9ef2-4849d558cc19",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3820,7 +4092,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "1536e0f7-51ab-41a2-8ad2-2a48dab0164c",
+          "__guid": "5bd0e262-e755-4123-90eb-105e225239bc",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3844,7 +4116,7 @@
       ]
     },
     {
-      "__guid": "c84a8b23-2878-496a-b2d9-b331c483bfe7",
+      "__guid": "f623a52e-1eb6-4d0f-9a50-e91c7df8ccdf",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 3",
@@ -3861,7 +4133,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "3745a866-7b10-4bdf-9930-244d25cff8bc",
+          "__guid": "5c44a8ed-ed29-43a6-ac6f-ceb82c68c5c3",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3888,7 +4160,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "53c0dad2-7884-4133-b227-603466ccd68e",
+          "__guid": "16cb4577-4002-4425-99dc-46bde4c964f4",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3912,7 +4184,7 @@
       ]
     },
     {
-      "__guid": "388165f5-154d-49c5-8562-cdd3e17f5f22",
+      "__guid": "d342493d-cf26-4669-95ac-76f057cafddc",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 4",
@@ -3929,7 +4201,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "2909c60a-6368-493a-a258-f401e0d08160",
+          "__guid": "d2165381-bc19-4f4c-a11b-fe2916699dfe",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -3956,7 +4228,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "cbc6fd97-615b-40c4-a4b4-f79abee33c15",
+          "__guid": "279600c5-000e-422c-97d3-9bd8637b1316",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -3980,7 +4252,7 @@
       ]
     },
     {
-      "__guid": "095e11cc-de95-41fe-ac59-4a18fb3e4b5c",
+      "__guid": "eb33dd37-b7a0-4001-9c86-f83e8950970d",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 5",
@@ -3997,7 +4269,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "eeb61c33-e2fb-4574-992d-4308820d4c76",
+          "__guid": "7014fb98-cb16-4f15-abd0-c55475e0e6a7",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -4024,7 +4296,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "61cf9660-8d0b-4734-997f-90da61c84eff",
+          "__guid": "0dd29aef-a77d-4ab9-ae26-e44a1598cac2",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -4048,7 +4320,7 @@
       ]
     },
     {
-      "__guid": "8d07ac2d-9c6b-4d58-8416-f08e9b5a2538",
+      "__guid": "9b1516a2-768f-4809-966c-dd6f65710472",
       "__version": 2,
       "Flags": 0,
       "Name": "Vehicle 6",
@@ -4065,7 +4337,7 @@
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "94656bfd-9f4c-40d0-975a-98e01af4bdfa",
+          "__guid": "a55f8c48-d58e-4e1b-b73a-dee83c890705",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -4092,7 +4364,7 @@
         },
         {
           "__type": "Sandbox.BoxCollider",
-          "__guid": "adaa8693-a868-4ef1-a940-0e2196ecb2aa",
+          "__guid": "08a3299e-e092-4e9d-992b-8e7b38023aed",
           "__enabled": true,
           "Flags": 0,
           "Center": "0,0,0",
@@ -4116,11 +4388,11 @@
       ]
     },
     {
-      "__guid": "33ea5644-b313-462c-af7f-63add7c9058a",
+      "__guid": "cb110cc4-450c-473a-b689-530050b5994f",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 1",
-      "Position": "0.00,1380.00,16",
+      "Position": "0.00,1390.00,16",
       "Rotation": "0,0,1.000000000,0.000000000",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4133,7 +4405,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "048cf868-f93b-4e36-b60b-d1109ad16bf6",
+          "__guid": "dd95c67e-b888-405a-8d0c-74d1d310e8ce",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4147,11 +4419,11 @@
       ]
     },
     {
-      "__guid": "7dba239c-9fbf-4f9e-92d9-5835f9e01717",
+      "__guid": "466eda9a-5ccd-4999-837f-13d4c6cd637f",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 2",
-      "Position": "-520.00,1050.00,16",
+      "Position": "-548.57,1072.22,16",
       "Rotation": "0,0,0.984807753,-0.173648178",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4164,7 +4436,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "628ea21e-20cf-48a6-ae00-dfbb031e9378",
+          "__guid": "8230a764-3a5e-4abe-ba81-d097c41222fb",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4178,7 +4450,7 @@
       ]
     },
     {
-      "__guid": "8a336a38-f215-4cdf-9265-a5c480ee8d62",
+      "__guid": "0e3ea9bc-b8d6-4253-a7c7-a5704b66c298",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 3",
@@ -4195,7 +4467,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "e3fc45d8-9eb9-44e0-b53a-01eaabf86f60",
+          "__guid": "65a5f781-b7fb-4faf-a7a7-1ce2ad218f94",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4209,11 +4481,11 @@
       ]
     },
     {
-      "__guid": "eae352ce-ad8a-4e4f-a979-2b192225d233",
+      "__guid": "040ab91b-a40c-4c5d-87b0-b762b9d88a24",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 4",
-      "Position": "-760.00,300.00,16",
+      "Position": "-790.38,352.08,16",
       "Rotation": "0,0,0.707106781,0.707106781",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4226,7 +4498,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "6769468e-3620-4445-bdc7-e36f61bef33c",
+          "__guid": "f3e6f3d6-07a5-458e-b1f4-9df672db52f1",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4240,7 +4512,7 @@
       ]
     },
     {
-      "__guid": "dd4e73f9-1521-4567-a8a4-f04fbdfb4ac3",
+      "__guid": "24f34c9c-772e-4ae2-96ed-0305f7deb80e",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 5",
@@ -4257,7 +4529,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "f615b41f-c168-464a-949d-446f511eb096",
+          "__guid": "814e18d4-7698-4a04-8f4d-4e861de8b8e4",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4271,11 +4543,11 @@
       ]
     },
     {
-      "__guid": "97df1642-ad94-4aa5-90ba-57e1982bcfd6",
+      "__guid": "158b4b38-7d27-48da-b440-969d451a55bc",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 6",
-      "Position": "-520.00,-980.00,16",
+      "Position": "-562.17,-973.98,16",
       "Rotation": "0,0,0.173648178,0.984807753",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4288,7 +4560,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "e3eb9f82-fbf8-4ebc-bb63-af6d2d1faa72",
+          "__guid": "c3901104-2b5b-45e5-9b1c-72dcba1d2ca9",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4302,11 +4574,11 @@
       ]
     },
     {
-      "__guid": "958a44fc-2f83-4cdb-bb60-cb78ee2f2788",
+      "__guid": "478ef7da-9a17-47d9-a01b-fb5c9a5d7a9b",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 7",
-      "Position": "520.00,-1000.00,16",
+      "Position": "509.04,-1096.21,16",
       "Rotation": "0,0,0.173648178,-0.984807753",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4319,7 +4591,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "fd221b34-ec7a-49ed-bb3d-d9996b7a4044",
+          "__guid": "0400c14c-d2f3-4b60-ac54-1a08b85f5360",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4333,11 +4605,11 @@
       ]
     },
     {
-      "__guid": "23b2051f-5aba-4a5f-bc5a-945e9cd21a0c",
+      "__guid": "1235959d-4ad9-4219-ac87-1d46df3d3743",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 8",
-      "Position": "0.00,-1380.00,16",
+      "Position": "0.00,-1390.00,16",
       "Rotation": "0,0,0.000000000,1.000000000",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4350,7 +4622,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "96d0e320-eb69-4610-ba90-264d3fda3fe9",
+          "__guid": "62c772e4-a4db-4bfb-84c1-d4a63b7baf75",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4364,11 +4636,11 @@
       ]
     },
     {
-      "__guid": "a095c9d3-9555-48a0-a923-2236abdfd776",
+      "__guid": "cd9c45f9-3945-4198-9692-00bede63200a",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 9",
-      "Position": "-700.00,760.00,16",
+      "Position": "-70.28,929.98,16",
       "Rotation": "0,0,0.923879533,0.382683432",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4381,7 +4653,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "569e3160-4800-4a07-a714-927d3c4a90b0",
+          "__guid": "b2afcb1e-5b99-40c6-a915-b204983f6f49",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",
@@ -4395,11 +4667,11 @@
       ]
     },
     {
-      "__guid": "2773cdf8-7c06-47f9-810a-4a48c8e7eb17",
+      "__guid": "72c26858-587a-4f47-a373-dcfcc3ca5058",
       "__version": 2,
       "Flags": 0,
       "Name": "Spawn 10",
-      "Position": "700.00,-700.00,16",
+      "Position": "653.11,-668.74,16",
       "Rotation": "0,0,0.382683432,-0.923879533",
       "Scale": "1,1,1",
       "Tags": "",
@@ -4412,7 +4684,7 @@
       "Components": [
         {
           "__type": "Sandbox.SpawnPoint",
-          "__guid": "ecfe22e3-f013-426a-93ca-833eb05193d7",
+          "__guid": "695d2211-b0de-4627-9ba1-840bc4218bc5",
           "__enabled": true,
           "Flags": 0,
           "Color": "0.2,0.8,1,1",

@@ -116,19 +116,41 @@ Traces at eye height, 21 checks, all passing:
 
 | Property | Result |
 |---|---|
-| No cross-map sightline survives | 5/5 blocked |
+| Unbroken cross-map lanes, swept every 100u | **0 of 44** |
+| Spawn pairs with line of sight | **0 of 45** |
+| Spawns clear of solids, standing on the floor | **10 of 10** |
 | Straight through the Core, on every door line | 6/6 blocked |
 | All four Core doorways enterable | 4/4 |
-| Open ground still open - not a maze | 6/6 |
+| Open ground still open - not a maze | 4/4 core routes |
+
+The lane sweep replaced hand-picked pairs: 27 east-west and 17 north-south lines
+across the whole map, every 100 units. Hand-picking found four problems; the
+sweep found a fifth the pairs had missed.
 
 **Opposing doorways are offset on purpose.** The first pass put the north and
 south doors both on x=0, which produced a clean firing lane straight through the
 building and defeated the point of putting it in the middle. North door sits west
 of centre, south door east; east door north, west door south.
 
-Two build bugs the traces caught, both mine: cover placed directly in the north
-and south doorways, and interior partitions laid along the exact lines the east
-and west doors sit on, sealing the Core shut.
+Build bugs the traces caught, all mine:
+
+- Cover placed directly in the north and south doorways.
+- Interior partitions laid along the exact lines the east and west doors sit on,
+  sealing the Core shut.
+- **A spawn inside a vehicle** - blocked on all four sides, its "floor" the
+  vehicle roof. Three more spawns hard against cover.
+- **An open corridor running tangent to the Core's north wall**, giving a 1550u
+  spawn-to-spawn sightline. Fixed with annexes on the building's four corners,
+  which is also what stops the same lane on the other three faces.
+
+The last two are now impossible to reintroduce: `Tools/build_compound.py`
+validates spawns at build time. It clears each one out of any solid using an
+oriented-box test, then checks every spawn pair and relocates any that can see
+each other from under 850 units. Rescaling the map re-runs all of it.
+
+A bounding-circle test was tried first and was useless - a 600-unit wall gets a
+300-unit radius that swallows the open ground beside it, and every spawn near a
+building reads as blocked.
 
 Playtested: spawns land on the ground, a walk crosses 1023u cleanly with no
 teleports, and a bot fought and scored a kill.

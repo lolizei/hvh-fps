@@ -159,6 +159,13 @@ walled("Core W Wall", "y", -CX, CY, -100)    # west door south of centre - offse
 # Partitions sit off the doorway lines so the Core stays enterable, while still
 # breaking the interior into rooms.
 objs.append(block("Core Partition NE", 190, 120, (240, WALL_T, WALL_H), BLD_T))
+
+# Annexes on the building's four corners. Without them there is an open
+# corridor running tangent to each face - a 1550u spawn-to-spawn sightline
+# grazed the north wall and crossed the whole map.
+for ax, ay, yw, nm in ((-440, 340, 20, "NW"), (440, 340, -20, "NE"),
+                       (-440, -340, -20, "SW"), (440, -340, 20, "SE")):
+    objs.append(block("Core Annex " + nm, ax, ay, (240, 70, 170), BLD_T, yaw=yw))
 objs.append(block("Core Partition SW", -190, -120, (240, WALL_T, WALL_H), BLD_T))
 
 
@@ -207,13 +214,140 @@ VEH = [(-430, 980, 210, 90, 68, 15), (-250, 1120, 210, 90, 68, -10),
 for i, (x, y, sx, sy, sz, yaw) in enumerate(VEH):
     objs.append(block("Vehicle %d" % (i + 1), x, y, (sx, sy, sz), VEH_T, yaw=yaw))
 
+# ---- spawn placement, validated ------------------------------------------
+# A spawn inside a solid is a player who cannot move. The first pass put one
+# inside a vehicle and three more hard against cover, so clearance is checked
+# here at build time rather than discovered in play. Auto-nudges outward, and
+# says so, instead of silently shipping a bad spawn.
+SOLIDS = []
+for o in objs:
+    sx, sy, _ = [float(v) * BOX for v in o["Scale"].split(",")]
+    cx, cy, _ = [float(v) for v in o["Position"].split(",")]
+    qz, qw = [float(v) for v in o["Rotation"].split(",")][2:4]
+    yaw = 2.0 * math.atan2(qz, qw)          # recover yaw from the quaternion
+    SOLIDS.append((cx, cy, sx / 2.0, sy / 2.0, yaw))
+
+CLEAR = 70.0     # player radius plus elbow room
+
+
+def box_distance(x, y, cx, cy, hx, hy, yaw):
+    """
+    Distance from a point to an oriented box, 0 if inside.
+
+    A bounding circle is useless here: a 600-unit wall gets a 300-unit radius
+    that swallows most of the open ground beside it, and every spawn near a
+    building looks blocked.
+    """
+    dx, dy = x - cx, y - cy
+    c, sn = math.cos(-yaw), math.sin(-yaw)
+    lx, ly = dx * c - dy * sn, dx * sn + dy * c      # into the box's own frame
+    ox, oy = abs(lx) - hx, abs(ly) - hy
+    if ox <= 0 and oy <= 0:
+        return 0.0
+    return math.hypot(max(ox, 0.0), max(oy, 0.0))
+
+
+def worst_overlap(x, y):
+    """Deepest intrusion into any solid's clearance shell, and its centre."""
+    worst, who = 0.0, None
+    for cx, cy, hx, hy, yaw in SOLIDS:
+        pen = CLEAR - box_distance(x, y, cx, cy, hx, hy, yaw)
+        if pen > worst:
+            worst, who = pen, (cx, cy)
+    return worst, who
+
+
+def inside_boundary(x, y, margin=90.0):
+    """Point-in-polygon against the kite, with a margin off the walls."""
+    inside = False
+    n = len(V)
+    for i in range(n):
+        x1, y1 = V[i]
+        x2, y2 = V[(i + 1) % n]
+        if (y1 > y) != (y2 > y):
+            xin = (x2 - x1) * (y - y1) / (y2 - y1) + x1
+            if x < xin:
+                inside = not inside
+    if not inside:
+        return False
+    for i in range(n):
+        x1, y1 = V[i]
+        x2, y2 = V[(i + 1) % n]
+        dx, dy = x2 - x1, y2 - y1
+        t = max(0.0, min(1.0, ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy)))
+        if math.hypot(x - (x1 + t * dx), y - (y1 + t * dy)) < margin:
+            return False
+    return True
+
+
+def place(x, y):
+    """Push a spawn out of anything it overlaps, keeping it inside the map."""
+    for _ in range(60):
+        pen, who = worst_overlap(x, y)
+        if pen <= 0 and inside_boundary(x, y):
+            return x, y, True
+        if pen > 0 and who:
+            ax, ay = x - who[0], y - who[1]
+            d = math.hypot(ax, ay) or 1.0
+            x, y = x + (ax / d) * (pen + 6), y + (ay / d) * (pen + 6)
+        else:
+            x, y = x * 0.92, y * 0.92        # drifted outside - pull inward
+    return x, y, False
+
+
 # ---- deathmatch spawns: distributed, not two team anchors -----------------
 SP = [(0, 1380, 180), (-520, 1050, 200), (520, 1020, 160),
       (-760, 300, 90), (760, 260, 270),
       (-520, -980, 20), (520, -1000, 340), (0, -1380, 0),
       (-700, 760, 135), (700, -700, 315)]
+def segment_blocked(a, b, step=24.0):
+    """
+    Does anything solid sit on the line between two points?
+
+    Sampled rather than solved: the blocks here are tens of units across, so a
+    24-unit step cannot slip through one, and it reuses the same box test.
+    """
+    ax, ay = a
+    bx, by = b
+    n = max(2, int(math.hypot(bx - ax, by - ay) / step))
+    for i in range(1, n):
+        t = i / float(n)
+        px, py = ax + (bx - ax) * t, ay + (by - ay) * t
+        for cx, cy, hx, hy, yaw in SOLIDS:
+            if box_distance(px, py, cx, cy, hx, hy, yaw) <= 0.0:
+                return True
+    return False
+
+
+def relocate(x, y, placed, min_sep=850.0):
+    """Find a nearby spot that is clear AND not visible from another spawn."""
+    for radius in (0, 120, 240, 360, 480, 600):
+        for deg in range(0, 360, 20):
+            nx = x + radius * math.cos(math.radians(deg))
+            ny = y + radius * math.sin(math.radians(deg))
+            cx, cy, ok = place(nx, ny)
+            if not ok:
+                continue
+            if all(math.hypot(cx - px, cy - py) > min_sep or segment_blocked((cx, cy), (px, py))
+                   for px, py in placed):
+                return cx, cy, True
+    return x, y, False
+
+
+moved = 0
+placed = []
 for i, (x, y, yaw) in enumerate(SP):
-    objs.append(spawn("Spawn %d" % (i + 1), x, y, yaw))
+    nx, ny, ok = relocate(x, y, placed)
+    if not ok:
+        raise SystemExit("Spawn %d at %.0f,%.0f could not be placed" % (i + 1, x, y))
+    d = math.hypot(nx - x, ny - y)
+    if d > 1:
+        moved += 1
+        print("  spawn %d moved %.0fu: (%.0f,%.0f) -> (%.0f,%.0f)" % (i + 1, d, x, y, nx, ny))
+    placed.append((nx, ny))
+    objs.append(spawn("Spawn %d" % (i + 1), nx, ny, yaw))
+print("spawns adjusted: %d of %d (clear of solids, and no two see each other "
+      "closer than 850u)" % (moved, len(SP)))
 
 # ---- carry the game systems over from game.scene --------------------------
 src = json.load(open(SRC, encoding="utf-8"))
