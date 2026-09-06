@@ -17,6 +17,14 @@ namespace HvH;
 /// </summary>
 public sealed class PlayerPresentation : Component
 {
+	/// <summary>Which set of bodies to use. Both are kept; this picks one.</summary>
+	[Property] public PlayerBodyStyle Style { get; set; } = PlayerBodyStyle.Citizen;
+
+	/// <summary>The engine Citizen playermodel, team-tinted.</summary>
+	[Property] public string CitizenVanguard { get; set; } = "prefabs/players/citizen_vanguard.prefab";
+	[Property] public string CitizenSyndicate { get; set; } = "prefabs/players/citizen_syndicate.prefab";
+
+	/// <summary>The blocky test humanoids. Kept as an alternative, not deleted.</summary>
 	[Property] public string VanguardModel { get; set; } = "prefabs/players/player_vanguard.prefab";
 	[Property] public string SyndicateModel { get; set; } = "prefabs/players/player_syndicate.prefab";
 
@@ -30,6 +38,7 @@ public sealed class PlayerPresentation : Component
 	public Team CurrentTeam { get; private set; } = Team.None;
 
 	private Player _player;
+	private PlayerBodyStyle _currentStyle;
 	private readonly List<ModelRenderer> _renderers = new();
 
 	protected override void OnAwake()
@@ -46,7 +55,7 @@ public sealed class PlayerPresentation : Component
 	{
 		var team = _player.IsValid() ? _player.Team : Team.None;
 
-		if ( team != CurrentTeam || !Current.IsValid() )
+		if ( team != CurrentTeam || Style != _currentStyle || !Current.IsValid() )
 			Rebuild( team );
 	}
 
@@ -54,12 +63,12 @@ public sealed class PlayerPresentation : Component
 	{
 		Clear();
 		CurrentTeam = team;
+		_currentStyle = Style;
 
-		var path = team switch
-		{
-			Team.Syndicate => SyndicateModel,
-			_ => VanguardModel,
-		};
+		var syndicate = team == Team.Syndicate;
+		var path = Style == PlayerBodyStyle.Citizen
+			? ( syndicate ? CitizenSyndicate : CitizenVanguard )
+			: ( syndicate ? SyndicateModel : VanguardModel );
 
 		if ( string.IsNullOrWhiteSpace( path ) ) return;
 

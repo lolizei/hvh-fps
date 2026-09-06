@@ -13,9 +13,13 @@
 	Read-only: it reports state, it never changes any.
 *@
 
-@if ( Visible )
-{
-	<root class="death-screen">
+@* The root is ALWAYS rendered and the tint hangs off a class. Wrapping <root>
+   in an @if leaves the panel and its own styling behind, so the red stayed on
+   screen after respawning. Crosshair already does it this way. *@
+
+<root class="death-screen @(Visible ? "visible" : "hidden")">
+	@if ( Visible )
+	{
 		<div class="headline">ELIMINATED</div>
 
 		@if ( !string.IsNullOrWhiteSpace( KillerName ) )
@@ -36,8 +40,8 @@
 				<div class="label wait">WAITING FOR THE NEXT ROUND</div>
 			</div>
 		}
-	</root>
-}
+	}
+</root>
 
 @code {
 	private static Player Me => Player.Local;

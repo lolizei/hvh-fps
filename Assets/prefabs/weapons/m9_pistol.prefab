@@ -1,7 +1,7 @@
 {
-  "__guid": "424e2a7f-1e8e-421d-bcdb-c67d4461178a",
+  "__guid": "f480078d-12a1-45b5-baa8-539f379c4a3e",
   "RootObject": {
-    "__guid": "e5ecb7da-8bfc-4f57-a37d-8e0ecc6633dc",
+    "__guid": "842215b2-1e60-468b-9b2e-4f3cdea404f7",
     "__version": 2,
     "Flags": 0,
     "Name": "m9_pistol",
@@ -18,7 +18,7 @@
     "Components": [],
     "Children": [
       {
-        "__guid": "3685629d-2306-4390-879e-03d1e3b540fd",
+        "__guid": "e66d81f0-c744-4d26-b15f-8f0f361288c9",
         "__version": 2,
         "Flags": 0,
         "Name": "Slide",
@@ -35,7 +35,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "eb4d4dee-458a-4e43-a457-497669b85e20",
+            "__guid": "1db0bd7f-68d3-4ac2-bbaa-5a75913f47e3",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -64,7 +64,7 @@
         "Children": []
       },
       {
-        "__guid": "a8c82a18-8587-467f-afea-7636f427079b",
+        "__guid": "a1210478-b041-414f-8037-a455af8cb959",
         "__version": 2,
         "Flags": 0,
         "Name": "Barrel",
@@ -81,7 +81,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "e7c0fc12-00d3-4863-b5d7-f6c31c4fbb05",
+            "__guid": "2e8a489c-bd44-4b05-9a5c-16c1c48704d3",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -110,7 +110,7 @@
         "Children": []
       },
       {
-        "__guid": "64d0eff8-3125-4b11-9d2f-6dea810f603e",
+        "__guid": "83ec7dbe-68f8-491c-a238-96a3e3c7bb9f",
         "__version": 2,
         "Flags": 0,
         "Name": "Frame",
@@ -127,7 +127,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "059502eb-bd7d-4f4c-b555-1bae3cdd4d1b",
+            "__guid": "19c5cb3b-92ae-4643-8c26-d78022f03b04",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -156,7 +156,7 @@
         "Children": []
       },
       {
-        "__guid": "63d1db4b-4033-4752-bbb9-97dee2403856",
+        "__guid": "1af778b8-c593-421c-94ce-677b92f3862d",
         "__version": 2,
         "Flags": 0,
         "Name": "Grip",
@@ -173,7 +173,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "8190ec2d-7c30-491a-953e-301c96f6f4e1",
+            "__guid": "0ce3e44a-1b84-47ba-9485-11dc16c58e1f",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -202,7 +202,7 @@
         "Children": []
       },
       {
-        "__guid": "cdb20501-46bb-41bb-9f57-e8f9db8d626f",
+        "__guid": "b05ae64c-8fe5-4c28-8469-73135bd115c4",
         "__version": 2,
         "Flags": 0,
         "Name": "Magazine Base",
@@ -219,7 +219,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "d44a4460-8fb3-44ee-a7e6-fc1e2e432555",
+            "__guid": "a2294bde-22f8-462e-8e74-0d86a615daf9",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -248,7 +248,7 @@
         "Children": []
       },
       {
-        "__guid": "b2e8602c-9f84-42dd-8d5f-daf6bcd366bf",
+        "__guid": "bae131d1-3ded-4d66-ad43-5e08d71f4dc1",
         "__version": 2,
         "Flags": 0,
         "Name": "Sight",
@@ -265,7 +265,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "b33dbca2-9c71-482c-88ea-993e98c0fc3c",
+            "__guid": "b42777c9-d72a-4da8-877b-b0fd379c7ffa",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,

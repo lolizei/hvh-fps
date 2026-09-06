@@ -1,4 +1,14 @@
 .death-screen {
+    // Tint only while actually dead. The panel itself always exists.
+    &.visible {
+        background-color: rgba(90, 10, 10, 0.22);
+    }
+
+    &.hidden {
+        background-color: rgba(0, 0, 0, 0);
+        opacity: 0;
+    }
+
     position: absolute;
     top: 0px;
     left: 0px;
@@ -9,7 +19,7 @@
     justify-content: center;
     pointer-events: none;
     font-family: Poppins;
-    background-color: rgba(90, 10, 10, 0.22);
+
 
     .headline {
         font-size: 46px;

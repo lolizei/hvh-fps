@@ -1,0 +1,92 @@
+{
+  "__guid": "89bb643b-ded3-44c3-9f80-288ad0994bdc",
+  "RootObject": {
+    "__guid": "ce5f2d50-4932-4276-a22e-4e3a9d9a594a",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "citizen_vanguard",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 0,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [],
+    "Children": [
+      {
+        "__guid": "4f761073-87cf-4be4-966d-62886e43caa8",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Citizen",
+        "Position": "0,0,0",
+        "Rotation": "0.000000,0.000000,0.000000,1.000000",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 0,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 0,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "16991352-ad99-4e0b-b5de-88a7017b62da",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": true,
+            "CreateBoneObjects": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/citizen/citizen.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1.0,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "hash": 0
+            },
+            "Tint": "0.34,0.52,0.85,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": []
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakLinks": false,
+  "ResourceVersion": 2,
+  "Title": "citizen_vanguard",
+  "Description": null,
+  "__references": [],
+  "__version": 2
+}

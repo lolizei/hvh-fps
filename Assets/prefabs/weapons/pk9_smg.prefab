@@ -1,7 +1,7 @@
 {
-  "__guid": "9a6a0cce-c838-4683-afaf-614bdac8d4dc",
+  "__guid": "38e81dad-5f29-4fa8-9315-c01aad37086d",
   "RootObject": {
-    "__guid": "c92f437f-a4ac-4a09-85b8-12199ef4ca59",
+    "__guid": "4c176ba8-3cab-45a5-8e8a-39061ecd6775",
     "__version": 2,
     "Flags": 0,
     "Name": "pk9_smg",
@@ -18,7 +18,7 @@
     "Components": [],
     "Children": [
       {
-        "__guid": "8efcc01c-51a5-4cf1-a3c0-cb6bb9e839f4",
+        "__guid": "ed442b9f-9eec-431b-8821-4b8134a96978",
         "__version": 2,
         "Flags": 0,
         "Name": "Receiver",
@@ -35,7 +35,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "644554cd-764f-4296-b448-da88abb08e9a",
+            "__guid": "b8b27114-93ab-4f14-86b0-7c35a3e939d2",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -64,7 +64,7 @@
         "Children": []
       },
       {
-        "__guid": "056c81ec-0662-43d4-9828-5cae9f836849",
+        "__guid": "f8c7071c-311a-48d9-86c8-824d8690b5ac",
         "__version": 2,
         "Flags": 0,
         "Name": "Barrel",
@@ -81,7 +81,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "50588231-410d-4370-a3d8-234a19cd78aa",
+            "__guid": "13284664-1e2b-4d8a-9d5b-c9e36f6e56d2",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -110,7 +110,7 @@
         "Children": []
       },
       {
-        "__guid": "be26a313-2a9c-4c98-a48c-98a68ab2d7d7",
+        "__guid": "711d4253-0d74-4245-8eb7-9079f8a8970d",
         "__version": 2,
         "Flags": 0,
         "Name": "Folding Stock",
@@ -127,7 +127,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "7eccde22-7022-4102-a74a-ae6f898d6e17",
+            "__guid": "64acf35a-35f6-4e26-b3f5-bf5a41af2fa8",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -156,7 +156,7 @@
         "Children": []
       },
       {
-        "__guid": "522517c2-c406-43e9-98e0-aaa2546dd144",
+        "__guid": "f262b9c4-35dc-4b16-94fd-7e3296dd45e1",
         "__version": 2,
         "Flags": 0,
         "Name": "Magazine",
@@ -173,7 +173,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "a0ff2d7a-dc87-4db4-90a0-0f272d3608bc",
+            "__guid": "658345d6-67ec-4301-bf4f-611177583d24",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -202,7 +202,7 @@
         "Children": []
       },
       {
-        "__guid": "cd00bd49-380e-45e4-8c8d-6748fbb8b35b",
+        "__guid": "664902df-a394-46e3-a222-1ba2f361ef4d",
         "__version": 2,
         "Flags": 0,
         "Name": "Grip",
@@ -219,7 +219,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "7f2c2ef7-c9ba-4385-ac0d-863da32ff735",
+            "__guid": "46ec93b8-9d85-49b1-8ea3-907af0ec76a5",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -248,7 +248,7 @@
         "Children": []
       },
       {
-        "__guid": "474b968a-92e2-47f0-bbf0-81949259806a",
+        "__guid": "11a02fba-1510-49ce-939e-719180caf832",
         "__version": 2,
         "Flags": 0,
         "Name": "Sight",
@@ -265,7 +265,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "c8596438-369a-4f1c-89e7-95c8dce33337",
+            "__guid": "41cc3ede-e899-46de-ae9e-e196db4c4954",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,

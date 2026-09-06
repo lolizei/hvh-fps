@@ -176,6 +176,48 @@ made.append(write_prefab(ROOT + "prefabs/players/player_vanguard.prefab",
 made.append(write_prefab(ROOT + "prefabs/players/player_syndicate.prefab",
                          "player_syndicate", humanoid("0.55,0.42,0.24,1", "0.24,0.20,0.16,1")))
 
+
+# ---------------------------------------------------------- citizen bodies ---
+# The engine's own Citizen playermodel - s&box base content in addons/citizen,
+# verified addressable. Kept alongside the box humanoids rather than replacing
+# them, so either can be selected.
+#
+# UseAnimGraph is on so it stands in its idle pose instead of a bind-pose
+# T-stance. Nothing here drives animation parameters - that is the advanced
+# animation this goal rules out - so it will not walk its legs.
+def citizen(tint):
+    return [{
+        "__guid": guid(), "__version": 2, "Flags": 0, "Name": "Citizen",
+        "Position": "0,0,0", "Rotation": quat(), "Scale": "1,1,1",
+        "Tags": "", "Enabled": True, "NetworkMode": 0, "NetworkFlags": 0,
+        "NetworkOrphaned": 0, "NetworkTransmit": True, "OwnerTransfer": 0,
+        "Components": [{
+            "__type": "Sandbox.SkinnedModelRenderer", "__guid": guid(),
+            "__enabled": True, "Flags": 0, "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": None, "CreateAttachments": True,
+            "CreateBoneObjects": False, "LodOverride": None, "MaterialGroup": None,
+            "MaterialOverride": None, "Materials": None,
+            "Model": "models/citizen/citizen.vmdl", "Morphs": {},
+            "OnComponentDestroy": None, "OnComponentDisabled": None,
+            "OnComponentEnabled": None, "OnComponentFixedUpdate": None,
+            "OnComponentStart": None, "OnComponentUpdate": None,
+            "Parameters": {"bools": {}, "ints": {}, "floats": {},
+                           "vectors": {}, "rotations": {}},
+            "PlaybackRate": 1.0,
+            "RenderOptions": {"GameLayer": True, "OverlayLayer": False,
+                              "BloomLayer": False, "AfterUILayer": False},
+            "RenderType": "On", "Sequence": {"hash": 0}, "Tint": tint,
+            "UseAnimGraph": True,
+        }],
+        "Children": [],
+    }]
+
+
+made.append(write_prefab(ROOT + "prefabs/players/citizen_vanguard.prefab",
+                         "citizen_vanguard", citizen("0.34,0.52,0.85,1")))
+made.append(write_prefab(ROOT + "prefabs/players/citizen_syndicate.prefab",
+                         "citizen_syndicate", citizen("0.90,0.62,0.28,1")))
+
 for m in made:
     print("wrote", m.replace(ROOT, "Assets/"))
 print("%d prefabs" % len(made))

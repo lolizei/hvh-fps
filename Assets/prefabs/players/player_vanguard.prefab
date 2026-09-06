@@ -1,7 +1,7 @@
 {
-  "__guid": "99d4fc0b-2e55-4c53-8028-7d87c3a7ecbb",
+  "__guid": "b4ee6541-37d6-4d8b-94ca-8d62d50d22f6",
   "RootObject": {
-    "__guid": "ff6f6e5d-49fb-4c25-9761-934ae7f8ba9c",
+    "__guid": "2ba544a9-98c3-4b26-9d94-dc8508f43d84",
     "__version": 2,
     "Flags": 0,
     "Name": "player_vanguard",
@@ -18,7 +18,7 @@
     "Components": [],
     "Children": [
       {
-        "__guid": "d55a321b-3ce0-4f3d-89b3-133beed591be",
+        "__guid": "c89d6109-438d-4977-b7a3-11ead2016ffd",
         "__version": 2,
         "Flags": 0,
         "Name": "Head",
@@ -35,7 +35,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "b4dae9f1-efcf-4e2b-b575-c414d4fce576",
+            "__guid": "3dfe1236-ef59-4378-9bcb-6f7375a93003",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -64,7 +64,7 @@
         "Children": []
       },
       {
-        "__guid": "fda1737e-ae22-467d-b2e8-e931c9ab9cfd",
+        "__guid": "4e0a56c9-0bdb-48e9-a19b-eb835ca7f5ed",
         "__version": 2,
         "Flags": 0,
         "Name": "Visor",
@@ -81,7 +81,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "4caef8de-f06b-4b45-b18f-f2aa5ac3388e",
+            "__guid": "9a8c8209-709d-4d2e-b6af-24f2b9b16a35",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -110,7 +110,7 @@
         "Children": []
       },
       {
-        "__guid": "ba454a95-abf5-4a23-b89e-dea2e51b2cab",
+        "__guid": "10a016b9-1b5e-4ee8-b964-91c0705a24fd",
         "__version": 2,
         "Flags": 0,
         "Name": "Torso",
@@ -127,7 +127,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "73cbfbda-37e7-475a-b5d2-ea6954f89c10",
+            "__guid": "0525e8b5-88aa-443b-9af5-07b324e207e9",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -156,7 +156,7 @@
         "Children": []
       },
       {
-        "__guid": "9b2d1caa-64a4-493d-b33a-bbcd5c75cc71",
+        "__guid": "426a1b63-e78f-49cb-9408-9560a10d0a94",
         "__version": 2,
         "Flags": 0,
         "Name": "Chest Rig",
@@ -173,7 +173,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "80595197-70b7-448e-bb5b-320cf3f61538",
+            "__guid": "dadd72ee-8b09-4c0c-8a82-d7815a6802c9",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -202,7 +202,7 @@
         "Children": []
       },
       {
-        "__guid": "fcf7a476-9b33-402e-a048-26e0b45dc02a",
+        "__guid": "e7ee7663-44f0-4f86-a30f-db65cc8e291e",
         "__version": 2,
         "Flags": 0,
         "Name": "Backpack",
@@ -219,7 +219,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "73675db8-503c-48d3-9f31-228763cc41b3",
+            "__guid": "0f519924-7343-491f-bccd-90dee36cc117",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -248,7 +248,7 @@
         "Children": []
       },
       {
-        "__guid": "6995d325-3fd2-44cf-8dd7-99dedcd340a9",
+        "__guid": "25f3f77f-f272-4714-a497-20fcfdf61e82",
         "__version": 2,
         "Flags": 0,
         "Name": "Shoulder L",
@@ -265,7 +265,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "e5bc308c-58a5-4c62-a071-1ede9c0cedc8",
+            "__guid": "9309ba1d-fcfb-4f2b-a5ac-6088b7bef65c",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -294,7 +294,7 @@
         "Children": []
       },
       {
-        "__guid": "ae70430a-3b23-41f8-95c3-704433673d88",
+        "__guid": "b4e9d369-6b00-47c2-8a20-692bed2fdf27",
         "__version": 2,
         "Flags": 0,
         "Name": "Shoulder R",
@@ -311,7 +311,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "d2661b31-20cb-4879-973d-47a41d38b724",
+            "__guid": "5621ae44-cf9c-4b2e-b66b-ed45b66c8d5a",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -340,7 +340,7 @@
         "Children": []
       },
       {
-        "__guid": "fc78aa12-68f5-406f-a89f-5d15209640ed",
+        "__guid": "6bb27451-e94f-46a5-a950-1a51f896f7db",
         "__version": 2,
         "Flags": 0,
         "Name": "Arm L",
@@ -357,7 +357,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "9fabfdf5-aa16-4ea1-87d6-a05afd709b18",
+            "__guid": "7e182abd-c3fd-4039-ab26-0f90e30d5575",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -386,7 +386,7 @@
         "Children": []
       },
       {
-        "__guid": "150f09e3-1a70-4558-9a54-ef7fbd03ed73",
+        "__guid": "c1d27ab3-09c1-48cc-b596-8cdcca461a03",
         "__version": 2,
         "Flags": 0,
         "Name": "Arm R",
@@ -403,7 +403,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "d14f794e-56da-4507-a0a4-0bf25f4d2039",
+            "__guid": "a8719e87-ae73-4a91-b763-dcf4719c559e",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -432,7 +432,7 @@
         "Children": []
       },
       {
-        "__guid": "46cc6793-2897-4db2-a790-bf96939699df",
+        "__guid": "46972c78-f2cd-4e6c-93a0-bf2560a4a507",
         "__version": 2,
         "Flags": 0,
         "Name": "Leg L",
@@ -449,7 +449,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "556e5e67-fb5b-4fc9-8612-cf189faf6090",
+            "__guid": "9fae540d-24e4-41df-8d70-622c6fd852cb",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -478,7 +478,7 @@
         "Children": []
       },
       {
-        "__guid": "e14fefa8-2532-4b0b-b1d9-17109982f20c",
+        "__guid": "5c477583-66b5-4587-8819-f7582718ed61",
         "__version": 2,
         "Flags": 0,
         "Name": "Leg R",
@@ -495,7 +495,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "96b22e4e-8b75-4697-a475-f90485fedc61",
+            "__guid": "75ff02ff-477f-4706-af59-76e3b73ddd9c",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -524,7 +524,7 @@
         "Children": []
       },
       {
-        "__guid": "03c21c04-e371-4e01-9bc1-18ed25b1c202",
+        "__guid": "da0d9a0f-4383-4a45-ae3c-a6d25f1cecd0",
         "__version": 2,
         "Flags": 0,
         "Name": "Boot L",
@@ -541,7 +541,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "cb4a186b-b798-4606-b4b5-a6b9ef7acec2",
+            "__guid": "803d43bd-ae7b-40f4-b446-49333f51ba20",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -570,7 +570,7 @@
         "Children": []
       },
       {
-        "__guid": "67cb53d8-4c52-4471-9512-a252c1f17ec6",
+        "__guid": "d583005a-f9be-4e34-9622-6c1d86a2fbd3",
         "__version": 2,
         "Flags": 0,
         "Name": "Boot R",
@@ -587,7 +587,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "4c637488-844a-4660-87dd-4ebf9fd67f09",
+            "__guid": "c89f8dd5-d602-451e-82b3-3f5f10eba5fe",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,

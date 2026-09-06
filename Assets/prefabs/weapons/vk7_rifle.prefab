@@ -1,7 +1,7 @@
 {
-  "__guid": "8bea3fce-59ba-49ac-86d5-85b2e8dfbb61",
+  "__guid": "5efcdcb9-31ad-4c28-853c-a83142827aee",
   "RootObject": {
-    "__guid": "0f1e2cc2-5e5f-4d74-86dd-08e90639b63a",
+    "__guid": "983cc2fd-77d5-4e54-8d81-1af408db49f3",
     "__version": 2,
     "Flags": 0,
     "Name": "vk7_rifle",
@@ -18,7 +18,7 @@
     "Components": [],
     "Children": [
       {
-        "__guid": "5da7a47a-5693-458d-92c1-9daf8d433ae3",
+        "__guid": "827214c8-0455-484a-885f-5792831a11a3",
         "__version": 2,
         "Flags": 0,
         "Name": "Receiver",
@@ -35,7 +35,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "06d14f60-0090-4785-8b9f-445ed4cf0aca",
+            "__guid": "e515c734-ff9a-4aab-ba07-e89b489e9c07",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -64,7 +64,7 @@
         "Children": []
       },
       {
-        "__guid": "50b495c3-b8b4-4b83-8541-03d2f831cfcb",
+        "__guid": "0ad788a3-775a-48c6-a5d8-fa134bf72768",
         "__version": 2,
         "Flags": 0,
         "Name": "Handguard",
@@ -81,7 +81,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "1b8d6e0e-2f69-4dad-9f54-372bc9735fcd",
+            "__guid": "ce59fb57-a1e2-489f-931d-580d65b4a499",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -110,7 +110,7 @@
         "Children": []
       },
       {
-        "__guid": "166430f0-e0a1-463e-8219-f27e8c011352",
+        "__guid": "a5a1cbbd-d4fc-41ee-8d40-cad14d9bfb36",
         "__version": 2,
         "Flags": 0,
         "Name": "Barrel",
@@ -127,7 +127,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "aa11c13e-251c-414f-8c96-4bc23b9fdb8c",
+            "__guid": "e167101a-5f99-4418-81b3-adad1a041e1d",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -156,7 +156,7 @@
         "Children": []
       },
       {
-        "__guid": "9a509161-d735-44e2-99a6-e68535e5c268",
+        "__guid": "3f2a6604-8317-46f1-a30c-72a538383121",
         "__version": 2,
         "Flags": 0,
         "Name": "Stock",
@@ -173,7 +173,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "245ee5b7-28c8-4929-85f4-f386949f47cc",
+            "__guid": "708f9ee0-ad1b-4a8b-a1d2-e2b9f3066fc1",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -202,7 +202,7 @@
         "Children": []
       },
       {
-        "__guid": "631f09c4-ccfe-4d43-8428-9a99314454b1",
+        "__guid": "77bb676d-0462-45ea-b609-62b4d8a3f807",
         "__version": 2,
         "Flags": 0,
         "Name": "Cheek Rest",
@@ -219,7 +219,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "83527ebc-7085-4489-8a62-2b94e6743445",
+            "__guid": "1b05add4-22e2-40f6-a40f-284f1f20d12e",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -248,7 +248,7 @@
         "Children": []
       },
       {
-        "__guid": "653a3149-586e-49d8-a9ba-03edeb879172",
+        "__guid": "1a514f47-9efd-450e-92ba-9c2760d3652d",
         "__version": 2,
         "Flags": 0,
         "Name": "Magazine",
@@ -265,7 +265,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "27feb04c-7bcc-404e-8c9d-78fc1121f39e",
+            "__guid": "75c6cdc8-ddc8-4eac-9f36-248f47bd8392",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -294,7 +294,7 @@
         "Children": []
       },
       {
-        "__guid": "90fe868f-530f-4115-9abc-0be73e5e37b0",
+        "__guid": "073f4d15-4243-481c-8ade-78cd3cb6c6a6",
         "__version": 2,
         "Flags": 0,
         "Name": "Grip",
@@ -311,7 +311,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "7ee2731a-ee50-4a33-9be5-3a9daded3eeb",
+            "__guid": "32d57d37-b8fc-453f-8ecd-d8ac2bdcf9dd",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -340,7 +340,7 @@
         "Children": []
       },
       {
-        "__guid": "2d4a788d-00ab-4c89-bc1a-e0e4b3401374",
+        "__guid": "e3b9e294-7086-42ee-9db6-8382a3ce7897",
         "__version": 2,
         "Flags": 0,
         "Name": "Rear Sight",
@@ -357,7 +357,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "ac4effe7-597e-4d84-9eb3-48437b7bac97",
+            "__guid": "956cc12c-f52f-4e73-bb3e-c9b6f53d2d8a",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -386,7 +386,7 @@
         "Children": []
       },
       {
-        "__guid": "7193c142-14c8-46d2-92e9-eb1ebe53cbe3",
+        "__guid": "548a477d-d720-4094-815a-dfc2e0e2bbab",
         "__version": 2,
         "Flags": 0,
         "Name": "Front Sight",
@@ -403,7 +403,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "f0ba4719-d860-49e4-b779-a0cc572511a2",
+            "__guid": "e62d6c29-0078-4922-b475-2d2201796f47",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,

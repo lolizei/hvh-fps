@@ -1,7 +1,7 @@
 {
-  "__guid": "6ed9c023-2a9e-4568-b1bc-8de6a8835739",
+  "__guid": "6a269ceb-21f6-4a1e-a6ab-862c73a3cb8b",
   "RootObject": {
-    "__guid": "b6f4fb1d-057c-4b50-97d0-7377c6fd6168",
+    "__guid": "6c2926cc-4f75-46a3-9717-6bc678e23249",
     "__version": 2,
     "Flags": 0,
     "Name": "lr40_sniper",
@@ -18,7 +18,7 @@
     "Components": [],
     "Children": [
       {
-        "__guid": "39d74bf4-8ee1-40bb-88af-930578ea0d29",
+        "__guid": "25062168-afed-450c-8b03-8982d8eca049",
         "__version": 2,
         "Flags": 0,
         "Name": "Receiver",
@@ -35,7 +35,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "2e52a455-f11d-4578-ac3b-3400f1a8bd37",
+            "__guid": "938b6027-27f9-4443-85f6-e588748a3ecb",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -64,7 +64,7 @@
         "Children": []
       },
       {
-        "__guid": "8bd8ff71-51a0-442f-870b-c9369ff7470c",
+        "__guid": "384542f1-161d-4ffb-b46b-ef867b5a14b4",
         "__version": 2,
         "Flags": 0,
         "Name": "Barrel",
@@ -81,7 +81,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "905de08a-c8f3-418d-a934-0bc74d8cd79f",
+            "__guid": "9d691cac-67f6-4325-bac6-8a816d42c9ce",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -110,7 +110,7 @@
         "Children": []
       },
       {
-        "__guid": "8f486da8-fe69-48f1-bcb0-259094f3ffe6",
+        "__guid": "e6c2b775-b050-4d43-91ff-7612a7bb8b24",
         "__version": 2,
         "Flags": 0,
         "Name": "Muzzle Brake",
@@ -127,7 +127,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "b5555d57-ccf7-4b4d-9fd6-de13e5358731",
+            "__guid": "5eddbd40-d367-420f-b869-68b902ed80c6",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -156,7 +156,7 @@
         "Children": []
       },
       {
-        "__guid": "7bc88f0a-9e61-4292-90d2-80d73885d8ae",
+        "__guid": "4167c1d7-babb-47c3-8238-47b0df24a606",
         "__version": 2,
         "Flags": 0,
         "Name": "Stock",
@@ -173,7 +173,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "9c0c901d-2502-4267-b67e-0f1eb10ba1a2",
+            "__guid": "b7092c6c-29a0-4659-9911-25361ed6b77c",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -202,7 +202,7 @@
         "Children": []
       },
       {
-        "__guid": "88dff6ba-20b4-4fea-beb3-1f948e85fd9e",
+        "__guid": "86637a19-bcf0-4b16-b278-cced22f45ac0",
         "__version": 2,
         "Flags": 0,
         "Name": "Cheek Rest",
@@ -219,7 +219,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "05c4de7a-14fa-47ff-8257-aff6747964b7",
+            "__guid": "dd5c47c1-1132-4028-bfc5-631ca3ba21f2",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -248,7 +248,7 @@
         "Children": []
       },
       {
-        "__guid": "e5d043c8-f5c5-42cb-ba81-316a1809a541",
+        "__guid": "f37fd842-adcb-4ac5-9d59-cc2affe9b981",
         "__version": 2,
         "Flags": 0,
         "Name": "Scope Body",
@@ -265,7 +265,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "b770442d-08bf-446c-a870-432d621ef163",
+            "__guid": "2aa1c6af-b4c2-422c-8d09-cbb3ba2e98ff",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -294,7 +294,7 @@
         "Children": []
       },
       {
-        "__guid": "efc809d9-f8b2-429e-a4d0-db2e65125620",
+        "__guid": "256dbe37-dc95-4c8c-b2bf-0291f216477e",
         "__version": 2,
         "Flags": 0,
         "Name": "Scope Lens",
@@ -311,7 +311,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "4a000c8c-7f60-47bc-b7ff-31e05fa553eb",
+            "__guid": "f8e759af-beb1-4abd-8993-80e8a1c36b94",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -340,7 +340,7 @@
         "Children": []
       },
       {
-        "__guid": "ae6233c7-3c2f-4309-91f2-60185df1361c",
+        "__guid": "66e9f00b-052a-4804-a090-b33316f1bc33",
         "__version": 2,
         "Flags": 0,
         "Name": "Scope Mount F",
@@ -357,7 +357,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "75eea808-8e64-4c8a-aade-8a1701f50ea0",
+            "__guid": "9a3995c8-09bf-455a-a508-e006a298b376",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -386,7 +386,7 @@
         "Children": []
       },
       {
-        "__guid": "a9329245-6a4c-4ded-9a13-65be71f02f53",
+        "__guid": "c393f83a-b621-4a71-9ede-fdc87f448cdf",
         "__version": 2,
         "Flags": 0,
         "Name": "Scope Mount R",
@@ -403,7 +403,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "d57599f2-574b-414c-8927-aea20a94a8c9",
+            "__guid": "41eaf21d-dc24-40c4-a641-c8f8d5f29bb9",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -432,7 +432,7 @@
         "Children": []
       },
       {
-        "__guid": "d182edb0-cbce-4b2b-8a5f-4d44d1f98297",
+        "__guid": "8bf71cb5-de5e-47fb-846b-c1c45fe4581f",
         "__version": 2,
         "Flags": 0,
         "Name": "Magazine",
@@ -449,7 +449,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "346f9c8a-fa6f-415a-99f8-8b87267d0614",
+            "__guid": "691c369a-e235-4ec7-9223-6eb6281ef33f",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -478,7 +478,7 @@
         "Children": []
       },
       {
-        "__guid": "cebd29ca-a87c-4002-a21b-52d362d39314",
+        "__guid": "0df28b4e-e3bc-4221-af2a-e396dd69bf38",
         "__version": 2,
         "Flags": 0,
         "Name": "Grip",
@@ -495,7 +495,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "737c8545-5d44-4d7f-8baa-59f57d7ed318",
+            "__guid": "f0a44093-518c-4bd6-a265-615df59740ab",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,
@@ -524,7 +524,7 @@
         "Children": []
       },
       {
-        "__guid": "13287bbe-0742-4416-b0dd-7c1c4e9101bd",
+        "__guid": "8724e351-a847-4925-9aaa-1942a0e844b7",
         "__version": 2,
         "Flags": 0,
         "Name": "Bipod",
@@ -541,7 +541,7 @@
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
-            "__guid": "efd60cc5-e9a1-4423-a6bb-139106503e57",
+            "__guid": "3b4d26c6-d565-422d-baba-a5a98295da1f",
             "__enabled": true,
             "Flags": 0,
             "BodyGroups": 18446744073709551615,

@@ -1,0 +1,92 @@
+{
+  "__guid": "67ea64c2-a77c-4d02-a732-08b58a32eb1f",
+  "RootObject": {
+    "__guid": "56f3261d-9106-40da-85c2-de02165fbe8b",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "citizen_syndicate",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 0,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [],
+    "Children": [
+      {
+        "__guid": "5512cdd2-d1c4-46b3-b53a-64ceb0f66364",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Citizen",
+        "Position": "0,0,0",
+        "Rotation": "0.000000,0.000000,0.000000,1.000000",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 0,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 0,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "77cfd044-1a0b-45f6-8d87-0c6d031ab89f",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": true,
+            "CreateBoneObjects": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/citizen/citizen.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1.0,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "hash": 0
+            },
+            "Tint": "0.90,0.62,0.28,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": []
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakLinks": false,
+  "ResourceVersion": 2,
+  "Title": "citizen_syndicate",
+  "Description": null,
+  "__references": [],
+  "__version": 2
+}
