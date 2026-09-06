@@ -155,16 +155,40 @@ building reads as blocked.
 Playtested: spawns land on the ground, a walk crosses 1023u cleanly with no
 teleports, and a bot fought and scored a kill.
 
+## Second storey - the open question, answered
+
+**Enclosed, not an open roof.** An open platform above the middle of a map sees
+over every piece of cover: measured at **39 of 44 lanes unbroken** from up there.
+That is a god-view, not vertical play.
+
+The built version is a real upper storey - walls, one opening per face offset
+from each other and from the ground-floor doors, and a capped roof nobody stands
+on. Reached by an outside stair on the south face. From inside it, **9 of 36
+radial directions** see further than 900u: it commands approaches without owning
+the map.
+
+The 27-of-44 figure an intermediate version produced was measuring the wrong
+thing - at 284 units almost nothing on the map is tall enough to block, so it
+measured "if you could float", not what a player in an enclosed room can see.
+Radial traces from inside the room are the honest test.
+
+## Also built
+
+- **Treeline** - 46 trunks ringing the map outside the boundary. Scenery; they
+  sit beyond the walls and cannot affect play.
+- **Outfields** - eight greenhouse rows east and west, never enterable.
+- **Ground** now extends well past the boundary so the outfields stand on it,
+  instead of stopping just past the walls and reading as an overhang.
+- **Cover pass** - twelve more pieces, mostly in the ring, at mixed heights.
+
 ## Known rough edges
 
-- The ground plane is a rectangle and pokes out past the angled boundary at the
-  corners. Harmless - the walls enclose play - but it looks unfinished.
-- Cover placement is a first pass by eye. It wants a play session, not more
-  traces.
-- No treeline or out-of-bounds Outfields yet; the boundary is a bare wall.
+- Cover placement is still by eye. It wants a play session, not more traces.
+- Bots have no navmesh; they steer directly. They cope with the Core, but the
+  stair and upper storey are almost certainly ignored by them.
+- The upper storey is reachable but nothing draws you there yet.
 
 ## Open questions
 
-- Player count this map is balanced for?
-- Is the Core enterable on one floor or two? A second storey changes every sightline.
-- Deathmatch mode itself: the game is round-based team elimination today.
+- Player count this map is balanced for? Ten spawns suggests 8-10.
+- Whether bots should be taught to use the upper storey at all.

@@ -24,6 +24,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | Weapons | Working — 4 data-driven guns, spread, recoil, reload, hit zones |
 | Health / damage / death / respawn | Working — host-authoritative |
 | Round loop | Working — Warmup → RoundStart → Playing → RoundEnd → Restarting |
+| Game modes | Elimination (default) and **Deathmatch**, set per scene on RoundManager |
 | Teams + scoreboard + kill feed | Working |
 | HUD | Working — health, armour, ammo, round clock, crosshair, kill feed |
 | Menu → game → menu | Working, round-trips cleanly |
@@ -34,7 +35,7 @@ and rounds resolve. A bot opponent will hunt you down and kill you.
 | Shot feedback | Muzzle flash, tracers, impacts, hit markers, footsteps working. **No gunshot sound** — s&box ships none |
 | Reload audio | Working — two positional cues, audible for other players too |
 | Viewmodel | Not implemented — the gun is invisible |
-| Real map | **Compound** greybox built and sightline-verified — `scenes/compound.scene`, deathmatch layout |
+| Real map | **Compound** built and verified — `scenes/compound.scene`, deathmatch, enclosed second storey, treeline |
 
 Roughly 7k lines of C# and Razor. Every "Working" row above was verified by actually
 playing it, not by the code compiling.

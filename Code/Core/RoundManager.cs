@@ -21,6 +21,17 @@ public sealed class RoundManager : Component
 	[Property] public float RoundEndDuration { get; set; } = 7f;
 	[Property] public float RestartDuration { get; set; } = 2f;
 
+	/// <summary>
+	/// How a round is won.
+	///
+	/// Defaults to Elimination so every existing scene behaves exactly as it
+	/// did. Deathmatch is opted into per scene - the Compound map sets it.
+	/// </summary>
+	[Property] public GameMode Mode { get; set; } = GameMode.Elimination;
+
+	/// <summary>Team frags that take a deathmatch round.</summary>
+	[Property] public int FragLimit { get; set; } = 30;
+
 	/// <summary>Rounds needed to take the match.</summary>
 	[Property] public int ScoreToWin { get; set; } = 16;
 
@@ -44,11 +55,13 @@ public sealed class RoundManager : Component
 	public bool AllowShooting => State is RoundState.Playing or RoundState.Warmup;
 
 	/// <summary>
-	/// Only warmup respawns you. A live round is elimination: a kill has to
-	/// stick, or shooting someone means nothing and they simply come back and
-	/// kill you. Death during Playing waits for the next round.
+	/// Warmup always respawns you. In Elimination a live round does not: a kill
+	/// has to stick, or shooting someone means nothing and they come straight
+	/// back. Deathmatch inverts exactly that - respawning IS the mode.
 	/// </summary>
-	public bool AllowRespawn => State == RoundState.Warmup;
+	public bool AllowRespawn
+		=> State == RoundState.Warmup
+		|| ( Mode == GameMode.Deathmatch && State == RoundState.Playing );
 
 	/// <summary>Raised on the host whenever the phase changes. The mod framework hooks this.</summary>
 	public event Action<RoundState> StateChanged;
@@ -99,8 +112,40 @@ public sealed class RoundManager : Component
 			EnterState( RoundState.Playing );
 	}
 
+	/// <summary>Team frags this round - bots included, they are ordinary players.</summary>
+	public static int FragsFor( Team team )
+		=> PlayerState.OnTeam( team ).Sum( x => x.Kills );
+
+	/// <summary>
+	/// Deathmatch: nobody is eliminated, so the round is decided by frags or by
+	/// the clock. Never by who is left standing - in this mode everyone is.
+	/// </summary>
+	private void TickDeathmatch()
+	{
+		var vanguard = FragsFor( Team.Vanguard );
+		var syndicate = FragsFor( Team.Syndicate );
+
+		if ( vanguard >= FragLimit || syndicate >= FragLimit )
+		{
+			DecideRound( vanguard == syndicate ? Team.None
+				: vanguard > syndicate ? Team.Vanguard : Team.Syndicate );
+			return;
+		}
+
+		if ( !PhaseElapsed ) return;
+
+		DecideRound( vanguard == syndicate ? Team.None
+			: vanguard > syndicate ? Team.Vanguard : Team.Syndicate );
+	}
+
 	private void TickPlaying()
 	{
+		if ( Mode == GameMode.Deathmatch )
+		{
+			TickDeathmatch();
+			return;
+		}
+
 		// Real opponents outrank practice targets. Once both sides actually have
 		// players on them - human or bot - the round is decided by elimination
 		// and the dummy rule is ignored, otherwise a round could resolve twice.
